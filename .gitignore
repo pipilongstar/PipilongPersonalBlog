@@ -21,6 +21,8 @@ target/
 *.iml
 *.ipr
 *.class
+技术文档.md
+问题文档.md
 
 ### NetBeans ###
 /nbproject/private/
