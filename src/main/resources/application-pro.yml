@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    druid:
+      driver: com.mysql.jdbc.Driver
+      url: jdbc:mysql://124.222.251.3:25647/pipilong_personal_blob
+      username: pipilong
+      password: ZSLnlshb2623
+
+
+
+logging:
+  file:
+    path: \root\pipilong\PipilongPersonalBlog\Log.log

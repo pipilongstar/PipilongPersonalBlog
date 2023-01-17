@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: dev
+  redis:
+    host: 101.43.24.234
+    port: 6379
+    password: ZSLnlshb2623
+    lettuce:
+      pool:
+        enabled: true
+mybatis:
+  config-location: classpath:mapper/*.xml;
+
+logging:
+  level:
+    com.pipilong.*: info
+
