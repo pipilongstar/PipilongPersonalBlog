@@ -5,11 +5,13 @@ spring:
     host: 101.43.24.234
     port: 6379
     password: ZSLnlshb2623
-    lettuce:
+    jedis:
       pool:
         enabled: true
+        max-active: 16
+
 mybatis:
-  config-location: classpath:mapper/*.xml;
+#  config-location: classpath:com/pipilong/mapper/*.xml;
 
 logging:
   level:
