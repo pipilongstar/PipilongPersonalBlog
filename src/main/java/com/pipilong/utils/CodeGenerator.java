@@ -7,14 +7,14 @@ import java.util.Random;
 /**
  * @author pipilong
  * @createTime 2023/1/18
- * @description 获取验证码的工具
+ * @description 获取码的工具
  */
 @Component
-public class VerificationCodeUtil {
-    public String getCode(){
+public class CodeGenerator {
+    public String getCode(Integer length){
         StringBuilder code = new StringBuilder();
         Random random = new Random();
-        for(int i=0;i<6;i++){
+        for(int i=0;i<length;i++){
             int next = random.nextInt(10);
             code.append(next);
         }

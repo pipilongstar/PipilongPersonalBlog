@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pipilong.mapper.UserMapper">
+
+    <resultMap id="resultMap" type="com.pipilong.pojo.User">
+        <result property="telephone" column="phone_number"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="username"/>
+    </resultMap>
+
+    <insert id="registerUserToSecurity">
+        insert into account_security value (null,${userId},'${email}','${telephone}',null,null,null);
+    </insert>
+
+    <insert id="registerUserToData">
+        insert into user_data(id,user_id,username) value (null,'${userId}','${username}');
+    </insert>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

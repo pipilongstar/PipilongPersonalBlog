@@ -23,7 +23,7 @@ target/
 *.class
 技术文档.md
 问题文档.md
-/src/main/java/com/pipilong/utils/ShortMessageUtil.java
+参数文档.md
 
 ### NetBeans ###
 /nbproject/private/

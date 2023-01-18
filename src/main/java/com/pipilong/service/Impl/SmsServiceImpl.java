@@ -1,5 +1,7 @@
-package com.pipilong.utils;
+package com.pipilong.service.Impl;
 
+import com.pipilong.service.SmsService;
+import com.pipilong.utils.CodeGenerator;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
@@ -8,7 +10,11 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author pipilong
@@ -16,13 +22,32 @@ import org.springframework.stereotype.Component;
  * @description
  */
 @Slf4j
-@Component
-public class ShortMessageUtil {
+@Service
+public class SmsServiceImpl implements SmsService {
 
-    public void sendSMS(String telephone, String message){
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private CodeGenerator codeGenerator;
+
+    @Override
+    public void verificationCodeProcessing(String telephone, String sessionId) {
+        String key="verificationCode:"+sessionId;
+
+        String code = stringRedisTemplate.opsForValue().get(key);
+        if(code == null) {
+            code = codeGenerator.getCode(6);
+        }
+
+        stringRedisTemplate.opsForValue().set(key,code,300, TimeUnit.SECONDS);
+        sendSMS(telephone,code);
+    }
+
+    @Override
+    public void sendSMS(String telephone, String message) {
         try {
 
-            Credential cred = new Credential("AKIDUroZEk7OejgR5Ys13kIgvGZjhXDxYxBD", "vfFlYBiBTo5HRZgq2B4IWisz42tcHtX8");
+            Credential cred = new Credential("secretId", "secretKey");
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setReqMethod("POST");
             httpProfile.setConnTimeout(60);
@@ -36,13 +61,13 @@ public class ShortMessageUtil {
 
             SendSmsRequest req = new SendSmsRequest();
 
-            String sdkAppId = "1400784898";
+            String sdkAppId = "sdkAppId";
             req.setSmsSdkAppId(sdkAppId);
 
             String signName = "皮皮龙技术个人网";
             req.setSignName(signName);
 
-            String templateId = "1667715";
+            String templateId = "templateId";
             req.setTemplateId(templateId);
 
             String[] templateParamSet = {message};
@@ -56,6 +81,13 @@ public class ShortMessageUtil {
         } catch (TencentCloudSDKException e) {
             log.error(e.getMessage());
         }
+    }
+
+    @Override
+    public boolean verificationCode(String code, String sessionId) {
+        String key="verificationCode:"+sessionId;
+        String saveCode = stringRedisTemplate.opsForValue().get(key);
+        return saveCode != null && saveCode.equals(code);
     }
 
 }

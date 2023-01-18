@@ -8,8 +8,5 @@ import org.springframework.stereotype.Service;
  * @description
  */
 @Service
-public interface GeneralOperation {
-
-    void sendVerificationCode(String telephone, String sessionId);
-
+public interface UploadService {
 }
