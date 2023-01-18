@@ -17,12 +17,12 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class ShortMessageUtil {
+public class ShortMessageUtil1 {
 
     public void sendSMS(String telephone, String message){
         try {
 
-            Credential cred = new Credential("AKIDUroZEk7OejgR5Ys13kIgvGZjhXDxYxBD", "vfFlYBiBTo5HRZgq2B4IWisz42tcHtX8");
+            Credential cred = new Credential("secretId", "secretKey");
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setReqMethod("POST");
             httpProfile.setConnTimeout(60);
@@ -36,13 +36,13 @@ public class ShortMessageUtil {
 
             SendSmsRequest req = new SendSmsRequest();
 
-            String sdkAppId = "1400784898";
+            String sdkAppId = "sdkAppId";
             req.setSmsSdkAppId(sdkAppId);
 
             String signName = "皮皮龙技术个人网";
             req.setSignName(signName);
 
-            String templateId = "1667715";
+            String templateId = "templateId";
             req.setTemplateId(templateId);
 
             String[] templateParamSet = {message};
