@@ -47,7 +47,7 @@ public class SmsServiceImpl implements SmsService {
     public void sendSMS(String telephone, String message) {
         try {
 
-            Credential cred = new Credential("secretId", "secretKey");
+            Credential cred = new Credential("AKIDUroZEk7OejgR5Ys13kIgvGZjhXDxYxBD", "vfFlYBiBTo5HRZgq2B4IWisz42tcHtX8");
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setReqMethod("POST");
             httpProfile.setConnTimeout(60);
@@ -61,13 +61,13 @@ public class SmsServiceImpl implements SmsService {
 
             SendSmsRequest req = new SendSmsRequest();
 
-            String sdkAppId = "sdkAppId";
+            String sdkAppId = "1400784898";
             req.setSmsSdkAppId(sdkAppId);
 
             String signName = "皮皮龙技术个人网";
             req.setSignName(signName);
 
-            String templateId = "templateId";
+            String templateId = "1667715";
             req.setTemplateId(templateId);
 
             String[] templateParamSet = {message};

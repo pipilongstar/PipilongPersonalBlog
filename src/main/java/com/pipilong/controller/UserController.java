@@ -6,9 +6,11 @@ import com.pipilong.service.UserService;
 import com.sun.deploy.association.RegisterFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -25,6 +27,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 用户注册接口
+     * @param user 用户信息
+     * @param code 验证码
+     * @param session 用户此时会话的session
+     * @return true or false
+     */
     @PutMapping("/register/{code}")
     public ResponseEntity<String> register(
             @RequestBody User user,

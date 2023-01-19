@@ -20,8 +20,6 @@ public class SmsController {
     @Autowired
     private SmsService smsService;
 
-    private final Pattern pattern=Pattern.compile("^1[3-9]\\d{9}$");
-
     /**
      * 接收手机号，发送验证码
      * @param telephone
@@ -33,8 +31,6 @@ public class SmsController {
             String telephone,
             HttpSession httpSession){
 
-        Matcher matcher = pattern.matcher(telephone);
-        if(!matcher.matches()) return new ResponseEntity<>("手机号格式错误",HttpStatus.BAD_REQUEST);
         String sessionId = httpSession.getId();
         smsService.verificationCodeProcessing(telephone,sessionId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

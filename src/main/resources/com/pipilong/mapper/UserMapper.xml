@@ -18,9 +18,15 @@
         insert into user_data(id,user_id,username) value (null,'${userId}','${username}');
     </insert>
 
+    <select id="getUserIdByTelephone" resultType="java.lang.String">
+        select user_id from account_security where phone_number = ${telephone};
+    </select>
+
+    <select id="getPasswordByIdentifier" resultMap="resultMap">
+        select * from account_security where phone_number = '${identifier}' or email = '${identifier}';
+    </select>
+
 </mapper>
-
-
 
 
 

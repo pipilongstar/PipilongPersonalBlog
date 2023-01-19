@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class UploadController {
 
 
+    /**
+     * 上传头像
+     * @param userId 用户id
+     * @param avatarUrl 头像URL
+     * @return true or false
+     */
     @PostMapping("/avatar")
     public ResponseEntity<String> uploadAvatar(
             @RequestParam("userid") String userId,

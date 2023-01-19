@@ -21,4 +21,9 @@ public class SelectExistServiceImpl implements SelectExistService {
         return selectExistMapper.telephone(telephone);
     }
 
+    @Override
+    public boolean email(String email) {
+        return selectExistMapper.email(email);
+    }
+
 }

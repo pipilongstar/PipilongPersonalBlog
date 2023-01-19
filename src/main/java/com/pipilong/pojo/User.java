@@ -1,7 +1,11 @@
 package com.pipilong.pojo;
 
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
 
 /**
  * @author pipilong
@@ -16,5 +20,6 @@ public class User {
     private String userName;
     private String email;
     private String telephone;
+    private String password;
 
 }
