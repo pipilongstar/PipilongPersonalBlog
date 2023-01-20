@@ -1,6 +1,5 @@
 package com.pipilong.config;
 
-import com.pipilong.service.Impl.MyAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,26 +20,26 @@ import javax.servlet.http.HttpServletRequest;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private HttpServletRequest request;
+//    @Autowired
+//    private HttpServletRequest request;
+//
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+//                .and()
+//            .formLogin()
+//                .and();
+//    }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .and()
-            .formLogin()
-                .and();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        return new MyAuthenticationProvider();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth){
-        auth.authenticationProvider(authenticationProvider());
-    }
+//    @Bean
+//    public AuthenticationProvider authenticationProvider(){
+//        return new MyAuthenticationProvider();
+//    }
+//
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth){
+//        auth.authenticationProvider(authenticationProvider());
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){

@@ -47,7 +47,7 @@ public class SmsServiceImpl implements SmsService {
     public void sendSMS(String telephone, String message) {
         try {
 
-            Credential cred = new Credential("AKIDUroZEk7OejgR5Ys13kIgvGZjhXDxYxBD", "vfFlYBiBTo5HRZgq2B4IWisz42tcHtX8");
+            Credential cred = new Credential("AKIDMUZgkaAUZNvDhxxgCWdUAcomYYxDHI7h", "Tq56rNkxwhBON9i27vUm198wZ4NZZIn4");
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setReqMethod("POST");
             httpProfile.setConnTimeout(60);

@@ -22,35 +22,35 @@ import javax.servlet.http.HttpServletRequest;
  * @createTime 2023/1/19
  * @description
  */
-@Service
-public class MyAuthenticationProvider extends DaoAuthenticationProvider {
-    private final UserService userService=new UserServiceImpl();
-
-    @Override
-    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String password = userDetails.getPassword();
-        String sessionId = request.getSession().getId();
-        if(password == null) {
-            //短信验证码验证
-            String code = request.getParameter("code");
-            try {
-                String userId = userService.codeLogin(userDetails.getUsername(),code,sessionId);
-                request.getSession().setAttribute("userId",userId);
-            } catch (LoginException e) {
-                throw new RuntimeException(e.getMessage());
-            }
-
-        }else{
-            //密码验证
-            try {
-                String userId = userService.passwordLogin(userDetails.getUsername(), password, sessionId);
-                request.getSession().setAttribute("uesrId",userId);
-            } catch (LoginException e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        }
-
-    }
-
-}
+//@Service
+//public class MyAuthenticationProvider extends DaoAuthenticationProvider {
+//    private final UserService userService=new UserServiceImpl();
+//
+//    @Override
+//    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//        String password = userDetails.getPassword();
+//        String sessionId = request.getSession().getId();
+//        if(password == null) {
+//            //短信验证码验证
+//            String code = request.getParameter("code");
+//            try {
+//                String userId = userService.codeLogin(userDetails.getUsername(),code,sessionId);
+//                request.getSession().setAttribute("userId",userId);
+//            } catch (LoginException e) {
+//                throw new RuntimeException(e.getMessage());
+//            }
+//
+//        }else{
+//            //密码验证
+//            try {
+//                String userId = userService.passwordLogin(userDetails.getUsername(), password, sessionId);
+//                request.getSession().setAttribute("uesrId",userId);
+//            } catch (LoginException e) {
+//                throw new RuntimeException(e.getMessage());
+//            }
+//        }
+//
+//    }
+//
+//}
