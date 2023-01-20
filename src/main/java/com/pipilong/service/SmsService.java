@@ -25,12 +25,10 @@ public interface SmsService {
     void sendSMS(String telephone, String message);
 
     /**
-     * 对验证码进行验证
-     * @param code 验证码
-     * @param sessionId 用户
-     * @return true or false
+     * 根据用户id找到手机号，并发送短信
+     * @param userId 用户id
      */
-    boolean verificationCode(String code, String sessionId);
+    void sendSmsByUserId(String userId,String sessionId);
 
 }
 

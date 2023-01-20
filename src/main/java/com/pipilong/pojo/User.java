@@ -1,8 +1,6 @@
 package com.pipilong.pojo;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -21,5 +19,29 @@ public class User {
     private String email;
     private String telephone;
     private String password;
+    private String gender;
+    private String birthday;
+    private String address;
+    private String personalMessage;
+    private String githubUrl;
+    private String school;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

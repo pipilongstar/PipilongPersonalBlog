@@ -1,5 +1,7 @@
 package com.pipilong.service.Impl;
 
+import com.pipilong.annotation.ErrorLog;
+import com.pipilong.mapper.UserMapper;
 import com.pipilong.service.SmsService;
 import com.pipilong.utils.CodeGenerator;
 import com.tencentcloudapi.common.Credential;
@@ -29,6 +31,9 @@ public class SmsServiceImpl implements SmsService {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private CodeGenerator codeGenerator;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public void verificationCodeProcessing(String telephone, String sessionId) {
@@ -83,11 +88,14 @@ public class SmsServiceImpl implements SmsService {
         }
     }
 
+    @ErrorLog
     @Override
-    public boolean verificationCode(String code, String sessionId) {
-        String key="verificationCode:"+sessionId;
-        String saveCode = stringRedisTemplate.opsForValue().get(key);
-        return saveCode != null && saveCode.equals(code);
+    public void sendSmsByUserId(String userId, String sessionId) {
+
+        String telephone = userMapper.selectTelephoneByUserId(userId);
+        this.verificationCodeProcessing(telephone,sessionId);
+
     }
+
 
 }

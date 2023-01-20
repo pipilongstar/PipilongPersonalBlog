@@ -1,9 +1,10 @@
 package com.pipilong.service.Impl;
 
+import com.pipilong.exception.ModifyException;
 import com.pipilong.mapper.UserMapper;
 import com.pipilong.pojo.User;
-import com.pipilong.service.SmsService;
 import com.pipilong.service.UserService;
+import com.pipilong.service.VerificationService;
 import com.pipilong.utils.CodeGenerator;
 import com.sun.deploy.association.RegisterFailedException;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
-    private SmsService smsService;
+    private VerificationService verificationService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String codeLogin(String telephone, String code, String sessionId) throws LoginException {
-        if(!smsService.verificationCode(code, sessionId)) throw new LoginException("验证码错误");
+        if(verificationService.verificationCode(code, sessionId)) throw new LoginException("验证码错误");
         String userId = null;
         try{
             userId = userMapper.getUserIdByTelephone(telephone);
@@ -103,6 +104,30 @@ public class UserServiceImpl implements UserService {
         stringRedisTemplate.opsForValue().set(key1, user.getUserId(),7, TimeUnit.DAYS);
         return user.getUserId();
     }
+
+    @Override
+    public void modifyProfile(User user) throws ModifyException {
+
+        try {
+            userMapper.modifyProfile(user);
+        } catch (Exception e){
+            log.error(e.getMessage());
+            throw new ModifyException("服务器错误");
+        }
+
+    }
+
+    @Override
+    public void modifyTelephone(String telephone, String userId) throws ModifyException {
+        try {
+            userMapper.modifyTelephone(telephone,userId);
+        } catch (Exception e){
+            throw new ModifyException(e.getMessage());
+        }
+
+    }
+
+
 }
 
 

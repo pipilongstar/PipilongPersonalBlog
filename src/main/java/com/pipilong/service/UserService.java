@@ -1,5 +1,6 @@
 package com.pipilong.service;
 
+import com.pipilong.exception.ModifyException;
 import com.pipilong.pojo.User;
 import com.sun.deploy.association.RegisterFailedException;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,20 @@ public interface UserService {
      * @return userid
      */
     String passwordLogin(String identifier, String password, String sessionId) throws LoginException;
+
+    /**
+     * 修改用户个人资料
+     * @param user 用户信息
+     * @throws ModifyException 修改失败
+     */
+    void modifyProfile(User user) throws ModifyException;
+
+    /**
+     * 修改手机号
+     * @param telephone 新手机号
+     * @throws ModifyException 修改失败
+     */
+    void modifyTelephone(String telephone,String userId) throws ModifyException;
 }
 
 

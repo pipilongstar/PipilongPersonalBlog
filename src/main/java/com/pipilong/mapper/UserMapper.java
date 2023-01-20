@@ -41,4 +41,44 @@ public interface UserMapper {
      * @return 用户信息
      */
     User getPasswordByIdentifier(@Param("identifier") String identifier);
+
+    /**
+     * 修改个人简介信息
+     * @param user 用户信息
+     * @return true or false
+     */
+    void modifyProfile(@Param("user") User user);
+
+    /**
+     * 根据用户id查找手机号
+     * @param userId 用户id
+     * @return 手机号
+     */
+    String selectTelephoneByUserId(@Param("userid") String userId);
+
+    /**
+     * 修改手机号
+     * @param telephone 新手机号
+     */
+    void modifyTelephone(@Param("telephone") String telephone,@Param("userid") String userId);
+
+    /**
+     * 根据用户id找邮箱
+     * @param userId 用户id
+     */
+    String selectEmailByUserIdAfter(@Param("userid") String userId);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

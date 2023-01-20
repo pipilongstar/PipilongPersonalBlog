@@ -26,6 +26,28 @@
         select * from account_security where phone_number = '${identifier}' or email = '${identifier}';
     </select>
 
+    <update id="modifyProfile">
+        update user_data set username='${user.username}',
+                             gender='${user.gender}',
+                             birthday='${user.birthday}',
+                             address='${user.address}',
+                             personal_message='${user.personalMessage}',
+                             github_url='${user.githubUrl}',
+                             school='${user.school}'
+                where user_id=${user.userId};
+    </update>
+
+    <select id="selectTelephoneByUserId" resultType="java.lang.String">
+        select phone_number from account_security where user_id = ${userid};
+    </select>
+
+    <update id="modifyTelephone">
+        update account_security set phone_number = ${telephone} where user_id = ${userid};
+    </update>
+
+    <select id="selectEmailByUserIdAfter" resultType="java.lang.String">
+        select email from account_security where user_id = ${userid};
+    </select>
 </mapper>
 
 
