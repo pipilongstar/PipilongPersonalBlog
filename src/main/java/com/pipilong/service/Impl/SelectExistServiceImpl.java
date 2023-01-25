@@ -26,4 +26,9 @@ public class SelectExistServiceImpl implements SelectExistService {
         return selectExistMapper.email(email);
     }
 
+    @Override
+    public boolean password(String userId) {
+        return selectExistMapper.password(userId) != null;
+    }
+
 }

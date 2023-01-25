@@ -1,5 +1,6 @@
 package com.pipilong.service.Impl;
 
+import com.pipilong.annotation.ErrorLog;
 import com.pipilong.exception.ModifyException;
 import com.pipilong.mapper.UserMapper;
 import com.pipilong.pojo.User;
@@ -13,6 +14,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.security.auth.login.LoginException;
@@ -43,18 +46,13 @@ public class UserServiceImpl implements UserService {
 
     private final Pattern patternEmail = Pattern.compile("^[A-Za-z0-9-._]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,6})$");
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.REPEATABLE_READ)
     public String register(User user, String sessionId) throws RegisterFailedException {
         String userId = codeGenerator.getCode(8);
-        try {
-            userMapper.registerUserToSecurity(userId, user.getEmail(), user.getTelephone());
-            userMapper.registerUserToData(userId, user.getUserName());
-            String key = "user:" + sessionId;
-            stringRedisTemplate.opsForValue().set(key, userId,7,TimeUnit.DAYS);
-        } catch (Exception e){
-            log.error(e.getMessage());
-            throw new RegisterFailedException("服务器异常");
-        }
+        userMapper.registerUserToSecurity(userId, user.getEmail(), user.getTelephone());
+        userMapper.registerUserToData(userId, user.getUserName());
+        String key = "user:" + sessionId;
+        stringRedisTemplate.opsForValue().set(key, userId,7,TimeUnit.DAYS);
         return userId;
     }
 
@@ -117,17 +115,34 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @ErrorLog(true)
     @Override
-    public void modifyTelephone(String telephone, String userId) throws ModifyException {
-        try {
-            userMapper.modifyTelephone(telephone,userId);
-        } catch (Exception e){
-            throw new ModifyException(e.getMessage());
-        }
+    public void modifyTelephone(String telephone, String userId){
+
+        userMapper.modifyTelephone(telephone,userId);
 
     }
 
+    @ErrorLog(true)
+    @Override
+    public void modifyEmail(String email, String userId) {
+        userMapper.modifyEmail(email,userId);
+    }
 
+    @ErrorLog(true)
+    @Override
+    public void modifyPassword(String oldPassword, String newPassword, String userId) throws ModifyException{
+
+        String encodePassword = passwordEncoder.encode(newPassword);
+        if("".equals(oldPassword)){
+            userMapper.setPassword(encodePassword,userId);
+            return;
+        }
+        String saveOldPassword = userMapper.selectPassword(userId);
+        if(!passwordEncoder.matches(oldPassword, saveOldPassword)) throw new ModifyException("当前密码输入错误");
+        userMapper.modifyPassword(encodePassword,userId);
+
+    }
 }
 
 

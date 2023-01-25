@@ -22,7 +22,7 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("/sendEmail")
+    @PostMapping("/sendemail")
     public ResponseEntity<String> sendEmail(@RequestParam("userid") String userId, HttpSession session){
 
         try {

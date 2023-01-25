@@ -12,6 +12,9 @@
         select if(count(*)=1,true,false) from account_security where email='${email}';
     </select>
 
+    <select id="password" resultType="java.lang.String">
+        select password from account_security where user_id = ${userid};
+    </select>
 
 </mapper>
 

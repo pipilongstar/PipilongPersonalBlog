@@ -24,4 +24,11 @@ public interface SelectExistMapper {
      * @return true or false
      */
     boolean email(@Param("email") String email);
+
+    /**
+     * 根据userid判断密码是否已经设置
+     * @param userId 用户id
+     * @return true or false
+     */
+    String password(@Param("userid") String userId);
 }

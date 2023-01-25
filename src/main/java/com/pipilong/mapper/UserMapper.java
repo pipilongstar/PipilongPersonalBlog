@@ -67,6 +67,34 @@ public interface UserMapper {
      * @param userId 用户id
      */
     String selectEmailByUserIdAfter(@Param("userid") String userId);
+
+    /**
+     * 修改电子邮件
+     * @param email 新电子邮件地址
+     * @param userId 用户id
+     */
+    void modifyEmail(@Param("email") String email,@Param("userid") String userId);
+
+    /**
+     * 根据用户id查找密码
+     * @param userId 用户id
+     * @return 加密后密码
+     */
+    String selectPassword(@Param("userid") String userId);
+
+    /**
+     * 修改密码
+     * @param newPassword 新密码
+     * @param userId 用户id
+     */
+    void modifyPassword(@Param("newpassword") String newPassword,@Param("userid") String userId);
+
+    /**
+     * 设置密码
+     * @param newPassword 新密码
+     * @param userId 用户id
+     */
+    void setPassword(@Param("newpassword") String newPassword,@Param("userid") String userId);
 }
 
 

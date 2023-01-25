@@ -51,6 +51,22 @@ public interface UserService {
      * @throws ModifyException 修改失败
      */
     void modifyTelephone(String telephone,String userId) throws ModifyException;
+
+    /**
+     * 修改电子邮箱
+     * @param email 电子邮箱
+     * @param userId 用户id
+     * @throws ModifyException 修改失败异常
+     */
+    void modifyEmail(String email,String userId) throws ModifyException;
+
+    /**
+     * 修改密码
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @param userId 用户id
+     */
+    void modifyPassword(String oldPassword,String newPassword,String userId) throws ModifyException;
 }
 
 

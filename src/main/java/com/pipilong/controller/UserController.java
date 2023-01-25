@@ -93,13 +93,53 @@ public class UserController {
 
         try {
             userService.modifyTelephone(telephone,userId);
-        } catch (ModifyException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * 修改电子邮箱
+     * @param email 新电子邮箱
+     * @param userid 用户id
+     * @param code 验证码
+     * @param session 用户session
+     * @return nothing
+     */
+    @PostMapping("/modifyemail")
+    public ResponseEntity<String> modifyEmail(
+            @RequestParam("email") String email,
+            @RequestParam("userid") String userid,
+            @RequestParam("code") String code,
+            HttpSession session){
+
+        if(verificationService.verificationCode(code, session.getId())) return new ResponseEntity<>("验证码错误",HttpStatus.UNAUTHORIZED);
+        try {
+            userService.modifyEmail(email,userid);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/modifypassword")
+    public ResponseEntity<String> modifyPassword(
+            @RequestParam("oldpassword") String oldPassword,
+            @RequestParam("newpassword") String newPassword,
+            @RequestParam("userid") String userid
+    ){
+
+        try {
+            userService.modifyPassword(oldPassword,newPassword,userid);
+        } catch (ModifyException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }
 

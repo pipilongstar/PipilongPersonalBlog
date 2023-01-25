@@ -45,8 +45,24 @@
         update account_security set phone_number = ${telephone} where user_id = ${userid};
     </update>
 
+    <update id="modifyEmail">
+        update account_security set email = '${email}' where user_id = ${userid};
+    </update>
+
+    <update id="modifyPassword">
+        update account_security set password = '${newpassword}' where user_id = ${userid};
+    </update>
+
+    <update id="setPassword">
+        update account_security set password = '${newpassword}' where user_id = ${userid};
+    </update>
+
     <select id="selectEmailByUserIdAfter" resultType="java.lang.String">
         select email from account_security where user_id = ${userid};
+    </select>
+
+    <select id="selectPassword" resultType="java.lang.String">
+        select password from account_security where user_id = ${userid};
     </select>
 </mapper>
 

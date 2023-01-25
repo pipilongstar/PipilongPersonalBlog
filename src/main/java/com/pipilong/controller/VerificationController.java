@@ -5,10 +5,7 @@ import com.pipilong.service.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.regex.Matcher;
@@ -74,16 +71,18 @@ public class VerificationController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * 判断密码是否已经设置
+     * @param userId 用户id
+     * @return true or false
+     */
+    @GetMapping("/password/{userid}")
+    public ResponseEntity<String> isExistPassword(@PathVariable("userid") String userId){
 
+        if(!selectExistService.password(userId)) return new ResponseEntity<>("null",HttpStatus.OK);
 
-
-
-
-
-
-
-
-
+        return new ResponseEntity<>("notNull",HttpStatus.OK);
+    }
 
 }
 

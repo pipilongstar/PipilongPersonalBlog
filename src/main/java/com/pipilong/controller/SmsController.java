@@ -29,8 +29,7 @@ public class SmsController {
      */
     @PostMapping("/sendcode/{telephone}")
     public ResponseEntity<String> sendCode(
-            @PathVariable
-            String telephone,
+            @PathVariable String telephone,
             HttpSession httpSession){
 
         String sessionId = httpSession.getId();

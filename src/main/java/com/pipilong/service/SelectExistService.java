@@ -24,4 +24,11 @@ public interface SelectExistService {
      */
     boolean email(String email);
 
+    /**
+     * 查询数据库，判断密码是否已经设置
+     * @param userId 用户id
+     * @return true or false
+     */
+    boolean password(String userId);
+
 }
