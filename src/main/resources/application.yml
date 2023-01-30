@@ -1,16 +1,12 @@
 spring:
   profiles:
     active: dev
-  redis:
-    host: 101.43.24.234
-    port: 6379
-    password: ZSLnlshb2623
-    jedis:
-      pool:
-        enabled: true
-        max-active: 16
+  servlet:
+    multipart:
+      enabled: true
 
-mybatis:
+
+
 #  config-location: classpath:com/pipilong/mapper/*.xml;
 
 logging:

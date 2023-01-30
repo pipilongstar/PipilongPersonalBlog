@@ -5,6 +5,14 @@ spring:
       url: jdbc:mysql://localhost:3306/pipilong-personal_blob
       username: root
       password: 26237447
+  redis:
+    host: 101.43.24.234
+    port: 6379
+    password: ZSLnlshb2623
+    jedis:
+      pool:
+        enabled: true
+        max-active: 16
 
 
 logging:

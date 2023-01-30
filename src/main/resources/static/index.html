@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>皮皮龙博客</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/css/search-style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+
+<script src="https://cdn.pipilong.com.cn/js/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.pipilong.com.cn/js/axios-0.18.0.js"></script>
+
+<div id="app">
+
+    <el-container>
+        <el-header style="background-color: #ffffff;margin-top: -8px;">
+            <!--            <div class="hr-double"></div>-->
+            <el-row class="row">
+                <el-col :span="1">
+                    <div></div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="./index.html">
+                            <img src="https://cdn.pipilong.com.cn/logo.png" class="logo" alt=""/>
+                        </a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="/" class="home-page-style1">首页</a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="/" class="home-page-style2">面经</a>
+                    </div>
+                </el-col>
+                <el-col :span="8">
+                    <div>
+                        <el-input v-model="search" placeholder="Enter Your Search Content" class="txtb">
+                            <template #suffix>
+                                <el-button icon="el-icon-search" circle></el-button>
+                            </template>
+                        </el-input>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="/" class="home-page-style">八股文</a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="/" class="home-page-style">消息</a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <el-dropdown :hide-on-click="false" show-timeout="0" hide-timeout="100">
+                            <span class="el-dropdown-link">
+                                网站相关
+                                <i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item>
+                                    <i class="el-icon-s-custom"></i>
+                                    作者介绍
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <i class="ri-booklet-fill"></i>
+                                    网站日志
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <i class="ri-github-fill"></i>
+                                    <a href="https://github.com/pipilongstar/PipilongPersonalBlog" target="_blank"
+                                       class="home-page-style">项目源码</a>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                </el-col>
+
+                <el-col :span="3">
+                    <div v-if="!isLogin">
+                        <a href="/html/login.html" target="_blank">
+                            <el-button round type="primary" class="login_button--primary">登录/注册</el-button>
+                        </a>
+                    </div>
+                    <div v-if="isLogin">
+
+                        <div style="margin-top: 13px;">
+                            <a href="./html/personal-center.html" target="_blank" @mouseover="avatarShow" @mouseleave="avatarShut">
+                                <el-avatar shape="circle" :size="40" :fit="fit" :src="avatarUrl"
+                                           class="avatar-style"></el-avatar>
+                            </a>
+                        </div>
+
+                        <el-collapse-transition>
+                            <div v-show="isAvatarShow" class="isAvatarShow_style" @mouseover="avatarShow" @mouseleave="avatarShut">
+                                <el-card shadow="always" style="height: 220px;width: 190px;border-radius: 16px;">
+                                    总是显示
+                                </el-card>
+                            </div>
+                        </el-collapse-transition>
+
+                    </div>
+                </el-col>
+            </el-row>
+
+        </el-header>
+        <!--        中部-->
+        <el-container>
+            <!--            左侧-->
+            <el-aside width="230px" style="background-color: #f5f5f5">
+
+<!--                <div style="width: 8cm;background-color: #107c10;height: 10px;"></div>-->
+                <div style="margin-top: 60px;">
+                    <h3>皮皮龙科技公众号</h3>
+                    <h4 style="line-height: 2;margin-top: -80px">更多资源，最新消息会持续发布在公众号上，如果你有关于面试，学习Java等问题或意见都可以在公众号上和我聊天😂，欢迎关注🥳</h4>
+                    <img src="https://cdn.pipilong.com.cn/公众号.png" style="width: 4cm;height: 4cm;">
+                    <h4 style="line-height: 2;margin-top: -40px">关注公众号，发送“资料”，可以领取学习资料大礼包😎</h4>
+                </div>
+
+            </el-aside>
+            <el-container>
+                <!--                主-->
+                <el-main style="background-color: #f5f5f5">
+
+                    <el-card shadow="always">
+                        <el-row style="margin-top: -10%;margin-bottom: -5%;margin-left: -2%">
+                            <el-col :span="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path fill="none" d="M0 0h24v24H0z"/>
+                                    <path d="M3 19V5.7a1 1 0 0 1 .658-.94l9.671-3.516a.5.5 0 0 1 .671.47v4.953l6.316 2.105a1 1 0 0 1 .684.949V19h2v2H1v-2h2zm2 0h7V3.855L5 6.401V19zm14 0v-8.558l-5-1.667V19h5z"
+                                          fill="rgba(214,98,98,1)"/>
+                                </svg>
+                            </el-col>
+                            <el-col :span="3" style="margin-top: -4%;margin-left: -3%;">
+                                <h4>名企面经</h4>
+                            </el-col>
+                        </el-row>
+
+<!--                     走马灯-->
+                        <el-col :span="24" style="height: 223px;margin-top: -14%;">
+                            <template>
+                                <el-carousel :interval="2000" type="card" height="200px" indicator-position="none">
+                                    <el-carousel-item v-for="item in 6" :key="item" style="border-radius: 7px;">
+                                        <el-card shadow="hover" style="border-radius: 7px;">
+                                            总是显示
+                                        </el-card>
+                                    </el-carousel-item>
+                                </el-carousel>
+                            </template>
+                        </el-col>
+
+                        <!--                    中部表单    -->
+                        <a href="#" v-for="(item,index) in tableData" style="text-decoration: none;">
+                            <el-card shadow="hover" class="card_discuss">
+                                {{index + 1}}:{{item}}
+                            </el-card>
+                            <div style="height: 10px;"></div>
+                        </a>
+                        <div style="margin-top: -50px;margin-bottom: -60px;">
+                            <el-button type="primary" @click="add_tableData" class="add_tableData_button--primary">
+                                加载更多
+                            </el-button>
+                        </div>
+
+                        <div v-show="this.tableData.length<=0" style="height: 600px;">
+                            <h3>空啦！</h3>
+                        </div>
+
+                    </el-card>
+
+                </el-main>
+            </el-container>
+            <!--            右侧-->
+            <el-aside width="400px" style="background-color: #f5f5f5">
+
+                <div style="padding-left: 34px;padding-top: 30px">
+                    <el-card shadow="always" style="border-radius: 20px;width: 240px;height: 60px;margin-bottom: -25%;">
+                        <el-col :span="12" style="margin-top: -45%;">
+                            <el-button icon="el-icon-edit-outline" type="primary" circle class="release_button--primary"
+                                       @click="openRelease"></el-button>
+                        </el-col>
+                        <el-col :span="12" style="margin-top: -45%;margin-left: -5%;">
+                            <el-button type="text" style="color: #81be81;font-weight: bolder;" @click="openRelease">
+                                发起讨论
+                            </el-button>
+                        </el-col>
+                    </el-card>
+                    <!--                    发讨论的格子-->
+
+                    <el-drawer
+                            :visible.sync="drawer"
+                            :direction="direction"
+                            :before-close="handleClose"
+                            direction="btt"
+                            size="430px">
+                        <span>我来啦!</span>
+                    </el-drawer>
+
+                </div>
+
+<!--                全站热榜-->
+                <div style="padding-left: 34px;padding-top: 126px;">
+                    <el-card shadow="always" style="border-radius: 20px;width: 240px;height: 600px;">
+                        <div style="margin-top: -110px;background-color: #f38f99;margin-left: -170px;width: 400px;height: 120px;">
+                            <h4>全站热榜</h4>
+                        </div>
+                        <div style="height: 6px;"></div>
+
+
+                        <div style="margin-bottom: -16px;"></div>
+
+                    </el-card>
+                </div>
+
+                <!--                回到顶部-->
+                <el-backtop :bottom="150" visibility-height="140" :right="180" style="width: 50px;">
+                    <div style="{
+                                height: 100%;
+                                width: 100%;
+                                background-color: #f2f5f6;
+                                box-shadow: 0 0 6px rgb(16,178,160);
+                                text-align: center;
+                                line-height: 50px;
+                                color: #10b2a0;
+                                border-radius: 12px;
+                                }">
+                        <div style="font-size: 30px;">
+                            <i class="ri-rocket-2-fill"></i>
+                        </div>
+                    </div>
+                </el-backtop>
+
+            </el-aside>
+        </el-container>
+        <!--        脚部-->
+        <el-footer height="40px" style="background-color: #f5f5f5">
+            <div style="margin-top: -32px">
+                <h5>Copyright © 2023 Pipilong. 皮皮龙技术分享 版权所有 <a href="https://beian.miit.gov.cn/"
+                                                                          target="_blank" class="footer-style">皖ICP备2023001037号-1</a>
+                </h5>
+            </div>
+        </el-footer>
+
+    </el-container>
+
+</div>
+
+<script>
+
+    const service = axios.create({
+        withCredentials: true, // 跨域请求时发送Cookie
+        timeout: 60000, // 请求超时
+    });
+
+</script>
+
+<script>
+
+    new Vue({
+        el: "#app",
+
+        mounted() {
+
+            service.get("http://localhost:8080/verification/isLogin").then(res => {
+                this.user_id=res.data;
+                this.avatarUrl="https://cdn.pipilong.com.cn/UserAvatar/"+this.user_id;
+                this.isLogin=true;
+            });
+
+        },
+
+        methods: {
+            login() {
+                this.dialogVisibleLogin = true;
+            },
+            openRelease() {
+                this.drawer = true;
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            add_tableData() {
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+            },
+            avatarShow(){
+                this.isAvatarShow=true;
+            },
+            avatarShut(){
+                this.isAvatarShow=false;
+            },
+        },
+
+        data() {
+            return {
+                search: '',
+                isLogin: false,
+                avatarUrl: 'https://cdn.pipilong.com.cn/UserAvatar/10037994.png',
+                fit: 'fill',
+                reference: false,
+                dialogVisibleLogin: false,
+                drawer: false,
+                tableData: ["北京", "上海", "广州", "深圳"],
+                hotList: ["北京", "上海", "广州", "深圳"],
+                isAvatarShow: false,
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

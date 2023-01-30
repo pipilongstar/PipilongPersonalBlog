@@ -1,7 +1,11 @@
 package com.pipilong.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.*;
 
 /**
  * @author pipilong
@@ -15,19 +19,21 @@ public class UploadController {
 
     /**
      * 上传头像
-     * @param userId 用户id
-     * @param avatarUrl 头像URL
      * @return true or false
      */
-    @PostMapping("/avatar")
-    public ResponseEntity<String> uploadAvatar(
-            @RequestParam("userid") String userId,
-            @RequestParam("avatarUrl") String avatarUrl
-    ){
+    @RequestMapping("/avatar")
+    public ResponseEntity<String> uploadAvatar(MultipartFile file) throws FileNotFoundException {
 
-        System.out.println(userId+":"+avatarUrl);
+        OutputStream os = new FileOutputStream("D://demo.jpg");
 
-        return null;
+        try {
+            System.out.println(file.getOriginalFilename());
+            os.write(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

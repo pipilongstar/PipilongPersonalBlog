@@ -2,6 +2,8 @@ package com.pipilong.service;
 
 import org.springframework.stereotype.Service;
 
+import javax.mail.SendFailedException;
+
 /**
  * @author pipilong
  * @createTime 2023/1/18
@@ -15,7 +17,7 @@ public interface SmsService {
      * @param telephone 手机号
      * @param sessionId 用户的session
      */
-    void verificationCodeProcessing(String telephone, String sessionId);
+    void verificationCodeProcessing(String telephone, String sessionId) throws SendFailedException;
 
     /**
      * 发送短信的方法
@@ -28,7 +30,7 @@ public interface SmsService {
      * 根据用户id找到手机号，并发送短信
      * @param userId 用户id
      */
-    void sendSmsByUserId(String userId,String sessionId);
+    void sendSmsByUserId(String userId,String sessionId) throws SendFailedException;
 
 }
 

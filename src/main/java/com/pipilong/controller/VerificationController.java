@@ -2,6 +2,7 @@ package com.pipilong.controller;
 
 import com.pipilong.service.SelectExistService;
 import com.pipilong.service.VerificationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
  * @createTime 2023/1/19
  * @description
  */
+@Slf4j
 @RestController
 @RequestMapping("/verification")
 public class VerificationController {
@@ -82,6 +84,16 @@ public class VerificationController {
         if(!selectExistService.password(userId)) return new ResponseEntity<>("null",HttpStatus.OK);
 
         return new ResponseEntity<>("notNull",HttpStatus.OK);
+    }
+
+    @GetMapping("/isLogin")
+    public ResponseEntity<String> isLogin(HttpSession httpSession){
+        String sessionId=httpSession.getId();
+
+        log.info("sessionId:"+sessionId);
+        String userId = verificationService.isLogin(sessionId);
+        if(userId==null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(userId,HttpStatus.OK);
     }
 
 }

@@ -19,5 +19,10 @@ public interface VerificationService {
      */
     boolean verificationCode(String code,String sessionId);
 
-
+    /**
+     * 验证是否已经登录
+     * @param sessionId 用户session id;
+     * @return true or false
+     */
+    String isLogin(String sessionId);
 }

@@ -23,8 +23,14 @@ public class VerificationServiceImpl implements VerificationService {
         return saveCode == null || !saveCode.equals(code);
     }
 
-}
+    @Override
+    public String isLogin(String sessionId) {
 
+        String key="user:" + sessionId;
+        return stringRedisTemplate.opsForValue().get(key);
+    }
+
+}
 
 
 

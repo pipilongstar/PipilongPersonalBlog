@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
         return userId;
     }
 
+    @ErrorLog(true)
     @Override
     public String codeLogin(String telephone, String code, String sessionId) throws LoginException {
         if(verificationService.verificationCode(code, sessionId)) throw new LoginException("验证码错误");

@@ -1,0 +1,60 @@
+
+  .newsletter{
+    background: linear-gradient(125deg,#778beb,#f8a5c2);
+    width: 500px;
+    padding: 60px;
+    text-align: center;
+    box-shadow: 0 0 20px #00000060;
+  }
+  .newsletter h1{
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 48px;
+    line-height: 40px;
+  }
+  .newsletter h1 span{
+    display: block;
+    font-size: 38px;
+  }
+  .newsletter p{
+    color: #fff;
+    font-size: 14px;
+    margin: 10px 0;
+  }
+  .txtb{
+    width: 80%;
+    height: 46px;
+    background: #f1f1f199;
+    border-radius: 40px;
+    position: relative;
+    margin-top: 5px;
+  }
+  .txtb input{
+    width: 100%;
+    height: 44px;
+    /*border-radius: 40px;*/
+    border: 0;
+    background: none;
+    outline: none;
+    font-size: 15px;
+    padding-left: 25px;
+    padding-top: 15px;
+    /*text-align: center;*/
+  }
+  .txtb button{
+    background: #574b90;
+    border: 0;
+    width: 37px;
+    height: 36px;
+    border-radius: 50%;
+    position: absolute;
+    right: 14px;
+    top: 6px;
+    outline: none;
+    cursor: pointer;
+    color: #fff;
+    transition: 0.3s linear;
+  }
+  .txtb button:hover{
+    opacity: .5;
+  }

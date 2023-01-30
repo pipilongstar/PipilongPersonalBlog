@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" href="https://cdn.pipilong.com.cn/css/login.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+
+<script src="https://cdn.pipilong.com.cn/js/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.pipilong.com.cn/js/axios-0.18.0.js"></script>
+
+<div id="page" class="site">
+    <div style="margin-top: -48%;margin-left: 6%;">
+        <a href="../index.html">
+            <img src="https://cdn.pipilong.com.cn/logo.png" class="logo" alt=""/>
+        </a>
+    </div>
+    <!--        登录部分-->
+    <div class="container" v-if="isToLogin">
+        <div class="login">
+            <div class="hero">
+                <h1>Sign In to <br>Open the World</h1>
+                <p>If you don't have an account,<br>you can
+                    <el-button type="text" class="isToLogin--text" @click="toLogin">Register here</el-button>
+                    .
+                </p>
+            </div>
+            <div class="main">
+<!--                验证码登录部分-->
+                <div v-if="codeLogin">
+                    <form>
+                        <p>
+                            <input type="text" placeholder="手机号" @blur="phone_number" v-model="telephone">
+                            <span style="color: #ff4e4e;font-family: 'Noto Sans SC', sans-serif !important;">{{this.phone_pattern}}</span>
+                        </p>
+                        <p class="password">
+                            <input type="text" placeholder="验证码" v-model="code">
+                            <!--              <i class="ri-eye-off-line"></i>-->
+                            <i style="margin-top: -19px;">
+                                <el-button id="sendCodeId" type="text" class="sendSms_button--text" @click="sendSms"
+                                           :disabled="disable">
+                                    {{sendSmsButtonName}}
+                                </el-button>
+                            </i>
+                            <span style="color: #ff4e4e;font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_code}}<br></span>
+                            <el-button type="text" @click="exchangeLogin" class="exchange_button--text">
+                                账户密码登录
+                            </el-button>
+                            <a href="#">找回密码</a>
+                        </p>
+                        <p>
+                            <input type="button" class="submit" value="登录" @click="codeSubmit">
+                        </p>
+                    </form>
+                </div>
+<!--                账号密码登录部分-->
+                <div v-if="!codeLogin">
+                    <form action="#">
+                        <p>
+                            <input type="text" placeholder="手机号或邮箱" v-model="username1">
+                        </p>
+                        <p class="password">
+                            <input type="password" placeholder="密码" v-model="password">
+                            <i class="ri-eye-off-line"></i>
+                            <span style="color: #ff4e4e;font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_login}}</span>
+                            <el-button type="text" @click="exchangeLogin" class="exchange_button--text">验证码登录
+                            </el-button>
+                            <a href="#">找回密码</a>
+                        </p>
+                        <p>
+                            <input type="button" class="submit" value="登录" @click="passwordSubmit">
+                        </p>
+                    </form>
+                </div>
+<!--                <h1 v-if="!codeLogin">hello</h1>-->
+
+                <div class="options">
+                    <div class="separator">
+                        <p>使用其他方式登录</p>
+                    </div>
+                    <ul>
+                        <li><a href="#"><i class="ri-github-fill ri-2x"></i></a></li>
+                        <li><a href="#"><i class="ri-qq-fill ri-2x"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--    注册部分-->
+    <div class="container" v-if="!isToLogin">
+        <div class="login">
+            <div class="hero1">
+                <h1>Sign In to <br>Open the World</h1>
+                <p>If you have an account, you can <br>
+                    <el-button type="text" class="isToLogin--text" @click="toLogin">Login here</el-button>
+                    .
+                </p>
+            </div>
+            <div class="main">
+
+                <form action="#">
+                    <p>
+                        <input type="text" placeholder="用户名" @blur="judge_username" v-model="username">
+                        <span style="color: #ff4e4e;font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_username}}</span>
+                    </p>
+                    <p>
+                        <input type="email" placeholder="电子邮箱" @blur="exist_email" v-model="email">
+                        <span style="color: #ff4e4e;font-family: 'Noto Sans SC', sans-serif !important;">{{this.email_exist}}</span>
+                    </p>
+                    <p>
+                        <input type="text" placeholder="手机号" @blur="exist_phone" v-model="telephone">
+                        <span style="color: #ff4e4e;font-family: 'Noto Sans SC', sans-serif !important;">{{this.phone_exist}}</span>
+                    </p>
+                    <p class="password">
+                        <input type="text" placeholder="验证码" v-model="code">
+                        <!--              <i class="ri-eye-off-line"></i>-->
+                        <i style="margin-top: -19px;">
+                            <el-button id="sendCodeId" type="text" class="sendSms_button--text" @click="sendSms"
+                                       :disabled="disable">
+                                {{sendSmsButtonName}}
+                            </el-button>
+                        </i>
+                        <span style="color: #ff4e4e;font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_code}}<br></span>
+                        <a href="#">找回密码</a>
+                    </p>
+                    <p>
+                        <input type="button" class="submit" value="注册" @click="register">
+                    </p>
+                </form>
+
+                <div class="options">
+                    <div class="separator">
+                        <p>使用其他方式登录</p>
+                    </div>
+                    <ul>
+                        <li><a href="#"><i class="ri-github-fill ri-2x"></i></a></li>
+                        <li><a href="#"><i class="ri-qq-fill ri-2x"></i></a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    const service = axios.create({
+        withCredentials: true, // 跨域请求时发送Cookie
+        timeout: 60000, // 请求超时
+    });
+
+</script>
+
+<script>
+
+    new Vue({
+        el: "#page",
+
+        mounted() {
+
+        },
+
+        methods: {
+            sendSms() {
+                this.error_code = '';
+                if (this.phone_pattern !== ''&&this.phone_exist !== ''||this.telephone==null) return;
+                if (this.isSendSms) return;
+                this.isSendSms = true;
+
+                service.post("http://localhost:8080/sendcode/" + this.telephone).then((res) => {
+                    console.info("kaishi");
+                    var timeout = setInterval(() => {
+                        if (this.count < 1) {
+                            this.disable = false;
+                            this.sendSmsButtonName = "获取验证码";
+                            this.count = 60;
+                            this.isSendSms = false;
+                            clearInterval(timeout);
+                        } else {
+                            this.disable = true;
+                            this.sendSmsButtonName = this.count-- + "s后重发";
+                        }
+                    }, 1000);
+                }).catch((error) => {
+                    this.error_code = error.response.data;
+                    this.isSendSms = false;
+                    console.info(error.response.data);
+                });
+            },
+            //验证码登录按钮
+            codeSubmit() {
+
+                this.username1=this.telephone;
+                let formData=new FormData();
+                formData.append("username",this.username1);
+                formData.append("password","");
+                formData.append("code",this.code);
+                service.post("http://localhost:8080/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
+                    window.open('../index.html');
+                    this.user_id=res.data;
+                }).catch(error => {
+                   this.error_code = error.response.data;
+                });
+
+            },
+            //密码登录按钮
+            passwordSubmit() {
+
+                let formData=new FormData();
+                formData.append("username",this.username1);
+                formData.append("password",this.password);
+                formData.append("code","");
+                service.post("http://localhost:8080/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
+                    window.open('../index.html');
+                    this.user_id=res.data;
+                }).catch(error => {
+                    this.error_code = error.response.data;
+                });
+
+            },
+            //注册
+            register() {
+                if (this.email_exist === '' && this.phone_exist === '' && this.error_username === '') {
+
+                    console.info('daole 1');
+
+                    let user_data={
+                        "username":this.username,
+                        "email":this.email,
+                        "telephone":this.telephone
+                    };
+                    service.put("http://localhost:8080/user/register/"+this.code,user_data).then((res) => {
+                        this.user_id=res.data;
+                    }).catch(error => {
+                        this.error_code=error.response.data;
+                    });
+
+                }
+            },
+            exchangeLogin() {
+                this.codeLogin = !this.codeLogin;
+            },
+            toLogin() {
+                this.isToLogin = !this.isToLogin;
+            },
+            // 验证手机号格式
+            phone_number() {
+                if(this.telephone==null) return;
+                var reg_phone = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+                if (!reg_phone.test(this.telephone)) {
+                    this.phone_pattern = '手机号格式错误';
+                    return;
+                }
+                this.phone_pattern = '';
+            },
+            //验证手机号是否存在
+            exist_phone() {
+
+                service.get("http://localhost:8080/verification/telephone/"+this.telephone).then(res => {
+                    this.phone_exist='';
+                }).catch(error => {
+                    this.phone_exist=error.response.data;
+                });
+
+            },
+            //验证邮箱是否存在
+            exist_email() {
+
+                service.get("http://localhost:8080/verification/email/"+this.email).then(res => {
+                    this.email_exist='';
+                }).catch(error => {
+                   this.email_exist=error.response.data;
+                });
+
+            },
+            //验证用户名输入不能太长
+            judge_username() {
+                if (this.username.length > 10) {
+                    this.error_username = '用户名长度不能大于10';
+                    return;
+                }
+                this.error_username = '';
+            }
+        },
+
+        data:{
+            sendSmsButtonName: '获取验证码',
+            disable: false,
+            count: 60,
+            codeLogin: true,
+            isToLogin: true,
+            telephone: null,
+            email: null,
+            //验证码
+            code: null,
+            password: null,
+            phone_pattern: '',
+            email_exist: ' ',
+            phone_exist: ' ',
+            //注册用的username
+            username: '',
+            error_username: ' ',
+            error_code: '',
+            //账号登录时，密码或账号错误的信息
+            error_login: '',
+            //账号密码登录时，发表单用的数据
+            username1: '',
+            user_id: '',
+            isSendSms: false,
+        }
+    });
+</script>
+
+
+</body>
+</html>

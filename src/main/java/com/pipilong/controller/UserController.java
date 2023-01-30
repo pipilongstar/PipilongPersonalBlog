@@ -2,10 +2,10 @@ package com.pipilong.controller;
 
 import com.pipilong.exception.ModifyException;
 import com.pipilong.pojo.User;
-import com.pipilong.service.SmsService;
 import com.pipilong.service.UserService;
 import com.pipilong.service.VerificationService;
 import com.sun.deploy.association.RegisterFailedException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,11 @@ import javax.servlet.http.HttpSession;
  * @createTime 2023/1/18
  * @description
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private SmsService smsService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -46,8 +45,7 @@ public class UserController {
         if(verificationService.verificationCode(code, sessionId)){
             return new ResponseEntity<>("验证码错误", HttpStatus.UNAUTHORIZED);
         }
-
-        String userId = null;
+        String userId;
         try {
             userId = userService.register(user, sessionId);
         } catch (RegisterFailedException e) {
@@ -125,6 +123,13 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * 修改密码
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @param userid 用户id
+     * @return true or false
+     */
     @PostMapping("/modifypassword")
     public ResponseEntity<String> modifyPassword(
             @RequestParam("oldpassword") String oldPassword,
@@ -140,7 +145,6 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }
 
 

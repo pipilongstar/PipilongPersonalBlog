@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.SendFailedException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -22,18 +25,27 @@ public class SmsController {
     @Autowired
     private VerificationService verificationService;
 
+    @Autowired
+    private HttpSession httpSession;
+
     /**
      * 接收手机号，发送验证码
      * @param telephone 手机号
-     * @param httpSession 用户session
+     * @param sessionId 用户session id
      */
     @PostMapping("/sendcode/{telephone}")
     public ResponseEntity<String> sendCode(
             @PathVariable String telephone,
-            HttpSession httpSession){
+            @CookieValue(value = "JSESSIONID",required = false) String sessionId){
 
-        String sessionId = httpSession.getId();
-        smsService.verificationCodeProcessing(telephone,sessionId);
+        if("".equals(sessionId)||sessionId==null){
+            sessionId = httpSession.getId();
+        }
+        try {
+            smsService.verificationCodeProcessing(telephone,sessionId);
+        } catch (SendFailedException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -46,7 +58,11 @@ public class SmsController {
     @PostMapping("/sendcode")
     public ResponseEntity<String> sendCodeByUserId(@RequestParam("userid") String userId, HttpSession httpSession){
 
-        smsService.sendSmsByUserId(userId,httpSession.getId());
+        try {
+            smsService.sendSmsByUserId(userId,httpSession.getId());
+        } catch (SendFailedException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

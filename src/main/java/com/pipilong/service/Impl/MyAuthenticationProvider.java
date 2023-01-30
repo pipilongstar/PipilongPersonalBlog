@@ -16,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author pipilong
@@ -28,6 +29,9 @@ public class MyAuthenticationProvider extends DaoAuthenticationProvider {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private HttpSession httpSession;
+
     public MyAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder){
         this.setUserDetailsService(userDetailsService);
         this.setPasswordEncoder(passwordEncoder);
@@ -39,7 +43,7 @@ public class MyAuthenticationProvider extends DaoAuthenticationProvider {
         String username = request.getParameter("username");
         if(username==null) throw new AuthenticationServiceException("未认证");
         String password = request.getParameter("password");
-        String sessionId = request.getSession().getId();
+        String sessionId = httpSession.getId();
         if(password == null || "".equals(password)) {
             //短信验证码验证
             String code = request.getParameter("code");

@@ -13,9 +13,13 @@ import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.mail.SendFailedException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,8 +40,19 @@ public class SmsServiceImpl implements SmsService {
     private UserMapper userMapper;
 
     @Override
-    public void verificationCodeProcessing(String telephone, String sessionId) {
+    public void verificationCodeProcessing(String telephone, String sessionId) throws SendFailedException {
         String key="verificationCode:"+sessionId;
+        String key1="ttl:"+telephone;
+
+        Long ttl = stringRedisTemplate.execute(new RedisCallback<Long>() {
+            @Override
+            public Long doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.ttl(key1.getBytes());
+            }
+        });
+        if(ttl!=null&&ttl>240) {
+            throw new SendFailedException("发送太频繁");
+        }
 
         String code = stringRedisTemplate.opsForValue().get(key);
         if(code == null) {
@@ -45,6 +60,7 @@ public class SmsServiceImpl implements SmsService {
         }
 
         stringRedisTemplate.opsForValue().set(key,code,300, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(key1,"",300,TimeUnit.SECONDS);
         sendSMS(telephone,code);
     }
 
@@ -88,9 +104,9 @@ public class SmsServiceImpl implements SmsService {
         }
     }
 
-    @ErrorLog
+    @ErrorLog(true)
     @Override
-    public void sendSmsByUserId(String userId, String sessionId) {
+    public void sendSmsByUserId(String userId, String sessionId) throws SendFailedException {
 
         String telephone = userMapper.selectTelephoneByUserId(userId);
         this.verificationCodeProcessing(telephone,sessionId);

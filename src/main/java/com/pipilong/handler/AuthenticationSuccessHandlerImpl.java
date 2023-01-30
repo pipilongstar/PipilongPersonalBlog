@@ -23,5 +23,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         String userId = (String) request.getSession().getAttribute("userId");
         PrintWriter writer = response.getWriter();
         writer.println(userId);
+        String sessionId=request.getSession().getId();
+        writer.println(sessionId);
+        System.out.println(sessionId);
     }
 }
