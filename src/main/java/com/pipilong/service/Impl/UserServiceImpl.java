@@ -144,6 +144,22 @@ public class UserServiceImpl implements UserService {
         userMapper.modifyPassword(encodePassword,userId);
 
     }
+
+    @ErrorLog(true)
+    @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ,
+        propagation = Propagation.REQUIRED)
+    public User getProfile(String sessionId) throws LoginException {
+
+        String key="user:"+sessionId;
+        String userId = stringRedisTemplate.opsForValue().get(key);
+        if(userId==null) throw new LoginException("登录异常");
+        User user = new User();
+        user.setProfile(userMapper.getProfile(userId));
+        user.setTelephone(userMapper.getTelephoneByUserId(userId));
+        user.setEmail(userMapper.getEmailByUserID(userId));
+        return user;
+    }
 }
 
 

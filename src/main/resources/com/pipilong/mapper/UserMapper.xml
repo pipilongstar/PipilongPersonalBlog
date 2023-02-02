@@ -8,6 +8,8 @@
         <result property="telephone" column="phone_number"/>
         <result property="userId" column="user_id"/>
         <result property="userName" column="username"/>
+        <result property="personalMessage" column="personal_message"/>
+        <result property="githubUrl" column="github_url"/>
     </resultMap>
 
     <insert id="registerUserToSecurity">
@@ -29,7 +31,9 @@
     <update id="modifyProfile">
         update user_data set username='${user.username}',
                              gender='${user.gender}',
-                             birthday='${user.birthday}',
+                             <if test="user.birthday!=null">
+                                 birthday='${user.birthday}',
+                             </if>
                              address='${user.address}',
                              personal_message='${user.personalMessage}',
                              github_url='${user.githubUrl}',
@@ -63,6 +67,15 @@
 
     <select id="selectPassword" resultType="java.lang.String">
         select password from account_security where user_id = ${userid};
+    </select>
+    <select id="getProfile" resultMap="resultMap">
+        select * from user_data where user_id = ${userid};
+    </select>
+    <select id="getTelephoneByUserId" resultType="java.lang.String">
+        select phone_number from account_security where user_id = ${userid};
+    </select>
+    <select id="getEmailByUserID" resultType="java.lang.String">
+        select email from account_security where user_id = ${userid};
     </select>
 </mapper>
 

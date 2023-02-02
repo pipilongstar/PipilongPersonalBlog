@@ -23,15 +23,47 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/sendemail")
-    public ResponseEntity<String> sendEmail(@RequestParam("userid") String userId, HttpSession session){
+    public ResponseEntity<String> sendEmail(@RequestParam("userid") String userId, HttpSession session) throws EmailException {
 
-        try {
-            emailService.sendVerificationCodeByUserId(userId,session.getId());
-        } catch (EmailException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        emailService.sendVerificationCodeByUserId(userId,session.getId());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

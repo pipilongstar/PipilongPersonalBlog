@@ -87,23 +87,61 @@
 
                 <el-col :span="3">
                     <div v-if="!isLogin">
-                        <a href="/html/login.html" target="_blank">
+                        <a href="./html/login.html" target="_blank">
                             <el-button round type="primary" class="login_button--primary">登录/注册</el-button>
                         </a>
                     </div>
                     <div v-if="isLogin">
 
                         <div style="margin-top: 13px;">
-                            <a href="./html/personal-center.html" target="_blank" @mouseover="avatarShow" @mouseleave="avatarShut">
+                            <a href="./html/personal-center.html" target="_blank" @mouseover="avatarShow"
+                               @mouseleave="avatarShut">
                                 <el-avatar shape="circle" :size="40" :fit="fit" :src="avatarUrl"
                                            class="avatar-style"></el-avatar>
                             </a>
                         </div>
 
+                        <!--                        鼠标悬停头像小卡片-->
                         <el-collapse-transition>
-                            <div v-show="isAvatarShow" class="isAvatarShow_style" @mouseover="avatarShow" @mouseleave="avatarShut">
+                            <div v-show="isAvatarShow" class="isAvatarShow_style" @mouseover="avatarShow"
+                                 @mouseleave="avatarShut">
                                 <el-card shadow="always" style="height: 220px;width: 190px;border-radius: 16px;">
-                                    总是显示
+                                    <a href="./html/personal-center.html" target="_blank">
+                                        <div style="margin-top: -5px;">
+                                            <el-avatar :src="avatarUrl"
+                                                       :size="60"></el-avatar>
+                                        </div>
+                                    </a>
+                                    <div style="margin-top: -50px;">
+                                        <h3>{{username}}</h3>
+                                    </div>
+
+                                    <div style="margin-top: -28px;margin-left: -26px;">
+                                        <el-button type="primary" plain class="avatar_card_item--primary" @click="openPersonalSettings">
+                                            <div style="font-size: 18px;float: left;margin-left: 14px;">
+                                                <i class="ri-user-settings-line"></i>
+                                            </div>
+                                            <div style="float: right;margin-right: 48px;font-size: 15px;margin-top: 4px;">
+                                                个人设置
+                                            </div>
+                                        </el-button>
+                                    </div>
+
+                                    <div style="margin-left: -26px;margin-top: -6px;">
+                                        <el-button type="primary" plain class="avatar_card_item--primary" @click="logout">
+                                            <div style="font-size: 18px;float: left;margin-left: 14px;">
+                                                <i class="ri-arrow-left-circle-line"></i>
+                                            </div>
+                                            <div style="float: right;margin-right: 48px;font-size: 15px;margin-top: 4px;">
+                                                退出登录
+                                            </div>
+                                        </el-button>
+                                    </div>
+                                    <!--                                    <a href="#">-->
+                                    <!--                                        <div class="avatar_card_item">-->
+                                    <!--                                            退出登录-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </a>-->
                                 </el-card>
                             </div>
                         </el-collapse-transition>
@@ -118,10 +156,11 @@
             <!--            左侧-->
             <el-aside width="230px" style="background-color: #f5f5f5">
 
-<!--                <div style="width: 8cm;background-color: #107c10;height: 10px;"></div>-->
+                <!--                <div style="width: 8cm;background-color: #107c10;height: 10px;"></div>-->
                 <div style="margin-top: 60px;">
                     <h3>皮皮龙科技公众号</h3>
-                    <h4 style="line-height: 2;margin-top: -80px">更多资源，最新消息会持续发布在公众号上，如果你有关于面试，学习Java等问题或意见都可以在公众号上和我聊天😂，欢迎关注🥳</h4>
+                    <h4 style="line-height: 2;margin-top: -80px">
+                        更多资源，最新消息会持续发布在公众号上，如果你有关于面试，学习Java等问题或意见都可以在公众号上和我聊天😂，欢迎关注🥳</h4>
                     <img src="https://cdn.pipilong.com.cn/公众号.png" style="width: 4cm;height: 4cm;">
                     <h4 style="line-height: 2;margin-top: -40px">关注公众号，发送“资料”，可以领取学习资料大礼包😎</h4>
                 </div>
@@ -145,7 +184,7 @@
                             </el-col>
                         </el-row>
 
-<!--                     走马灯-->
+                        <!--                     走马灯-->
                         <el-col :span="24" style="height: 223px;margin-top: -14%;">
                             <template>
                                 <el-carousel :interval="2000" type="card" height="200px" indicator-position="none">
@@ -160,7 +199,7 @@
 
                         <!--                    中部表单    -->
                         <a href="#" v-for="(item,index) in tableData" style="text-decoration: none;">
-                            <el-card shadow="hover" class="card_discuss">
+                            <el-card shadow="none" class="card_discuss">
                                 {{index + 1}}:{{item}}
                             </el-card>
                             <div style="height: 10px;"></div>
@@ -183,7 +222,7 @@
             <el-aside width="400px" style="background-color: #f5f5f5">
 
                 <div style="padding-left: 34px;padding-top: 30px">
-                    <el-card shadow="always" style="border-radius: 20px;width: 240px;height: 60px;margin-bottom: -25%;">
+                    <el-card shadow="always" style="border-radius: 20px;width: 240px;height: 60px;margin-bottom: -25%;box-shadow: 0 0 6px rgb(129,190,129);">
                         <el-col :span="12" style="margin-top: -45%;">
                             <el-button icon="el-icon-edit-outline" type="primary" circle class="release_button--primary"
                                        @click="openRelease"></el-button>
@@ -207,14 +246,17 @@
 
                 </div>
 
-<!--                全站热榜-->
+                <!--                全站热榜-->
                 <div style="padding-left: 34px;padding-top: 126px;">
-                    <el-card shadow="always" style="border-radius: 20px;width: 240px;height: 600px;">
+                    <el-card shadow="always" style="border-radius: 20px;width: 240px;box-shadow: 0 0 6px rgb(234,112,112);">
                         <div style="margin-top: -110px;background-color: #f38f99;margin-left: -170px;width: 400px;height: 120px;">
                             <h4>全站热榜</h4>
                         </div>
                         <div style="height: 6px;"></div>
 
+                        <div v-for="(item,index) in hotList" style="margin-left: -20px;line-height: 0.7;">
+                            <el-button type="primary" plain class="hot_item">{{index+1}}:{{item}}</el-button>
+                        </div>
 
                         <div style="margin-bottom: -16px;"></div>
 
@@ -271,9 +313,9 @@
         mounted() {
 
             service.get("http://localhost:8080/verification/isLogin").then(res => {
-                this.user_id=res.data;
-                this.avatarUrl="https://cdn.pipilong.com.cn/UserAvatar/"+this.user_id;
-                this.isLogin=true;
+                this.user_id = res.data;
+                this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
+                this.isLogin = true;
             });
 
         },
@@ -302,26 +344,39 @@
                 this.tableData.push("new data!");
                 this.tableData.push("new data!");
             },
-            avatarShow(){
-                this.isAvatarShow=true;
+            avatarShow() {
+                this.isAvatarShow = true;
             },
-            avatarShut(){
-                this.isAvatarShow=false;
+            avatarShut() {
+                this.isAvatarShow = false;
             },
+            openPersonalSettings(){
+              window.open('./html/personal-settings.html');
+            },
+            logout(){
+
+                service.get('http://localhost:8080/logout').then(res=>{
+                   window.location.href='./index.html';
+                }).catch(error=>{
+                    this.$message.error('退出登录失败！');
+                });
+
+            }
         },
 
         data() {
             return {
                 search: '',
                 isLogin: false,
-                avatarUrl: 'https://cdn.pipilong.com.cn/UserAvatar/10037994.png',
+                avatarUrl: '',
                 fit: 'fill',
                 reference: false,
                 dialogVisibleLogin: false,
                 drawer: false,
                 tableData: ["北京", "上海", "广州", "深圳"],
-                hotList: ["北京", "上海", "广州", "深圳"],
+                hotList: ["北京", "上海", "广州", "深圳","天津","重庆","杭州","深圳","厦门","合肥"],
                 isAvatarShow: false,
+                username: 'pipilong',
             }
         }
     });

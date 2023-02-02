@@ -36,16 +36,13 @@ public class SmsController {
     @PostMapping("/sendcode/{telephone}")
     public ResponseEntity<String> sendCode(
             @PathVariable String telephone,
-            @CookieValue(value = "JSESSIONID",required = false) String sessionId){
+            @CookieValue(value = "JSESSIONID",required = false) String sessionId) throws SendFailedException {
 
         if("".equals(sessionId)||sessionId==null){
             sessionId = httpSession.getId();
         }
-        try {
-            smsService.verificationCodeProcessing(telephone,sessionId);
-        } catch (SendFailedException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
+        smsService.verificationCodeProcessing(telephone,sessionId);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -56,13 +53,9 @@ public class SmsController {
      * @return nothing
      */
     @PostMapping("/sendcode")
-    public ResponseEntity<String> sendCodeByUserId(@RequestParam("userid") String userId, HttpSession httpSession){
+    public ResponseEntity<String> sendCodeByUserId(@RequestParam("userid") String userId, HttpSession httpSession) throws SendFailedException {
 
-        try {
-            smsService.sendSmsByUserId(userId,httpSession.getId());
-        } catch (SendFailedException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
+        smsService.sendSmsByUserId(userId,httpSession.getId());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

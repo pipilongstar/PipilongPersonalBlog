@@ -5,13 +5,19 @@ import com.pipilong.pojo.User;
 import com.pipilong.service.UserService;
 import com.pipilong.service.VerificationService;
 import com.sun.deploy.association.RegisterFailedException;
+import javafx.scene.input.DataFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.DefaultMessageCodesResolver;
 import org.springframework.web.bind.annotation.*;
+import sun.text.resources.FormatData;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.logging.SimpleFormatter;
 
 /**
  * @author pipilong
@@ -40,17 +46,12 @@ public class UserController {
             @RequestBody User user,
             @PathVariable("code") String code,
             HttpSession session
-    ){
+    ) throws RegisterFailedException {
         String sessionId = session.getId();
         if(verificationService.verificationCode(code, sessionId)){
             return new ResponseEntity<>("验证码错误", HttpStatus.UNAUTHORIZED);
         }
-        String userId;
-        try {
-            userId = userService.register(user, sessionId);
-        } catch (RegisterFailedException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        String userId = userService.register(user, sessionId);
         return new ResponseEntity<>(userId,HttpStatus.OK);
     }
 
@@ -60,13 +61,9 @@ public class UserController {
      * @return ture or false
      */
     @PutMapping("/modifyprofile")
-    public ResponseEntity<String> modifyProfile(@RequestBody User user){
+    public ResponseEntity<String> modifyProfile(@RequestBody User user) throws ModifyException {
 
-        try {
-            userService.modifyProfile(user);
-        } catch (ModifyException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userService.modifyProfile(user);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -75,25 +72,15 @@ public class UserController {
      * 修改手机号
      * @param telephone 新手机号
      * @param userId 用户id
-     * @param code 验证码
-     * @param session 用户session
      * @return nothing
      */
-    @PostMapping("/modifyphone")
+    @PutMapping("/modifyphone")
     public ResponseEntity<String> modifyPhone(
             @RequestParam("telephone") String telephone,
-            @RequestParam("userid") String userId,
-            @RequestParam("code") String code,
-            HttpSession session
-    ){
+            @RequestParam("userid") String userId
+    ) throws ModifyException {
 
-        if(verificationService.verificationCode(code, session.getId())) return new ResponseEntity<>("验证码错误",HttpStatus.UNAUTHORIZED);
-
-        try {
-            userService.modifyTelephone(telephone,userId);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userService.modifyTelephone(telephone,userId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -106,19 +93,13 @@ public class UserController {
      * @param session 用户session
      * @return nothing
      */
-    @PostMapping("/modifyemail")
+    @PutMapping("/modifyemail")
     public ResponseEntity<String> modifyEmail(
             @RequestParam("email") String email,
             @RequestParam("userid") String userid,
-            @RequestParam("code") String code,
-            HttpSession session){
+            HttpSession session) throws ModifyException {
 
-        if(verificationService.verificationCode(code, session.getId())) return new ResponseEntity<>("验证码错误",HttpStatus.UNAUTHORIZED);
-        try {
-            userService.modifyEmail(email,userid);
-        } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userService.modifyEmail(email,userid);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -135,16 +116,28 @@ public class UserController {
             @RequestParam("oldpassword") String oldPassword,
             @RequestParam("newpassword") String newPassword,
             @RequestParam("userid") String userid
-    ){
+    ) throws ModifyException {
 
-        try {
-            userService.modifyPassword(oldPassword,newPassword,userid);
-        } catch (ModifyException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userService.modifyPassword(oldPassword,newPassword,userid);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    /**
+     * 获取个人资料
+     * @param session 用户session
+     * @return true or false
+     * @throws LoginException 用户未登录
+     */
+    @GetMapping("/getprofile")
+    public ResponseEntity<User> getProfile(HttpSession session) throws LoginException {
+
+        String sessionId = session.getId();
+        User user = userService.getProfile(sessionId);
+
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
 }
 
 

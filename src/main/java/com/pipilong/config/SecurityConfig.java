@@ -1,5 +1,6 @@
 package com.pipilong.config;
 
+import com.pipilong.handler.LogoutSuccessHandlerImpl;
 import com.pipilong.service.Impl.MyAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationSuccessHandler authenticationSuccessHandler;
 
+    @Autowired
+    private LogoutSuccessHandlerImpl logoutSuccessHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
@@ -53,6 +57,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
                 .permitAll()
+                .and()
+            .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .invalidateHttpSession(true)
+                .and()
+            .oauth2Login()
+                .redirectionEndpoint()
+                    .baseUri("/login/oauth2/code/github")
                 .and();
     }
 
@@ -79,6 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String[] methods={"GET","POST","PUT","DELETE","TRACE","OPTIONS","PATCH","HEAD"};
         corsConfiguration.setAllowedMethods(Arrays.asList(methods));
         corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "XFILENAME", "XFILECATEGORY", "XFILESIZE","Origin", "X-Requested-With", "Accept", "cc"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",corsConfiguration);
         return source;

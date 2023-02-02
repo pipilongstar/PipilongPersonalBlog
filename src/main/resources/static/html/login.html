@@ -140,8 +140,8 @@
                         <p>使用其他方式登录</p>
                     </div>
                     <ul>
-                        <li><a href="#"><i class="ri-github-fill ri-2x"></i></a></li>
-                        <li><a href="#"><i class="ri-qq-fill ri-2x"></i></a></li>
+                        <li><i class="ri-github-fill ri-2x" @click="githubLogin"></i></li>
+                        <li><i class="ri-qq-fill ri-2x"></i></li>
                     </ul>
                 </div>
 
@@ -166,6 +166,8 @@
         el: "#page",
 
         mounted() {
+
+            // window.location.href='../index.html';
 
         },
 
@@ -198,31 +200,34 @@
             },
             //验证码登录按钮
             codeSubmit() {
-
+                if(this.IsLoginRequestSend) return;
+                this.IsLoginRequestSend=true;
                 this.username1=this.telephone;
                 let formData=new FormData();
                 formData.append("username",this.username1);
                 formData.append("password","");
                 formData.append("code",this.code);
                 service.post("http://localhost:8080/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
-                    window.open('../index.html');
-                    this.user_id=res.data;
+                    window.location.href='../index.html';
                 }).catch(error => {
                    this.error_code = error.response.data;
+                   this.IsLoginRequestSend=false;
+                   return 0;
                 });
-
+                // console.log(window.opener.sessionId);
             },
             //密码登录按钮
             passwordSubmit() {
-
+                if(this.IsLoginRequestSend) return;
+                this.IsLoginRequestSend=true;
                 let formData=new FormData();
                 formData.append("username",this.username1);
                 formData.append("password",this.password);
                 formData.append("code","");
                 service.post("http://localhost:8080/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
-                    window.open('../index.html');
-                    this.user_id=res.data;
+                    window.location.href='../index.html';
                 }).catch(error => {
+                    this.IsLoginRequestSend=false;
                     this.error_code = error.response.data;
                 });
 
@@ -289,6 +294,14 @@
                     return;
                 }
                 this.error_username = '';
+            },
+            githubLogin(){
+
+                service.post('http://localhost:8080/oauth2/github').then(res=>{
+                    window.location.href='../index.html';
+                }).catch(error=>{
+                    this.$message.error('认证失败！');
+                });
             }
         },
 
@@ -316,6 +329,7 @@
             username1: '',
             user_id: '',
             isSendSms: false,
+            IsLoginRequestSend: false,
         }
     });
 </script>

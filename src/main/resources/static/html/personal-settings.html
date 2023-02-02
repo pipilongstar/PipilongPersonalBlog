@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:width="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>个人设置</title>
+    <link rel="stylesheet" href="../css/settings.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/search-style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+
+<script src="https://cdn.pipilong.com.cn/js/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.pipilong.com.cn/js/axios-0.18.0.js"></script>
+
+<div id="app">
+
+    <el-container>
+        <el-header style="background-color: #ffffff;margin-top: -8px;">
+            <!--            <div class="hr-double"></div>-->
+            <el-row class="row">
+                <el-col :span="1">
+                    <div></div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="../index.html">
+                            <img src="https://cdn.pipilong.com.cn/logo.png" class="logo" alt=""/>
+                        </a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="/" class="home-page-style1">首页</a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="/" class="home-page-style2">面经</a>
+                    </div>
+                </el-col>
+                <el-col :span="8">
+                    <div>
+                        <el-input v-model="search" placeholder="Enter Your Search Content" class="txtb">
+                            <template #suffix>
+                                <el-button icon="el-icon-search" circle></el-button>
+                            </template>
+                        </el-input>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="/" class="home-page-style">八股文</a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="/" class="home-page-style">消息</a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <el-dropdown :hide-on-click="false" show-timeout="0" hide-timeout="100">
+                            <span class="el-dropdown-link">
+                                网站相关
+                                <i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item>
+                                    <i class="el-icon-s-custom"></i>
+                                    作者介绍
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <i class="ri-booklet-fill"></i>
+                                    网站日志
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <i class="ri-github-fill"></i>
+                                    <a href="https://github.com/pipilongstar/PipilongPersonalBlog" target="_blank"
+                                       class="home-page-style">项目源码</a>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                </el-col>
+
+                <el-col :span="3">
+                    <div v-if="!isLogin">
+                        <a href="./login.html">
+                            <el-button round type="primary" class="login_button--primary">登录/注册</el-button>
+                        </a>
+                    </div>
+                    <div v-if="isLogin">
+
+                        <div style="margin-top: 13px;">
+                            <a href="./personal-center.html" @mouseover="avatarShow"
+                               @mouseleave="avatarShut">
+                                <el-avatar shape="circle" :size="40" :fit="fit" :src="avatarUrl"
+                                           class="avatar-style"></el-avatar>
+                            </a>
+                        </div>
+
+                        <!--                        鼠标悬停头像小卡片-->
+                        <el-collapse-transition>
+                            <div v-show="isAvatarShow" class="isAvatarShow_style" @mouseover="avatarShow"
+                                 @mouseleave="avatarShut">
+                                <el-card shadow="always" style="height: 220px;width: 190px;border-radius: 16px;">
+                                    <a href="./personal-center.html">
+                                        <div style="margin-top: -5px;">
+                                            <el-avatar :src="avatarUrl"
+                                                       :size="60"></el-avatar>
+                                        </div>
+                                    </a>
+                                    <div style="margin-top: -50px;">
+                                        <h3>{{user.username}}</h3>
+                                    </div>
+
+                                    <div style="margin-top: -28px;margin-left: -26px;">
+                                        <el-button type="primary" plain class="avatar_card_item--primary"
+                                                   @click="openPersonalSettings">
+                                            <div style="font-size: 18px;float: left;margin-left: 14px;">
+                                                <i class="ri-user-settings-line"></i>
+                                            </div>
+                                            <div style="float: right;margin-right: 48px;font-size: 15px;margin-top: 4px;">
+                                                个人设置
+                                            </div>
+                                        </el-button>
+                                    </div>
+
+                                    <div style="margin-left: -26px;margin-top: -6px;">
+                                        <el-button type="primary" plain class="avatar_card_item--primary"
+                                                   @click="logout">
+                                            <div style="font-size: 18px;float: left;margin-left: 14px;">
+                                                <i class="ri-arrow-left-circle-line"></i>
+                                            </div>
+                                            <div style="float: right;margin-right: 48px;font-size: 15px;margin-top: 4px;">
+                                                退出登录
+                                            </div>
+                                        </el-button>
+                                    </div>
+                                    <!--                                    <a href="#">-->
+                                    <!--                                        <div class="avatar_card_item">-->
+                                    <!--                                            退出登录-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </a>-->
+                                </el-card>
+                            </div>
+                        </el-collapse-transition>
+
+                    </div>
+                </el-col>
+            </el-row>
+
+        </el-header>
+        <!--        中部-->
+        <el-container>
+            <!--            左侧-->
+            <el-aside width="300px" style="background-color: #f5f5f5">
+
+
+            </el-aside>
+            <el-container>
+                <!--                主-->
+                <el-main style="background-color: #f5f5f5">
+
+                    <el-card shadow="always">
+
+                        <div style="margin-top: -70px;margin-left: -620px;">
+                            <h3>个人资料</h3>
+                        </div>
+
+                        <div style="margin-top: -53px;">
+
+                            <el-upload
+                                    action="http://localhost:8080/upload/avatar"
+                                    :multiple="true"
+                                    :with-credentials="true"
+                                    :show-file-list="false"
+                                    :http-request="upload"
+                                    :on-success="handleAvatarSuccess"
+                                    :before-upload="beforeAvatarUpload">
+
+                                <el-avatar :src=imageUrl :size="100"></el-avatar>
+                                <!--                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+                            </el-upload>
+
+                        </div>
+
+                        <!--                        个人资料框-->
+                        <div>
+
+                            <el-row style="margin-top: -50px;line-height: 2;">
+                                <el-col :span="12">
+                                    <div>
+                                        <div style="font-size: 17px;color: #656565;">
+                                            昵称
+                                        </div>
+
+                                        <div style="width: 220px;margin-left: 70px;">
+                                            <el-input v-model="user.username" class="username_input_style"></el-input>
+                                        </div>
+
+                                    </div>
+                                </el-col>
+                                <el-col :span="12">
+                                    <div>
+                                        <div style="font-size: 17px;color: #656565;">
+                                            性别
+                                        </div>
+
+                                        <div>
+                                            <el-radio-group v-model="user.gender" style="border-radius: 10px;">
+                                                <div style="margin-left: -100px;">
+                                                    <el-radio-button label="男"
+                                                                     class="radio_button_style"></el-radio-button>
+                                                </div>
+                                                <div style="margin-top: -39px;margin-right: -100px;">
+                                                    <el-radio-button label="女"></el-radio-button>
+                                                </div>
+                                            </el-radio-group>
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+                            <div style="height: 10px;"></div>
+
+                            <el-row style="line-height: 2">
+                                <el-col :span="12">
+                                    <div>
+                                        <div style="font-size: 17px;color: #656565;">
+                                            生日
+                                        </div>
+                                        <div style="">
+                                            <el-date-picker
+                                                    v-model="user.birthday"
+                                                    type="date"
+                                                    placeholder="选择日期"
+                                                    value-format="yyyy-MM-dd">
+                                            </el-date-picker>
+                                        </div>
+
+                                    </div>
+                                </el-col>
+                                <el-col :span="12">
+                                    <div>
+                                        <div style="font-size: 17px;color: #656565;">
+                                            现居地
+                                        </div>
+
+                                        <div style="">
+                                            <el-select v-model="user.address" placeholder="请选择现居地">
+                                                <el-option
+                                                        v-for="item in address_options"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value">
+                                                </el-option>
+                                            </el-select>
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+                            <div style="height: 10px;"></div>
+
+                            <el-row style="line-height: 2">
+                                <el-col :span="24">
+                                    <div>
+
+                                        <div style="font-size: 17px;color: #656565;">
+                                            个人寄语
+                                        </div>
+
+                                        <div style="width: 400px;margin-left: 172px;">
+                                            <el-input
+                                                    type="textarea"
+                                                    :autosize="{ minRows: 2, maxRows: 4}"
+                                                    placeholder="送给自己的一段话..."
+                                                    v-model="user.person_message"
+                                                    maxlength="100"
+                                                    show-word-limit>
+                                            </el-input>
+                                        </div>
+
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+                            <div style="height: 10px;"></div>
+
+                            <el-row style="line-height: 2">
+                                <el-col :span="24">
+                                    <div>
+
+                                        <div style="font-size: 17px;color: #656565;">
+                                            GitHub
+                                        </div>
+
+                                        <div style="width: 400px;margin-left: 172px;">
+                                            <el-input placeholder="github地址" v-model="user.github_url">
+                                                <template slot="prepend">https//:github.com/</template>
+                                            </el-input>
+                                        </div>
+
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+                            <div style="height: 10px;"></div>
+
+                            <el-row style="line-height: 2">
+                                <el-col :span="24">
+                                    <div>
+
+                                        <div style="font-size: 17px;color: #656565;">
+                                            就读学校
+                                        </div>
+
+                                        <div style="width: 400px;margin-left: 172px;height: 100px;">
+                                            <el-input v-model="user.school" placeholder="最高学历学府">
+                                                <template #prefix>
+                                                    <span style="font-size: 20px;">
+                                                        <i class="ri-pencil-ruler-line"></i>
+                                                    </span>
+                                                </template>
+                                            </el-input>
+                                        </div>
+
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+                            <el-row>
+                                <el-col style="margin-top: -70px;">
+                                    <el-button type="primary" plain class="save_style--primary" @click="save">保存
+                                    </el-button>
+                                </el-col>
+                            </el-row>
+
+                        </div>
+                        <div style="background-color: #eceaea;height: 2px;margin-top: -20px;"></div>
+                        <el-row>
+                            <el-col style="margin-left: -300px;margin-top: -50px;">
+                                <h3>账户安全</h3>
+                            </el-col>
+                        </el-row>
+
+                        <!--                        账户安全框-->
+                        <div>
+
+                            <el-row>
+                                <el-col :span="6" style="margin-top: -100px;margin-left: -10px;color: #333333;">
+                                    <span style="font-size: 20px;"><i class="ri-smartphone-line"></i></span>
+                                    <span>手机号</span>
+                                </el-col>
+                                <el-col :span="6"
+                                        style="margin-top: -100px;color: #333333;margin-left: -6px;height: 200px;">
+                                    <div style="width: 210px;">
+                                        <el-input
+                                                :placeholder="telephone"
+                                                v-model="telephone"
+                                                :disabled="true">
+                                            <template slot="prepend">+86</template>
+                                        </el-input>
+                                    </div>
+                                </el-col>
+                                <el-col :span="12" style="margin-top: -100px;">
+                                    <div style="margin-left: 158px;">
+                                        <span style="font-size: 18px;color: #949393;"><i class="ri-quill-pen-fill"></i></span>
+                                        <el-button type="text" class="update_button--text" @click="updateTelephone">
+                                            修改
+                                        </el-button>
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+                            <div style="border-radius: 10px;">
+                                <el-dialog
+                                        :visible.sync="dialogUpdateTelephone"
+                                        width="300"
+                                        :before-close="handleClose"
+                                        show-close="false">
+                                    <span slot="title">
+                                        <el-steps :active="active1" finish-status="success">
+                                        <el-step title="验证当前手机号">
+<!--                                            <el-input-->
+                                            <!--                                                    :placeholder="telephone"-->
+                                            <!--                                                    v-model="telephone"-->
+                                            <!--                                                    :disabled="true">-->
+                                            <!--                                                <template slot="prepend">+86</template>-->
+                                            <!--                                            </el-input>-->
+                                        </el-step>
+                                        <el-step title="更改为新手机号"></el-step>
+                                        <el-step title="更改完成"></el-step>
+                                    </el-steps>
+                                    </span>
+
+                                </el-dialog>
+                            </div>
+
+
+                            <el-row>
+                                <el-col :span="6" style="margin-top: -100px;margin-left: -1px;color: #333333;">
+                                    <span style="font-size: 20px;"><i class="ri-mail-line"></i></span>
+                                    <span>电子邮箱</span>
+                                </el-col>
+                                <el-col :span="6" style="margin-top: -100px;margin-left: -14px;height: 200px;">
+                                    <div style="width: 210px;">
+                                        <el-input
+                                                :placeholder="email"
+                                                v-model="email"
+                                                :disabled="true">
+                                        </el-input>
+                                    </div>
+                                </el-col>
+                                <el-col :span="12" style="margin-top: -100px;">
+                                    <div style="margin-left: 158px;">
+                                        <span style="font-size: 18px;color: #949393;"><i class="ri-quill-pen-fill"></i></span>
+                                        <el-button type="text" class="update_button--text" @click="updateEmail">修改
+                                        </el-button>
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+
+                            <el-row>
+                                <el-col :span="6" style="margin-top: -100px;margin-left: -14px;color: #333333;">
+                                    <span style="font-size: 20px;"><i class="ri-key-fill"></i></span>
+                                    <span>密码</span>
+                                </el-col>
+                                <el-col :span="6" style="margin-top: -100px;color: #333333;margin-left: -72px;">
+                                    <span style="margin-right: -50px;">********</span>
+                                </el-col>
+                                <el-col :span="12" style="margin-top: -100px;">
+                                    <div style="margin-left: 300px;">
+                                        <span style="font-size: 18px;color: #949393;"><i class="ri-quill-pen-fill"></i></span>
+                                        <el-button type="text" class="update_button--text" @click="updatePassword">
+                                            修改
+                                        </el-button>
+                                    </div>
+                                </el-col>
+                            </el-row>
+
+                        </div>
+
+                        <div style="background-color: #eceaea;height: 2px;margin-top: -20px;"></div>
+                        <el-row>
+                            <el-col style="margin-left: -440px;margin-top: -50px;">
+                                <h3>关联第三方账号</h3>
+                            </el-col>
+                        </el-row>
+
+                        <div>
+
+                            <el-row>
+                                <el-col style="margin-top: -100px;" :span="12">
+                                    <span style="font-size: 34px;cursor:pointer;"><i class="ri-qq-line"
+                                                                                     @click="bindQQ"></i></span>
+                                    <span style="color: #9c0000;font-size: 30px;" v-show="!isBindQQ"><i
+                                            class="ri-close-line"></i></span>
+                                    <span style="color: #229c00;font-size: 30px;" v-show="isBindQQ"><i
+                                            class="ri-check-line"></i></span>
+                                </el-col>
+
+                                <el-col style="margin-top: -100px;" :span="12">
+                                    <span style="font-size: 34px;cursor:pointer;"><i class="ri-github-fill"
+                                                                                     @click="bindGitHub"></i></span>
+                                    <span style="color: #9c0000;font-size: 30px;" v-show="!isBindGitHub"><i
+                                            class="ri-close-line"></i></span>
+                                    <span style="color: #229c00;font-size: 30px;" v-show="isBindGitHub"><i
+                                            class="ri-check-line"></i></span>
+                                </el-col>
+                            </el-row>
+
+                        </div>
+
+                        <a href="/oauth2/authorization/github">github登录</a>
+
+                    </el-card>
+
+                </el-main>
+            </el-container>
+            <!--            右侧-->
+            <el-aside width="300px" style="background-color: #f5f5f5">
+
+
+                <!--                回到顶部-->
+                <el-backtop :bottom="150" visibility-height="140" :right="180" style="width: 50px;">
+                    <div style="{
+                                height: 100%;
+                                width: 100%;
+                                background-color: #f2f5f6;
+                                box-shadow: 0 0 6px rgb(16,178,160);
+                                text-align: center;
+                                line-height: 50px;
+                                color: #10b2a0;
+                                border-radius: 12px;
+                                }">
+                        <div style="font-size: 30px;">
+                            <i class="ri-rocket-2-fill"></i>
+                        </div>
+                    </div>
+                </el-backtop>
+
+            </el-aside>
+        </el-container>
+        <!--        脚部-->
+        <el-footer height="40px" style="background-color: #f5f5f5">
+            <div style="margin-top: -32px">
+                <h5>Copyright © 2023 Pipilong. 皮皮龙技术分享 版权所有 <a href="https://beian.miit.gov.cn/"
+                                                                          target="_blank" class="footer-style">皖ICP备2023001037号-1</a>
+                </h5>
+            </div>
+        </el-footer>
+
+    </el-container>
+
+</div>
+
+<script>
+
+    const service = axios.create({
+        withCredentials: true, // 跨域请求时发送Cookie
+        timeout: 60000, // 请求超时
+    });
+
+</script>
+
+<script>
+
+    new Vue({
+        el: "#app",
+
+        mounted() {
+
+            service.get("http://localhost:8080/verification/isLogin").then(res => {
+                this.user_id = res.data;
+                this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
+                this.imageUrl = this.avatarUrl;
+                this.isLogin = true;
+            }).catch(error => {
+                window.open('./login.html', '_parent', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+            });
+
+            service.get("http://localhost:8080/user/getprofile").then(res=>{
+               this.user=res.data;
+            }).catch(error=>{
+                this.$message.error('登录异常，请重新登录！');
+            });
+
+        },
+
+        methods: {
+            login() {
+                this.dialogVisibleLogin = true;
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            add_tableData() {
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+                this.tableData.push("new data!");
+            },
+            avatarShow() {
+                this.isAvatarShow = true;
+            },
+            avatarShut() {
+                this.isAvatarShow = false;
+            },
+            openPersonalSettings() {
+                window.location.href = './personal-settings.html';
+            },
+            logout() {
+
+                service.get('http://localhost:8080/logout').then(res=>{
+                    window.location.href='./index.html';
+                }).catch(error=>{
+                    this.$message.error('退出登录失败！');
+                });
+
+            },
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+            },
+            beforeAvatarUpload(file) {
+                this.file = file;
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            },
+            upload() {
+                let formData = new FormData();
+                formData.append("file", this.file);
+                service.post('http://localhost:8080/upload/avatar', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
+                    this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id+".jpg";
+                    this.imageUrl = this.avatarUrl;
+                    this.$message({
+                        message: '更改成功！',
+                        type: 'success'
+                    });
+                }).catch(error => {
+
+                });
+            },
+            save() {
+
+                service.put('http://localhost:8080/user/modifyprofile',this.user).then(res=>{
+                    this.$message({
+                        message: '保存成功',
+                        type: 'success'
+                    });
+                }).catch(error=>{
+                    this.$message.error(error.response.data);
+                });
+
+            },
+            bindQQ() {
+                this.isBindQQ = !this.isBindQQ;
+            },
+            bindGitHub() {
+
+                //绑定github
+                if(!this.isBindGitHub){
+                    service.get('http://localhost:8080/oauth2/authorization/github').then(res=>{
+                        this.isBindGitHub=true;
+                        this.$message({
+                            message: '绑定成功！',
+                            type: 'success'
+                        });
+                    }).catch(error=>{
+                        this.isBindGitHub=false;
+                        this.$message.error('绑定失败！');
+                    });
+
+                }else {
+                    //解绑github
+
+
+                }
+
+            },
+            updateTelephone() {
+                this.dialogUpdateTelephone = !this.dialogUpdateTelephone;
+            },
+            updateEmail() {
+
+            },
+            updatePassword() {
+
+            },
+            next1() {
+                if (this.active1++ > 2) this.active1 = 0;
+            },
+            next2() {
+                if (this.active2++ > 2) this.active2 = 0;
+            },
+            next3() {
+                if (this.active3++ > 2) this.active3 = 0;
+            }
+        },
+
+        data() {
+            return {
+                search: '',
+                isLogin: true,
+                imageUrl: '',
+                avatarUrl: '',
+                fit: 'fill',
+                reference: false,
+                dialogVisibleLogin: false,
+                drawer: false,
+                tableData: ["北京", "上海", "广州", "深圳"],
+                hotList: ["北京", "上海", "广州", "深圳", "天津", "重庆", "杭州", "深圳", "厦门", "合肥"],
+                isAvatarShow: false,
+                user: {
+                    'username': '',
+                    'gender': '',
+                    'birthday': '',
+                    'address': '',
+                    'person_message': '',
+                    'github_url': '',
+                    'school': ''
+                },
+                telephone: 18226237447,
+                email: 'official@pipilong.com.cn',
+                file: null,
+                isBindQQ: true,
+                isBindGitHub: false,
+                dialogUpdateTelephone: false,
+                active1: 0,
+                active2: 0,
+                active3: 0,
+                address_options: [
+                    {value: "河北", label: "河北"},
+                    {value: "山西", label: "山西"},
+                    {value: "辽宁", label: "辽宁"},
+                    {value: "吉林", label: "吉林"},
+                    {value: "黑龙江", label: "黑龙江"},
+                    {value: "江苏", label: "江苏"},
+                    {value: "浙江", label: "浙江"},
+                    {value: "安徽", label: "安徽"},
+                    {value: "福建", label: "福建"},
+                    {value: "江西", label: "江西"},
+                    {value: "山东", label: "山东"},
+                    {value: "河南", label: "河南"},
+                    {value: "湖北", label: "湖北"},
+                    {value: "湖南", label: "湖南"},
+                    {value: "广东", label: "广东"},
+                    {value: "海南", label: "海南"},
+                    {value: "四川", label: "四川"},
+                    {value: "贵州", label: "贵州"},
+                    {value: "云南", label: "云南"},
+                    {value: "陕西", label: "陕西"},
+                    {value: "甘肃", label: "甘肃"},
+                    {value: "青海", label: "青海"},
+                    {value: "台湾", label: "台湾"},
+                    {value: "内蒙古", label: "内蒙古"},
+                    {value: "广西", label: "广西"},
+                    {value: "西藏", label: "西藏"},
+                    {value: "宁夏", label: "宁夏"},
+                    {value: "新疆", label: "新疆"},
+                    {value: "北京", label: "北京"},
+                    {value: "天津", label: "天津"},
+                    {value: "上海", label: "上海"},
+                    {value: "重庆", label: "重庆"},
+                    {value: "香港", label: "香港"},
+                    {value: "澳门", label: "澳门"}
+                ],
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

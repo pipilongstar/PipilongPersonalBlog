@@ -86,6 +86,11 @@ public class VerificationController {
         return new ResponseEntity<>("notNull",HttpStatus.OK);
     }
 
+    /**
+     * 验证是否已经登录
+     * @param httpSession 用户session
+     * @return true or false
+     */
     @GetMapping("/isLogin")
     public ResponseEntity<String> isLogin(HttpSession httpSession){
         String sessionId=httpSession.getId();

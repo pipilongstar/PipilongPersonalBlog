@@ -1,10 +1,13 @@
 package com.pipilong.controller;
 
+import com.pipilong.service.UploadService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.*;
 
 /**
@@ -16,24 +19,19 @@ import java.io.*;
 @RequestMapping("/upload")
 public class UploadController {
 
+    @Autowired
+    private UploadService uploadService;
 
     /**
      * 上传头像
      * @return true or false
      */
     @RequestMapping("/avatar")
-    public ResponseEntity<String> uploadAvatar(MultipartFile file) throws FileNotFoundException {
+    public ResponseEntity<String> uploadAvatar(MultipartFile file, HttpSession httpSession) throws IOException {
 
-        OutputStream os = new FileOutputStream("D://demo.jpg");
+        uploadService.uploadToCos(file.getInputStream(),httpSession.getId());
 
-        try {
-            System.out.println(file.getOriginalFilename());
-            os.write(file.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

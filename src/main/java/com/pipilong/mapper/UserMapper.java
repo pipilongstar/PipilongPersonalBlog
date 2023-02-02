@@ -95,6 +95,27 @@ public interface UserMapper {
      * @param userId 用户id
      */
     void setPassword(@Param("newpassword") String newPassword,@Param("userid") String userId);
+
+    /**
+     * 根据用户id，获取用户信息
+     * @param userId 用户id
+     * @return User用户信息
+     */
+    User getProfile(@Param("userid") String userId);
+
+    /**
+     * 根据用户id，获取用户手机号
+     * @param userId 用户id
+     * @return 用户手机号
+     */
+    String getTelephoneByUserId(@Param("userid") String userId);
+
+    /**
+     * 根据用户id，获取用户电子邮件
+     * @param userId 用户id
+     * @return 用户电子邮件
+     */
+    String getEmailByUserID(@Param("userid") String userId);
 }
 
 

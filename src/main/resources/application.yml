@@ -5,7 +5,14 @@ spring:
     multipart:
       enabled: true
 
-
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: d9d6946364681fc45ef8
+            client-secret: 62f08091ae6ddcd487072508e0eb152e9c0ff2dc
+            client-name: github
 
 #  config-location: classpath:com/pipilong/mapper/*.xml;
 

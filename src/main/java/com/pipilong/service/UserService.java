@@ -67,6 +67,13 @@ public interface UserService {
      * @param userId 用户id
      */
     void modifyPassword(String oldPassword,String newPassword,String userId) throws ModifyException;
+
+    /**
+     * 获取用户信息
+     * @param sessionId 用户session
+     * @return User,用户信息
+     */
+    User getProfile(String sessionId) throws LoginException;
 }
 
 
