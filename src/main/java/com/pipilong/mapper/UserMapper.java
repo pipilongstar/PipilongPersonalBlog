@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.security.core.parameters.P;
 
+import java.util.List;
+
 /**
  * @author pipilong
  * @createTime 2023/1/18
@@ -116,6 +118,34 @@ public interface UserMapper {
      * @return 用户电子邮件
      */
     String getEmailByUserID(@Param("userid") String userId);
+
+    /**
+     * 更新用户的点赞数
+     * @param userId 用户id
+     * @param count 数量
+     */
+    void updateUserLikeCount(@Param("userid") String userId,@Param("count") String count);
+
+    /**
+     * 更新用户的收藏数
+     * @param userId 用户id
+     * @param count 数量
+     */
+    void updateUserCollectionCount(@Param("userid") String userId,@Param("count") String count);
+
+    /**
+     * 更新用户的阅读数
+     * @param userId 用户id
+     * @param count 数量
+     */
+    void updateUserReadCount(@Param("userid") String userId,@Param("count") String count);
+
+    /**
+     * 查询用户全部id
+     * @return 用户的全部id
+     */
+    List<String> selectUserId();
+
 }
 
 

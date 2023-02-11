@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pipilong.mapper.QueryMapper">
+
+    <resultMap id="map" type="com.pipilong.pojo.Discuss">
+        <result property="userId" column="user_id"/>
+        <result property="numberOfCollections" column="number_of_collections"/>
+        <result property="numberOfLikes" column="number_of_likes"/>
+        <result property="discussId" column="discuss_id"/>
+        <result property="numberOfRead" column="number_of_read"/>
+        <result property="submitDate" column="date"/>
+    </resultMap>
+    <select id="selectRankingList" resultMap="map">
+        select * from discuss order by number_of_read desc limit 6;
+    </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

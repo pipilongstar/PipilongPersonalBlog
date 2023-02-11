@@ -13,6 +13,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.concurrent.*;
 
 /**
  * @author pipilong
@@ -33,6 +34,19 @@ public class GeneralConfig {
 
         return new COSClient(cred, clientConfig);
     }
+
+//    @Bean
+//    public ThreadPoolExecutor getThreadPoolExecutor(){
+//        return new ThreadPoolExecutor(
+//                5,
+//                10,
+//                60,
+//                TimeUnit.SECONDS,
+//                new ArrayBlockingQueue<>(100),
+//                Executors.defaultThreadFactory(),
+//                new ThreadPoolExecutor.AbortPolicy()
+//        );
+//    }
 
 
 }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pipilong.mapper.DiscussMapper">
+
+    <resultMap id="map" type="com.pipilong.pojo.Discuss">
+        <result property="userId" column="user_id"/>
+        <result property="numberOfCollections" column="number_of_collections"/>
+        <result property="numberOfLikes" column="number_of_likes"/>
+        <result property="discussId" column="discuss_id"/>
+        <result property="numberOfRead" column="number_of_read"/>
+        <result property="submitDate" column="date"/>
+    </resultMap>
+
+    <resultMap id="comment" type="com.pipilong.pojo.Comment">
+        <result property="discussId" column="discuss_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="replyId" column="reply_id"/>
+        <result property="userAvatarUrl" column="user_avatar_uri"/>
+    </resultMap>
+
+    <insert id="submitDiscuss">
+        insert into discuss value (null,'${discuss.username}','${discuss.theme}',${discuss.userId},0,0,'${discuss.label}','${discuss.submitDate}','${discuss.text}',0,${discuss.discussId});
+    </insert>
+    <insert id="insertLike">
+        insert into `like` value (null,${userId},${discussId},true);
+    </insert>
+    <insert id="submitReply">
+        insert into comment value (null,${comment.discussId},'${comment.userAvatarUrl}','${comment.username}',${comment.replyId},0,'${comment.date}','${comment.text}');
+    </insert>
+    <insert id="insertCollection">
+        insert into collection value (null,${userId},${discussId},true);
+    </insert>
+    <update id="updateLike">
+        update `like` set is_able = ${dianZan} where discuss_id=${discussId} and user_id=${userId};
+    </update>
+    <update id="updateCollection">
+        update collection set is_able = ${dianZan} where discuss_id=${discussId} and user_id=${userId};
+    </update>
+    <select id="getDiscuss" resultMap="map">
+        select * from discuss where discuss_id = ${discussId};
+    </select>
+
+    <select id="selectIsCollection" resultType="java.lang.Boolean">
+        select is_able from collection where discuss_id=${discussId} and user_id=${userId};
+    </select>
+
+    <select id="selectIsLike" resultType="java.lang.Boolean">
+        select is_able from `like` where discuss_id=${discussId} and user_id=${userId};
+    </select>
+    <select id="getComment" resultMap="comment">
+        select * from comment where discuss_id = ${discussId};
+    </select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pipilong.mapper.EventMapper">
+
+
+    <insert id="insertSystemMessage">
+        insert into system_message value (null,${userid},'${date}','${text}',false);
+    </insert>
+    <insert id="insertPersonMessage">
+        insert into person_message value (null,
+                                         ${message.userId},
+                                         '${message.messageType.getValue()}',
+                                         '${message.date}',
+                                         ${message.eventSourceId},
+                                         '${message.text}',
+                                         '${message.eventSourceUrl}',
+                                         ${message.messageId},
+                                         ${message.isRead});
+    </insert>
+
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -7,9 +7,19 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="/css/search-style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="./editormd/css/editormd.css" />
 </head>
 <body>
 
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdn.pipilong.com.cn/editormd/editormd.min.js"></script>
+<script src="./editormd/lib/marked.min.js"></script>
+<script src="./editormd/lib/prettify.min.js"></script>
+<script src="./editormd/lib/raphael.min.js"></script>
+<script src="./editormd/lib/underscore.min.js"></script>
+<script src="./editormd/lib/sequence-diagram.min.js"></script>
+<script src="./editormd/lib/flowchart.min.js"></script>
+<script src="./editormd/lib/jquery.flowchart.min.js"></script>
 <script src="https://cdn.pipilong.com.cn/js/vue.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="https://cdn.pipilong.com.cn/js/axios-0.18.0.js"></script>
@@ -32,12 +42,16 @@
                 </el-col>
                 <el-col :span="2">
                     <div>
-                        <a href="/" class="home-page-style1">首页</a>
+                        <a href="/" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 21px;padding-left: 54px;"><img src="https://cdn.pipilong.com.cn/svg/home.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 6px;">首页</div></a>
                     </div>
                 </el-col>
                 <el-col :span="2">
                     <div>
-                        <a href="/" class="home-page-style2">面经</a>
+                        <a href="./html/interview-experience.html" target="_blank" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 21px;padding-left: 50px;"><img src="https://cdn.pipilong.com.cn/svg/book.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 10px;">面经</div></a>
                     </div>
                 </el-col>
                 <el-col :span="8">
@@ -50,14 +64,21 @@
                     </div>
                 </el-col>
                 <el-col :span="2">
+
                     <div>
-                        <a href="/" class="home-page-style">八股文</a>
+                        <a href="/" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 19px;padding-left: 10px;"><img src="https://cdn.pipilong.com.cn/svg/java.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 34px;">八股文</div></a>
                     </div>
                 </el-col>
                 <el-col :span="2">
+
                     <div>
-                        <a href="/" class="home-page-style">消息</a>
+                        <a href="/" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 20px;padding-left: 20px;"><img src="https://cdn.pipilong.com.cn/svg/message.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 40px;">消息</div></a>
                     </div>
+
                 </el-col>
                 <el-col :span="2">
                     <div>
@@ -76,9 +97,14 @@
                                     网站日志
                                 </el-dropdown-item>
                                 <el-dropdown-item>
-                                    <i class="ri-github-fill"></i>
+                                    <i><img src="https://cdn.pipilong.com.cn/svg/github.svg" width="15px;" alt=""/></i>
                                     <a href="https://github.com/pipilongstar/PipilongPersonalBlog" target="_blank"
-                                       class="home-page-style">项目源码</a>
+                                       class="home-page-style5">项目源码</a>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <i><img src="https://cdn.pipilong.com.cn/svg/gitee.svg" width="14px;" alt=""/></i>
+                                    <a href="https://gitee.com/pipilongstar/PipilongPersonalBlog" target="_blank"
+                                       class="home-page-style5">项目源码</a>
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -113,7 +139,12 @@
                                         </div>
                                     </a>
                                     <div style="margin-top: -50px;">
-                                        <h3>{{username}}</h3>
+                                        <span v-if="username.length<=7">
+                                            <h3>{{username}}</h3>
+                                        </span>
+                                        <span v-if="username.length>7">
+                                            <h3>{{username.substring(0,7)}}...</h3>
+                                        </span>
                                     </div>
 
                                     <div style="margin-top: -28px;margin-left: -26px;">
@@ -154,24 +185,32 @@
         <!--        中部-->
         <el-container>
             <!--            左侧-->
-            <el-aside width="230px" style="background-color: #f5f5f5">
+            <el-aside width="250px" style="background-color: #f8f8f8">
 
+<!--                插图-->
+                <div style="margin-top: 30px;">
+                    <img src="https://cdn.pipilong.com.cn/svg/undraw_public_discussion_re_w9up.svg" style="width: 230px;"/>
+                </div>
                 <!--                <div style="width: 8cm;background-color: #107c10;height: 10px;"></div>-->
-                <div style="margin-top: 60px;">
+                <div style="margin-top: -160px;">
                     <h3>皮皮龙科技公众号</h3>
                     <h4 style="line-height: 2;margin-top: -80px">
                         更多资源，最新消息会持续发布在公众号上，如果你有关于面试，学习Java等问题或意见都可以在公众号上和我聊天😂，欢迎关注🥳</h4>
                     <img src="https://cdn.pipilong.com.cn/公众号.png" style="width: 4cm;height: 4cm;">
-                    <h4 style="line-height: 2;margin-top: -40px">关注公众号，发送“资料”，可以领取学习资料大礼包😎</h4>
+                    <h4 style="line-height: 2;margin-top: -80px">关注公众号，发送“资料”，可以领取学习资料大礼包😎</h4>
+                </div>
+
+                <div style="">
+                    <img src="https://cdn.pipilong.com.cn/svg/discuss2.svg" style="width: 200px;"/>
                 </div>
 
             </el-aside>
             <el-container>
                 <!--                主-->
-                <el-main style="background-color: #f5f5f5">
+                <el-main style="background-color: #f8f8f8">
 
-                    <el-card shadow="always">
-                        <el-row style="margin-top: -10%;margin-bottom: -5%;margin-left: -2%">
+<!--                    <el-card shadow="always">-->
+                        <el-row style="margin-top: -60px;margin-bottom: -5%;margin-left: -2%">
                             <el-col :span="2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                     <path fill="none" d="M0 0h24v24H0z"/>
@@ -185,7 +224,7 @@
                         </el-row>
 
                         <!--                     走马灯-->
-                        <el-col :span="24" style="height: 223px;margin-top: -14%;">
+                        <el-col :span="24" style="height: 223px;margin-top: -13%;">
                             <template>
                                 <el-carousel :interval="2000" type="card" height="200px" indicator-position="none">
                                     <el-carousel-item v-for="item in 6" :key="item" style="border-radius: 7px;">
@@ -198,13 +237,45 @@
                         </el-col>
 
                         <!--                    中部表单    -->
-                        <a href="#" v-for="(item,index) in tableData" style="text-decoration: none;">
-                            <el-card shadow="none" class="card_discuss">
-                                {{index + 1}}:{{item}}
+                        <div v-for="(item,index) in tableData" style="text-decoration: none;cursor:pointer;">
+                            <el-card shadow="none" class="card_discuss" style="line-height: 2">
+                                <el-row style="line-height: 1;margin-top: -5px;margin-left: -5px;">
+                                    <el-col :span="2" style="float: left;">
+                                        <el-avatar :size="40" :src="item.userAvatarUrl"></el-avatar>
+                                    </el-col>
+                                    <el-col :span="18" style="text-align: left;margin-top: -6px;">
+                                        <h4>{{item.theme}}</h4>
+                                    </el-col>
+                                    <el-col :span="4" style="font-size: 10px;">
+                                        {{item.date}}
+                                    </el-col>
+                                </el-row>
+
+                                <div>
+                                    <p style="float: left;color: #7c7b7b;font-size: 14px;line-height: 1.4;text-align:left;margin-top: -2px;margin-left: 8px;">
+                                        {{item.text.substring(0,95)}}
+                                        <span v-show="item.text.length>=95">...</span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <el-col :span="24">
+                                        <div style="float: left;margin-top: -28px;margin-bottom: 8px;">
+                                            <el-tag
+                                                    v-for="tag in item.label"
+                                                    :key="tag"
+                                                    type="danger"
+                                                    size="small"
+                                                    style="margin-top: 30px;border-radius: 25px;margin-left: 5px;">
+                                                {{tag}}
+                                            </el-tag>
+                                        </div>
+                                    </el-col>
+                                </div>
+
                             </el-card>
                             <div style="height: 10px;"></div>
-                        </a>
-                        <div style="margin-top: -50px;margin-bottom: -60px;">
+                        </div>
+                        <div style="margin-top: -36px;">
                             <el-button type="primary" @click="add_tableData" class="add_tableData_button--primary">
                                 加载更多
                             </el-button>
@@ -214,12 +285,71 @@
                             <h3>空啦！</h3>
                         </div>
 
-                    </el-card>
+<!--                    发讨论的对话框-->
+                    <el-dialog
+                            :visible.sync="isShowDialog"
+                            width="60%"
+                            top="8vh"
+                            :before-close="close_dialog">
+                        <div style="line-height: 1">
+                            <p style="margin-top: -40px;color: #81be81;font-weight: bolder;font-size: 20px;text-shadow: 1px 1px 3px 2px #81be81">发布讨论</p>
+
+                            <div style="margin-left: -10px;">
+                                <el-input v-model="theme" placeholder="请输入标题..." maxlength="30" show-word-limit></el-input>
+                            </div>
+
+                            <div style="margin-top: 15px;float: left;margin-bottom: 20px;">
+                                <el-button type="primary" icon="el-icon-circle-plus-outline" @click="isShowTagSelect" class="tag_button--primary" size="small" round>
+                                    <span v-show="this.tags.length===0">请选择标签</span>
+                                    <span v-show="this.tags.length>0">已选择{{tags.length}}个标签</span>
+                                </el-button>
+                            </div>
+
+                            <div style="margin-top: 58px;position: absolute;z-index: 999;">
+                                <el-select filterable v-model="currentTag" placeholder="请选择标签" @change="currentOptionTag" @blur="isShowTagSelect1" v-show="showTagSelect">
+                                    <el-option
+                                            v-for="(tag,index) in optionTags"
+                                            :key="tag.label"
+                                            :label="tag.label"
+                                            :value="tag.label"
+                                    >
+                                    </el-option>
+                                </el-select>
+                            </div>
+
+                            <div style="float: left ;height: 10px;margin-top: 16px;margin-left: 12px;word-spacing:10px;">
+                                <el-tag
+                                        v-for="(tag,index) in tags"
+                                        :key="tag.name"
+                                        closable
+                                        @close="handleClose(tag,index)"
+                                        :type="tag.type"
+                                        style="border-radius: 25px;margin-left: 5px;">
+                                    {{tag.name}}
+                                </el-tag>
+                            </div>
+
+                            <div id="my-editor" style="line-height: 1;height: 400px;width: 862px;margin-left: -20px;margin-top: 65px;">
+                                <textarea style="display:none;"  id="my-editormd-markdown-doc" name="my-editormd-markdown-doc">
+                                 </textarea>
+                            </div>
+
+                            <div>
+                                <el-row style="margin-bottom: -10px;">
+                                    <el-col :span="12" style="padding-left: 140px;"><el-button type="primary" primary class="cancel_button--primary" @click="close_dialog">取消</el-button></el-col>
+                                    <el-col :span="12" style="padding-right: 140px;"><el-button type="primary" primary class="submit_button--primary" v-loading.fullscreen.lock="fullscreenLoading" @click="submitDiscuss">发布</el-button></el-col>
+                                </el-row>
+                            </div>
+                        </div>
+                    </el-dialog>
+
+
+<!--                    </el-card>-->
 
                 </el-main>
             </el-container>
             <!--            右侧-->
-            <el-aside width="400px" style="background-color: #f5f5f5">
+            <el-aside width="380px" style="background-color: #f8f8f8">
 
                 <div style="padding-left: 34px;padding-top: 30px">
                     <el-card shadow="always" style="border-radius: 20px;width: 240px;height: 60px;margin-bottom: -25%;box-shadow: 0 0 6px rgb(129,190,129);">
@@ -233,16 +363,7 @@
                             </el-button>
                         </el-col>
                     </el-card>
-                    <!--                    发讨论的格子-->
 
-                    <el-drawer
-                            :visible.sync="drawer"
-                            :direction="direction"
-                            :before-close="handleClose"
-                            direction="btt"
-                            size="430px">
-                        <span>我来啦!</span>
-                    </el-drawer>
 
                 </div>
 
@@ -255,12 +376,28 @@
                         <div style="height: 6px;"></div>
 
                         <div v-for="(item,index) in hotList" style="margin-left: -20px;line-height: 0.7;">
-                            <el-button type="primary" plain class="hot_item">{{index+1}}:{{item}}</el-button>
+                            <el-button type="primary" plain class="hot_item">
+                                <el-row>
+                                    <el-col :span="2" style="margin-left: -5px;">
+                                        <img :src="item.indexUrl" width="16px;" style="float: left;margin-top: 4px;margin-left: -5px;">
+                                    </el-col>
+                                    <el-col :span="4" style="">
+                                        <el-avatar :size="25" :src="item.userAvatarUrl" style="float: left;margin-left: 4px;"></el-avatar>
+                                    </el-col>
+                                    <el-col :span="4">
+                                        <p style="text-align: left;line-height: 2px;margin-left: 7px;font-size: 14px;">{{item.theme.substring(0,11)}}</p>
+                                    </el-col>
+                                </el-row>
+                            </el-button>
                         </div>
 
                         <div style="margin-bottom: -16px;"></div>
 
                     </el-card>
+                </div>
+
+                <div style="margin-top: 25px;margin-right: 130px;">
+                    <img src="https://cdn.pipilong.com.cn/svg/discuss3.svg" style="width: 210px;"/>
                 </div>
 
                 <!--                回到顶部-->
@@ -273,7 +410,7 @@
                                 text-align: center;
                                 line-height: 50px;
                                 color: #10b2a0;
-                                border-radius: 12px;
+                                border-radius: 16px;
                                 }">
                         <div style="font-size: 30px;">
                             <i class="ri-rocket-2-fill"></i>
@@ -284,7 +421,7 @@
             </el-aside>
         </el-container>
         <!--        脚部-->
-        <el-footer height="40px" style="background-color: #f5f5f5">
+        <el-footer height="40px" style="background-color: #f8f8f8">
             <div style="margin-top: -32px">
                 <h5>Copyright © 2023 Pipilong. 皮皮龙技术分享 版权所有 <a href="https://beian.miit.gov.cn/"
                                                                           target="_blank" class="footer-style">皖ICP备2023001037号-1</a>
@@ -295,6 +432,67 @@
     </el-container>
 
 </div>
+
+<script type="text/javascript">
+    $(function() {
+        var editor = editormd("my-editor", {
+            width  : "100%;",
+            height : "100%;",
+            path   : "./editormd/lib/",
+            saveHTMLToTextarea: true,
+            syncScrolling: "single",
+            emoji: true,
+            theme : "default",
+            previewTheme : "default",
+            editorTheme : 'mdn-like',
+            toolbarIcons : function(){
+                return ["header","bold","xieti","list-ol","list-ul","emoji","image","uploadImage","","","","","","","code2","code","link","watch","fullscreen"]
+            },
+            toolbarIconsClass : {
+                header : "fa fa-header",
+                code2 :"fa fa-file-code-o",
+                xieti: "fa fa-italic",
+            },
+            toolbarHandlers : {
+                /**
+                 * @param {Object}      cm         CodeMirror对象
+                 * @param {Object}      icon       图标按钮jQuery元素对象
+                 * @param {Object}      cursor     CodeMirror的光标对象，可获取光标所在行和位置
+                 * @param {String}      selection  编辑器选中的文本
+                 */
+                header : function(cm) {
+                    cm.replaceSelection("#");
+                },
+                code2 : function(cm) {
+                    cm.replaceSelection("```\n代码块\n ```");
+                },
+                xieti : function(cm) {
+                    cm.replaceSelection("*斜体*");
+                }
+            },
+            toolbarCustomIcons : {
+                uploadImage   : "<input type=\"file\" accept=\"image/*\" />",
+                // image : "<i class=\"fa fa-photo\" aria-hidden=\"true\"/>"
+            },
+            onload : function(){
+                $("[type=\"file\"]").bind("change", function(){
+                    let file=this.files[0];
+                    let formData = new FormData();
+                    let last = '';
+                    formData.append("file", file);
+                    service.post('http://localhost:8080/upload/image', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
+                        last=res.data;
+                        let index=$(this).val().lastIndexOf('\\');
+                        editor.cm.replaceSelection("![](https://cdn.pipilong.com.cn/images/"+last+"_"+$(this).val().substring(index+1)+")");
+                    }).catch(error => {
+
+                    });
+                });
+            },
+        });
+
+    });
+</script>
 
 <script>
 
@@ -311,12 +509,52 @@
         el: "#app",
 
         mounted() {
+            this.isShowDialog=false;
 
             service.get("http://localhost:8080/verification/isLogin").then(res => {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
                 this.isLogin = true;
+
+                service.get("http://localhost:8080/user/getprofile").then(res=>{
+                    this.username=res.data.username;
+                }).catch(error=>{
+                    this.$message.error('登录异常，请重新登录！');
+                });
             });
+
+            let data={
+                "query": {
+                    "match_all": {}
+                },
+                "sort": {
+                    "submitDate": {
+                        "order": "desc"
+                    }
+                },
+                "from": 0,
+                "size": 5
+            }
+            service.get("http://localhost:9200/discuss/_search",data).then(res=>{
+                this.tableData=res.data.hits.hits;
+            }).catch(error=>{
+                this.$message.error('加载错误！');
+            });
+
+            for(let i=1;i<=10;i++){
+                this.hotList[i-1].indexUrl='https://cdn.pipilong.com.cn/svg/数字'+i+'.svg';
+            }
+
+            for(let i=0;i<this.tableData.length;i++){
+                let oldDate=new Date(this.tableData[i].date);
+                let newDate=new Date();
+                let diff=(newDate-oldDate)/1000/3600/24;
+                diff=Math.round(diff);
+                console.info(diff);
+                if(diff===0) this.tableData[i].date='今天';
+                else this.tableData[i].date=diff+'天前';
+            }
+
 
         },
 
@@ -325,7 +563,11 @@
                 this.dialogVisibleLogin = true;
             },
             openRelease() {
-                this.drawer = true;
+                if(!this.isLogin){
+                    window.open('./html/login.html');
+                    return 0;
+                }
+                this.isShowDialog = true;
             },
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex === 1) {
@@ -336,13 +578,14 @@
                 return '';
             },
             add_tableData() {
-                this.tableData.push("new data!");
-                this.tableData.push("new data!");
-                this.tableData.push("new data!");
-                this.tableData.push("new data!");
-                this.tableData.push("new data!");
-                this.tableData.push("new data!");
-                this.tableData.push("new data!");
+                this.tableData.push("{\n" +
+                    "                    \"id\": '',\n" +
+                    "                    \"theme\": '你',\n" +
+                    "                    \"text\":'反对拉萨快点回家阿范德萨范德萨范德萨及辅导老师附近的拉萨的飞机老师点卡力扣安居房了烦啦看JFK拉萨发阿里阿靖；解法六十九开发了；激发了大家来看飞机拉萨大家复读机啊减肥的拉萨解放和管理的撒谎弗兰克罗斯的里',\n" +
+                    "                    \"userAvatarUrl\":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',\n" +
+                    "                    \"label\": ['Java','并发','JVM'],\n" +
+                    "                    }");
+
             },
             avatarShow() {
                 this.isAvatarShow = true;
@@ -361,6 +604,63 @@
                     this.$message.error('退出登录失败！');
                 });
 
+            },
+            handleClose(tag, index) {
+                this.tags.splice(index,1);
+            },
+            currentOptionTag(){
+                let type=['','success','info','warning','danger'];
+                let idx=Math.floor(Math.random()*5);
+                console.info(idx);
+                let data={name:this.currentTag,type:type[idx]};
+                this.tags.push(data);
+                console.info(this.tags);
+            },
+            isShowTagSelect(){
+                this.showTagSelect=!this.showTagSelect;
+            },
+            isShowTagSelect1(){
+                this.showTagSelect=false;
+            },
+            close_dialog(){
+                this.isShowDialog=false;
+            },
+            submitDiscuss(){
+                this.fullscreenLoading=true;
+                if(!this.isLogin){
+                    this.$message.error('请先登录！');
+                    this.fullscreenLoading=false;
+                    return;
+                }
+                if(this.theme===''){
+                    this.$message.error('请填写主题！');
+                    this.fullscreenLoading=false;
+                    return;
+                }
+
+                let data={
+                    "theme":this.theme,
+                    "user_id":this.user_id,
+                    "text": $("#my-editormd-markdown-doc").val(),
+                    "username": this.username,
+                    "label": JSON.stringify(Array.from(this.tags,({name})=>name))
+                }
+                service.post('http://localhost:8080/upload/discuss',data,{
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    }
+                }).then(res=>{
+                    this.fullscreenLoading=false;
+                    this.isShowDialog=false;
+                    this.$message({
+                        message: '发布成功！',
+                        type: 'success'
+                    });
+                }).catch(error=>{
+                    this.fullscreenLoading=false;
+                    this.$message.error(error.response.data);
+                });
+
             }
         },
 
@@ -372,11 +672,99 @@
                 fit: 'fill',
                 reference: false,
                 dialogVisibleLogin: false,
-                drawer: false,
-                tableData: ["北京", "上海", "广州", "深圳"],
-                hotList: ["北京", "上海", "广州", "深圳","天津","重庆","杭州","深圳","厦门","合肥"],
+                tableData: [{
+                    "id": '',
+                    "theme": '你',
+                    "text":'反对拉萨快点回家阿范德萨范德萨范德萨及辅导老师附近的拉萨的飞机老师点卡力扣安居房了烦啦看JFK拉萨发阿里阿靖；解法六十九开发了；激发了大家来看飞机拉萨大家复读机啊减肥的拉萨解放和管理的撒谎弗兰克罗斯的里',
+                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "label": ['Java','并发','JVM'],
+                    "date": "2023-02-05"
+                    },{
+                    "id": '',
+                    "theme": '你好好范德萨立法就是杜拉拉护肤老师打',
+                    "text":'反离开',
+                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "label": ['Java','并发','JVM'],
+                    "date": "2023-02-05"
+                    },{
+                    "id": '',
+                    "theme": '你老师打',
+                    "text":'反对拉萨咖啡看来大家撒赖咖啡碱但是看了附近的拉萨解放离开',
+                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "label": ["Java",'并发','JVM'],
+                    "date": "2023-02-05"
+                    },{
+                    "id": '',
+                    "theme": '你好好范德萨立法就是杜拉拉护肤老师打',
+                    "text":'反对拉萨咖啡看来大家撒赖咖啡碱但是看了附近的拉萨解放离开',
+                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "label": ['Java','并发','JVM'],
+                    "date": "2023-02-05"
+                    },{
+                    "id": '',
+                    "theme": '你好好范德萨立法就是杜拉拉护肤老师打',
+                    "text":'反对拉萨咖啡看来大家撒赖咖啡碱但是看了附近的拉萨解放离开',
+                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "label": ['Java','并发','JVM'],
+                    "date": "2023-02-05"
+                    },
+                ],
+                hotList: [{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗发动机辣椒粉反对就奥利弗就到了就',
+                    "indexUrl": ''
+                },{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗就',
+                    "indexUrl": ''
+                },{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗就',
+                    "indexUrl": ''
+                },{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗就',
+                    "indexUrl": ''
+                },{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗就',
+                    "indexUrl": ''
+                },{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗就',
+                    "indexUrl": ''
+                },{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗就',
+                    "indexUrl": ''
+                },{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗就',
+                    "indexUrl": ''
+                },{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗就',
+                    "indexUrl": ''
+                },{
+                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
+                    "theme": '反对就奥利弗就',
+                    "indexUrl": ''
+                }],
                 isAvatarShow: false,
-                username: 'pipilong',
+                username: '',
+                isShowDialog: true,
+                fullscreenLoading: false,
+                theme: '',
+                currentTag: '',
+                showTagSelect: false,
+                tags: [],
+                optionTags: [
+                    {label:'面经'},{label:'生活'},{label:'技术分享'},{label:'问题求助'},{label:'知识'},{label:'Java'},{label:'JavaScript'},{label:'MS SQL Server'},{label:'MySQL'},{label:'Oracle'},
+                    {label:'Erlang'},{label:'IO'},{label:'并发'},{label:'多线程'},{label:'集合'},{label:'JVM'},{label:'计算机网络'},{label:'HTTP'},{label:'TLS'},{label:'TCP'},{label:'操作系统'},{label:'CPU'},{label:'内存'},{label:'Linux'},
+                    {label:'Shell'},{label:'数据结构'},{label:'树'},{label:'堆'},{label:'图'},{label:'布隆过滤器'},{label:'算法'},{label:'Redis'},{label:'ElasticSearch'},{label:'Maven'},{label:'Git'},{label:'Docker'},{label:'IDEA'},{label:'Eclipse'},
+                    {label:'Spring'},{label:'SpringBoot'},{label:'MyBatis'},{label:'Netty'},{label:'设计模式'},{label:'SpringSecurity'},{label:'SpringData'},{label:'JWT'},{label:'单点登录'},{label:'WebSocket'},{label:'分布式'},
+                    {label:'RPC'},{label:'负载均衡'},{label:'CDN'},{label:'消息队列'},{label:'MySQL优化'},{label:'读写分离'},{label:'网关'},{label:'熔断'}
+                ],
             }
         }
     });

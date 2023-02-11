@@ -7,6 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
+
+import java.time.Duration;
 
 /**
  * @author pipilong
@@ -15,16 +19,21 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
  */
 @Configuration
 public class RedisConfig {
-
-    @Bean
+    @Bean("redisCacheManager")
     public CacheManager initRedisCacheManager(
             @Autowired RedisConnectionFactory redisConnectionFactory
     ){
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
+        RedisSerializationContext.SerializationPair<Object> valueSerialization = RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.java());
+
+        RedisCacheConfiguration config = RedisCacheConfiguration
+                .defaultCacheConfig()
+                .entryTtl(Duration.ofDays(1L))
+                .disableCachingNullValues()
+                .serializeValuesWith(valueSerialization);
         RedisCacheManager redisCacheManager=
                 RedisCacheManager.RedisCacheManagerBuilder
                         .fromConnectionFactory(redisConnectionFactory)
-                        .withCacheConfiguration("user:",config)
+                        .withCacheConfiguration("redisCacheManager",config)
                         .build();
         return redisCacheManager;
     }

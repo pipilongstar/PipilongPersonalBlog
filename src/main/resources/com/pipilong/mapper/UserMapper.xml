@@ -10,6 +10,9 @@
         <result property="userName" column="username"/>
         <result property="personalMessage" column="personal_message"/>
         <result property="githubUrl" column="github_url"/>
+        <result property="numberOfRead" column="number_of_read"/>
+        <result property="numberOfLikes" column="number_of_likes"/>
+        <result property="numberOfCollections" column="number_of_collections"/>
     </resultMap>
 
     <insert id="registerUserToSecurity">
@@ -61,6 +64,16 @@
         update account_security set password = '${newpassword}' where user_id = ${userid};
     </update>
 
+    <update id="updateUserLikeCount">
+        update user_data set number_of_likes = number_of_likes + ${count} where user_id = ${userid};
+    </update>
+    <update id="updateUserCollectionCount">
+        update user_data set number_of_collections = number_of_collections + ${count} where user_id=${userid};
+    </update>
+    <update id="updateUserReadCount">
+        update user_data set number_of_read = number_of_read + ${count} where user_id=${userid};
+    </update>
+
     <select id="selectEmailByUserIdAfter" resultType="java.lang.String">
         select email from account_security where user_id = ${userid};
     </select>
@@ -76,6 +89,9 @@
     </select>
     <select id="getEmailByUserID" resultType="java.lang.String">
         select email from account_security where user_id = ${userid};
+    </select>
+    <select id="selectUserId" resultType="java.lang.String">
+        select user_id from user_data;
     </select>
 </mapper>
 

@@ -35,6 +35,9 @@ public class User {
     @JsonAlias("github_url")
     private String githubUrl;
     private String school;
+    private Integer numberOfRead;
+    private Integer numberOfLikes;
+    private Integer numberOfCollections;
 
     public void setProfile(User user){
         this.userId=user.getUserId();
@@ -45,6 +48,9 @@ public class User {
         this.githubUrl=user.getGithubUrl();
         this.school=user.getSchool();
         this.personalMessage=user.getPersonalMessage();
+        this.numberOfRead=user.getNumberOfRead();
+        this.numberOfCollections=user.getNumberOfCollections();
+        this.numberOfLikes=user.getNumberOfLikes();
     }
 
 }
