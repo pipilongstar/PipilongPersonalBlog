@@ -21,7 +21,7 @@ public class QueryServiceImpl implements QueryService {
     private QueryMapper queryMapper;
 
     @Override
-    @Cacheable(value = "redisCacheManager",key = "'rankingList'")
+    @Cacheable(value = "hotList",key = "'rankingList'")
     public List<Discuss> selectRankingList() {
 
         List<Discuss> list = queryMapper.selectRankingList();

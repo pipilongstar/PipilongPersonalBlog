@@ -93,6 +93,9 @@
     <select id="selectUserId" resultType="java.lang.String">
         select user_id from user_data;
     </select>
+    <select id="getUserNameByUserId" resultType="java.lang.String">
+        select username from user_data where user_id = ${userid};
+    </select>
 </mapper>
 
 

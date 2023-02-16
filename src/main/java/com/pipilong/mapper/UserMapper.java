@@ -146,6 +146,12 @@ public interface UserMapper {
      */
     List<String> selectUserId();
 
+    /**
+     * 根据用户id查用户名
+     * @param userId 用户id
+     * @return 用户名
+     */
+    String getUserNameByUserId (@Param("userid") String userId);
 }
 
 

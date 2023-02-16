@@ -1,10 +1,11 @@
 package com.pipilong.pojo;
 
 import com.pipilong.enums.MessageType;
+import com.pipilong.pojo.Abstract.Message;
 import lombok.Data;
-import org.elasticsearch.common.inject.Singleton;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.io.Serializable;
 
 /**
  * @author pipilong
@@ -13,17 +14,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Data
-public class PersonMessage {
+public class PersonMessage extends Message implements Serializable {
 
     private Long id;
-    private String userId;
     private Enum<MessageType> messageType;
-    private String date;
     private String eventSourceId;
-    private String text;
     private String eventSourceUrl;
     private String messageId;
-    private Boolean isRead;
 
 }
 

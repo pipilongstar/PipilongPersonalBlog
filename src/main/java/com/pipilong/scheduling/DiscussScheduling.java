@@ -48,10 +48,10 @@ public class DiscussScheduling {
 
         Iterator<Object> ik = keys.iterator();
         while(ik.hasNext()){
-            userMapper.updateUserLikeCount((String) ik.next(),(String) iv.next());
+            userMapper.updateUserCollectionCount((String) ik.next(),(String) iv.next());
         }
 
-        stringRedisTemplate.opsForHash().delete("userCollectionCount:");
+        stringRedisTemplate.delete("userCollectionCount:");
     }
 
     @Scheduled(cron = "* 20 2/23 * * ?")
@@ -63,10 +63,10 @@ public class DiscussScheduling {
 
         Iterator<Object> ik = keys.iterator();
         while(ik.hasNext()){
-            userMapper.updateUserLikeCount((String) ik.next(),(String) iv.next());
+            userMapper.updateUserReadCount((String) ik.next(),(String) iv.next());
         }
 
-        stringRedisTemplate.opsForHash().delete("userReadCount:");
+        stringRedisTemplate.delete("userReadCount:");
     }
 
 }

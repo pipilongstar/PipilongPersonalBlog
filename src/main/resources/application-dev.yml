@@ -13,6 +13,8 @@ spring:
       pool:
         enabled: true
         max-active: 16
+  rabbitmq:
+    host: 192.168.43.148
 
 es:
   hostAndPort: "localhost:9200"

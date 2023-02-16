@@ -35,18 +35,18 @@ public class GeneralConfig {
         return new COSClient(cred, clientConfig);
     }
 
-//    @Bean
-//    public ThreadPoolExecutor getThreadPoolExecutor(){
-//        return new ThreadPoolExecutor(
-//                5,
-//                10,
-//                60,
-//                TimeUnit.SECONDS,
-//                new ArrayBlockingQueue<>(100),
-//                Executors.defaultThreadFactory(),
-//                new ThreadPoolExecutor.AbortPolicy()
-//        );
-//    }
+    @Bean("taskExecutor")
+    public ThreadPoolExecutor getThreadPoolExecutor(){
+        return new ThreadPoolExecutor(
+                5,
+                10,
+                60,
+                TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(100),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.AbortPolicy()
+        );
+    }
 
 
 }

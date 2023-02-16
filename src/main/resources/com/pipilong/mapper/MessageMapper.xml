@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pipilong.mapper.MessageMapper">
+
+    <resultMap id="chatRoom" type="com.pipilong.pojo.ChatRoom">
+        <result property="userAvatarUrl" column="user_avatar_url"/>
+        <result property="friendName" column="friend_name"/>
+        <result property="friendId" column="friend_id"/>
+        <result property="noReadCount" column="no_read_count"/>
+    </resultMap>
+
+    <resultMap id="chatRecord" type="com.pipilong.pojo.ChatRecord">
+        <result property="userAvatarUrl" column="user_avatar_url"/>
+    </resultMap>
+
+    <resultMap id="systemMessage" type="com.pipilong.pojo.SystemMessage">
+        <result property="userId" column="user_id"/>
+        <result property="isRead" column="is_read"/>
+    </resultMap>
+
+    <resultMap id="personMessage" type="com.pipilong.pojo.PersonMessage">
+        <result property="isRead" column="is_read"/>
+        <result property="userId" column="user_id"/>
+        <result property="eventSourceId" column="event_source_id"/>
+        <result property="eventSourceUrl" column="event_source_url"/>
+        <result property="messageId" column="message_id"/>
+        <result property="messageType" column="message_type"/>
+    </resultMap>
+
+    <insert id="insertRecord">
+        insert into chat_record value (null,${chat.userId},'${chat.text}',false,'${chat.date}','${chat.userAvatarUrl}','${chat.position}',${chat.friendId});
+    </insert>
+    <insert id="insertRoom">
+        insert into chat_room value (null,'${room.userAvatarUrl}',${userid},'${room.friendName}','${room.date}','${room.text}',${room.friendId},1);
+    </insert>
+
+
+
+    <update id="updateChatRoom">
+        update chat_room set no_read_count = no_read_count + ${count},date='${date}',text='${text}' where user_id = ${userid} and friend_id=${friendid};
+    </update>
+    <update id="updateNoReadCount">
+        update chat_room set no_read_count=0 where user_id=${userid} and friend_id=${friendid};
+    </update>
+    <delete id="deleteChatRoom">
+        delete  from chat_room  where user_id = ${userid} and friend_id = ${friendid};
+    </delete>
+
+    <select id="getChatRoom" resultMap="chatRoom">
+        select * from chat_room where user_id = ${userid} order by date limit 100;
+    </select>
+    <select id="getChatRecord" resultMap="chatRecord">
+        select * from chat_record where user_id = ${userid} and friend_id = ${friendId} order by date desc limit 100;
+    </select>
+    <select id="getSystemMessage" resultMap="systemMessage">
+        select * from system_message where user_id = ${userid} order by date limit 40;
+    </select>
+    <select id="getPersonMessage" resultType="com.pipilong.pojo.PersonMessage">
+        select * from person_message where user_id = ${userid} and message_type = '${messageType.getValue()}' order by date desc limit 40;
+    </select>
+    <select id="isExistChatRoom" resultType="java.lang.Integer">
+        select id from chat_room where user_id = ${userid} and friend_id = ${friendid};
+    </select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

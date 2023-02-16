@@ -11,6 +11,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.time.Duration;
+import java.util.HashMap;
 
 /**
  * @author pipilong
@@ -25,17 +26,30 @@ public class RedisConfig {
     ){
         RedisSerializationContext.SerializationPair<Object> valueSerialization = RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.java());
 
-        RedisCacheConfiguration config = RedisCacheConfiguration
+        HashMap<String, RedisCacheConfiguration> map = new HashMap<>();
+        RedisCacheConfiguration config1 = RedisCacheConfiguration
                 .defaultCacheConfig()
                 .entryTtl(Duration.ofDays(1L))
                 .disableCachingNullValues()
                 .serializeValuesWith(valueSerialization);
-        RedisCacheManager redisCacheManager=
-                RedisCacheManager.RedisCacheManagerBuilder
-                        .fromConnectionFactory(redisConnectionFactory)
-                        .withCacheConfiguration("redisCacheManager",config)
-                        .build();
-        return redisCacheManager;
+        map.put("hotList",config1);
+        RedisCacheConfiguration config2 = RedisCacheConfiguration
+                .defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(10L))
+                .disableCachingNullValues()
+                .serializeValuesWith(valueSerialization);
+        map.put("chatRecord",config2);
+        RedisCacheConfiguration config3 = RedisCacheConfiguration
+                .defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(10L))
+                .disableCachingNullValues()
+                .serializeValuesWith(valueSerialization);
+        map.put("message",config3);
+
+        return RedisCacheManager.RedisCacheManagerBuilder
+                .fromConnectionFactory(redisConnectionFactory)
+                .withInitialCacheConfigurations(map)
+                .build();
     }
 
 }

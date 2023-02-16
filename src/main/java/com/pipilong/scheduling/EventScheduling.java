@@ -1,5 +1,6 @@
 package com.pipilong.scheduling;
 
+import com.pipilong.annotation.ErrorLog;
 import com.pipilong.enums.MessageType;
 import com.pipilong.mapper.EventMapper;
 import com.pipilong.mapper.UserMapper;
@@ -35,12 +36,12 @@ public class EventScheduling {
     private CodeGenerator codeGenerator;
 
     @Scheduled(fixedRate = 30*60*1000)
+    @ErrorLog
     public void systemMessage() {
 
         SetOperations<String, String> ops = stringRedisTemplate.opsForSet();
         Set<String> keys = stringRedisTemplate.keys("systemMessage:*");
-
-        assert keys != null;
+        if(keys == null || keys.isEmpty()) return;
         Iterator<String> iterator = keys.iterator();
         while (iterator.hasNext()) {
             String key = iterator.next();
@@ -69,11 +70,12 @@ public class EventScheduling {
     }
 
     @Scheduled(fixedRate = 30*60*1000)
+    @ErrorLog
     public void likeMessage(){
 
         HashOperations<String, Object, Object> ops = stringRedisTemplate.opsForHash();
         Set<String> keys = stringRedisTemplate.keys("likeMessage:*");
-        assert keys != null;
+        if(keys == null || keys.isEmpty()) return;
         Iterator<String> iterator = keys.iterator();
         while (iterator.hasNext()){
 
@@ -97,13 +99,5 @@ public class EventScheduling {
         }
 
     }
-
-
-
-
-
-
-
-
 
 }

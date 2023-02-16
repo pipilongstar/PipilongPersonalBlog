@@ -13,15 +13,19 @@ spring:
             client-id: d9d6946364681fc45ef8
             client-secret: 62f08091ae6ddcd487072508e0eb152e9c0ff2dc
             client-name: github
+  rabbitmq:
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 10
 
 
-  task:
-    execution:
-      pool:
-        core-size: 8
-        max-size: 15
-        queue-capacity: 120
-
+#  task:
+#    execution:
+#      pool:
+#        core-size: 8
+#        max-size: 15
+#        queue-capacity: 120
 
 #  config-location: classpath:com/pipilong/mapper/*.xml;
 
