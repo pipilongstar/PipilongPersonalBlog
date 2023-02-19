@@ -17,6 +17,7 @@ target/
 .idea
 .mvn
 /src/test
+/src/main/resources/static
 *.iws
 *.iml
 *.ipr
@@ -24,6 +25,7 @@ target/
 技术文档.md
 问题文档.md
 参数文档.md
+
 
 ### NetBeans ###
 /nbproject/private/
