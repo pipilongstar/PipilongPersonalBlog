@@ -5,17 +5,19 @@ import com.pipilong.annotation.ErrorLog;
 import com.pipilong.enums.MessageType;
 import com.pipilong.mapper.MessageMapper;
 import com.pipilong.pojo.*;
-import com.pipilong.pojo.Abstract.Message;
+import com.pipilong.pojo.Message;
 import com.pipilong.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author pipilong
@@ -29,11 +31,19 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageMapper messageMapper;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @Override
     @ErrorLog(true)
-    public List<ChatRoom> getChatRoom(String userId) {
+    public List<Object> getChatRoom(String userId) {
 
-        return messageMapper.getChatRoom(userId);
+        List<ChatRoom> chatRooms = messageMapper.getChatRoom(userId);
+        int count =0;
+        for(ChatRoom chatRoom: chatRooms){
+            count+=Integer.parseInt(chatRoom.getNoReadCount());
+        }
+        return Arrays.asList(JSON.toJSONString(chatRooms),count);
     }
 
     @Override
@@ -52,6 +62,7 @@ public class MessageServiceImpl implements MessageService {
 
         List<SystemMessage> message = messageMapper.getSystemMessage(userId);
         Integer count = calculate(message);
+        messageMapper.updateNoReadSystemMessage(userId);
 
         return Arrays.asList(JSON.toJSONString(message),count);
     }
@@ -73,8 +84,10 @@ public class MessageServiceImpl implements MessageService {
     public List<Object> getCommentMessage(String userId) {
 
         List<PersonMessage> message = messageMapper.getPersonMessage(userId, MessageType.COMMENT);
-        message.addAll(messageMapper.getPersonMessage(userId,MessageType.AT));
-        Integer count = calculate(message);
+        List<PersonMessage> message1 = messageMapper.getPersonMessage(userId, MessageType.AT);
+        if(message==null) message=message1;
+        else message.addAll(message1);
+        Integer count=calculate(message);
 
         return Arrays.asList(JSON.toJSONString(message),count);
     }
@@ -96,7 +109,17 @@ public class MessageServiceImpl implements MessageService {
         messageMapper.deleteChatRoom(userId,friendId);
     }
 
-    private Integer calculate(@NotNull List<? extends Message> message){
+    @Override
+    @ErrorLog
+    public void updateNoRead(String userId, String type) {
+        assert MessageType.getInstance(type) == null : new NullPointerException();
+        messageMapper.updateNoReadMessage(userId,MessageType.getInstance(type));
+        String key = "message::"+ Objects.requireNonNull(MessageType.getInstance(type)).getLowerCase()+userId;
+        stringRedisTemplate.delete(key);
+    }
+
+    private Integer calculate(List<? extends Message> message){
+        if(message.isEmpty()) return 0;
         int count=0;
         for(Message m:message){
             count += m.getIsRead() ? 0 : 1;

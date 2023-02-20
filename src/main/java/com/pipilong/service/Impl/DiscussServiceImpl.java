@@ -10,6 +10,7 @@ import com.pipilong.service.DiscussService;
 import com.pipilong.utils.CodeGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.HashOperations;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +50,9 @@ public class DiscussServiceImpl implements DiscussService {
     @Autowired
     private PersonMessage personMessage;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @Override
     public Discuss getDiscuss(String discussId) {
         Discuss discuss = discussMapper.getDiscuss(discussId);
@@ -73,46 +78,14 @@ public class DiscussServiceImpl implements DiscussService {
     @Override
     public void dianZan(Boolean dianZan, String discussID, String userId,String authorId,String discussUrl,String username,String discussTheme) {
 
-        Object res = discussMapper.selectIsLike(discussID, userId);
-        if(res==null){
-            discussMapper.insertLike(discussID, userId);
-        } else {
-            discussMapper.updateLike(dianZan, discussID, userId);
-        }
-
-        String key = "userLikeCount:";
-        this.authorsContributionChange(key,dianZan,authorId);
-        HashOperations<String, Object, Object> ops = stringRedisTemplate.opsForHash();
-        String key1 = "likeMessage:"+discussID;
-
-        if(!dianZan){
-            if(Objects.equals(ops.get(key1, "count"), "1")) stringRedisTemplate.delete(key1);
-            else ops.increment(key1,"count",-1);
-        }else {
-            ops.putIfAbsent(key1,"date",new SimpleDateFormat("yyyy-MM-dd HH-mm").format(new Date()));
-            ops.put(key1,"authorId",authorId);
-            ops.put(key1,"eventSourceUrl",discussUrl);
-            ops.put(key1,"username",username);
-            ops.put(key1,"discussTheme",discussTheme);
-            ops.putIfAbsent(key1,"count","0");
-            ops.increment(key1,"count",1);
-        }
+        rabbitTemplate.convertAndSend("discussExchange","like", Arrays.asList(dianZan,discussID,userId,authorId,discussUrl,username,discussTheme));
 
     }
 
     @Override
     public void collection(Boolean collection, String discussId, String userId, String authorId) {
 
-        Object res = discussMapper.selectIsCollection(discussId,userId);
-        if(res==null){
-            discussMapper.insertCollection(discussId,userId);
-        } else {
-            discussMapper.updateCollection(collection,discussId,userId);
-        }
-
-        String key = "userCollectionCount:";
-        this.authorsContributionChange(key,collection,authorId);
-
+        rabbitTemplate.convertAndSend("discussExchange","collection", Arrays.asList(collection,discussId,userId,authorId));
     }
 
     @Override
@@ -128,7 +101,7 @@ public class DiscussServiceImpl implements DiscussService {
 
         personMessage.setMessageId(codeGenerator.getCode(8));
         personMessage.setMessageType(MessageType.COMMENT);
-        personMessage.setText("<span style=\"color = #5b91d9\">"+comment.getUsername()+"</span>"+" 评论了你发布的讨论 " +"<span style=\"color = #5b91d9\">"+comment.getDiscussTheme()+"</span>");
+        personMessage.setText("<span style=\"color:#5b91d9\">"+comment.getUsername()+"</span>"+" 评论了你发布的讨论 " +"<span style=\"color:#5b91d9\">"+comment.getDiscussTheme()+"</span>");
         personMessage.setIsRead(false);
         personMessage.setEventSourceId(comment.getDiscussId());
         personMessage.setUserId(comment.getAuthorId());
@@ -146,17 +119,15 @@ public class DiscussServiceImpl implements DiscussService {
     }
 
     @Override
-    public void readDiscuss(String authorId) {
+    public void readDiscuss(String authorId, String discussId) {
 
-        String key = "userReadCount:";
-        this.authorsContributionChange(key,true,authorId);
-
+        rabbitTemplate.convertAndSend("discussExchange","read", Arrays.asList(authorId,discussId));
     }
 
 
     private void authorsContributionChange(String key, @NotNull Boolean change, String authorId){
 
-        stringRedisTemplate.opsForHash().putIfAbsent(key,authorId,"0");
+        stringRedisTemplate.opsForHash().putIfAbsent(key,authorId,"1073741823");
         if(change){
             stringRedisTemplate.opsForHash().increment(key,authorId,1);
         }else{

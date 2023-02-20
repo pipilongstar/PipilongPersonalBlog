@@ -1,6 +1,5 @@
 package com.pipilong.pojo;
 
-import com.pipilong.pojo.Abstract.Message;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 

@@ -42,7 +42,7 @@
                 </el-col>
                 <el-col :span="2">
                     <div>
-                        <a href="/" class="home-page-style1 head_icon">
+                        <a href="./index.html" class="home-page-style1 head_icon">
                             <div style="float: left;margin-top: 21px;padding-left: 54px;"><img src="https://cdn.pipilong.com.cn/svg/home.svg" width="19px;"></div>
                             <div style="float: right;margin-top: -38px;padding-right: 6px;">首页</div></a>
                     </div>
@@ -56,9 +56,9 @@
                 </el-col>
                 <el-col :span="8">
                     <div>
-                        <el-input v-model="search" placeholder="Enter Your Search Content" class="txtb">
+                        <el-input v-model="search" placeholder="Enter Your Search Content" class="txtb" @keyup.enter.native="searchMethod">
                             <template #suffix>
-                                <el-button icon="el-icon-search" circle></el-button>
+                                <el-button icon="el-icon-search" circle @click="searchMethod"></el-button>
                             </template>
                         </el-input>
                     </div>
@@ -66,7 +66,7 @@
                 <el-col :span="2">
 
                     <div>
-                        <a href="/" class="home-page-style1 head_icon">
+                        <a href="./html/java.html" class="home-page-style1 head_icon" target="_blank">
                             <div style="float: left;margin-top: 19px;padding-left: 10px;"><img src="https://cdn.pipilong.com.cn/svg/java.svg" width="19px;"></div>
                             <div style="float: right;margin-top: -38px;padding-right: 34px;">八股文</div></a>
                     </div>
@@ -74,7 +74,7 @@
                 <el-col :span="2">
 
                     <div>
-                        <a href="/" class="home-page-style1 head_icon">
+                        <a href="./html/message.html" target="_blank" class="home-page-style1 head_icon">
                             <div style="float: left;margin-top: 20px;padding-left: 20px;"><img src="https://cdn.pipilong.com.cn/svg/message.svg" width="19px;"></div>
                             <div style="float: right;margin-top: -38px;padding-right: 40px;">消息</div></a>
                     </div>
@@ -90,7 +90,7 @@
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item>
                                     <i class="el-icon-s-custom"></i>
-                                    作者介绍
+                                    <a href="https://cos.pipilong.com.cn/作者介绍.html" class="home-page-style5" target="_blank">作者介绍</a>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <i class="ri-booklet-fill"></i>
@@ -139,7 +139,8 @@
                                         </div>
                                     </a>
                                     <div style="margin-top: -50px;">
-                                        <span v-if="username.length<=7">
+                                        <span v-if="username.length===0" style="color: #dc6a6a"><h3>还没有名称哦！</h3></span>
+                                        <span v-if="username.length<=7&&username.length>0">
                                             <h3>{{username}}</h3>
                                         </span>
                                         <span v-if="username.length>7">
@@ -189,13 +190,13 @@
 
 <!--                插图-->
                 <div style="margin-top: 30px;">
-                    <img src="https://cdn.pipilong.com.cn/svg/undraw_public_discussion_re_w9up.svg" style="width: 230px;"/>
+                    <img src="https://cdn.pipilong.com.cn/svg/message1.svg" style="width: 230px;"/>
                 </div>
                 <!--                <div style="width: 8cm;background-color: #107c10;height: 10px;"></div>-->
                 <div style="margin-top: -160px;">
                     <h3>皮皮龙科技公众号</h3>
                     <h4 style="line-height: 2;margin-top: -80px">
-                        更多资源，最新消息会持续发布在公众号上，如果你有关于面试，学习Java等问题或意见都可以在公众号上和我聊天😂，欢迎关注🥳</h4>
+                        更多资源，最新消息会持续发布在公众号上，如果你有关于面试，学习Java等问题或意见都可以在公众号上和我讨论😂，欢迎关注🥳</h4>
                     <img src="https://cdn.pipilong.com.cn/公众号.png" style="width: 4cm;height: 4cm;">
                     <h4 style="line-height: 2;margin-top: -80px">关注公众号，发送“资料”，可以领取学习资料大礼包😎</h4>
                 </div>
@@ -219,7 +220,7 @@
                                 </svg>
                             </el-col>
                             <el-col :span="3" style="margin-top: -4%;margin-left: -3%;">
-                                <h4>名企面经</h4>
+                                <h4>精选讨论</h4>
                             </el-col>
                         </el-row>
 
@@ -227,18 +228,60 @@
                         <el-col :span="24" style="height: 223px;margin-top: -13%;">
                             <template>
                                 <el-carousel :interval="2000" type="card" height="200px" indicator-position="none">
-                                    <el-carousel-item v-for="item in 6" :key="item" style="border-radius: 7px;">
-                                        <el-card shadow="hover" style="border-radius: 7px;">
-                                            总是显示
+                                    <el-carousel-item v-for="item in this.light" :key="item" style="border-radius: 7px;" @click.native="enterDiscuss(item)">
+
+                                        <el-card shadow="none"  style="line-height: 9;height: 200px;cursor: pointer;">
+                                            <el-row style="line-height: 1;margin-top: -5px;margin-left: -5px;">
+                                                <el-col :span="2" style="float: left;">
+                                                    <el-avatar :size="50" :src="item.userAvatarUrl"></el-avatar>
+                                                </el-col>
+                                                <el-col :span="18" style="text-align: left;margin-top: -6px;">
+                                                    <h4 style="margin-left: 30px;">{{item.theme}}</h4>
+                                                </el-col>
+                                                <el-col :span="4" style="font-size: 10px;">
+                                                    {{item.submitDate}}
+                                                </el-col>
+                                            </el-row>
+
+                                            <div style="margin-top: 24px;">
+                                                <p style="float: left;color: #7c7b7b;font-size: 14px;line-height: 1.4;text-align:left;margin-top: -2px;margin-left: 8px;">
+                                                    {{item.text.substring(0,95)}}
+                                                    <span v-show="item.text.length>=95">...</span>
+                                                </p>
+                                            </div>
+                                            <div style="">
+                                                <el-col :span="24">
+                                                    <div style="float: left;margin-top: -28px;margin-bottom: 8px;">
+                                                        <el-tag
+                                                                v-for="tag in item.label"
+                                                                :key="tag.name"
+                                                                :type="tag.type"
+                                                                size="small"
+                                                                style="margin-top: 30px;border-radius: 25px;margin-left: 5px;">
+                                                            {{tag.name}}
+                                                        </el-tag>
+                                                    </div>
+                                                </el-col>
+                                            </div>
+
                                         </el-card>
+
                                     </el-carousel-item>
                                 </el-carousel>
                             </template>
                         </el-col>
 
+                        <el-col>
+                            <div v-show="this.tableData.length<=0" style="">
+                                <el-empty style="height: 660px" image="https://cdn.pipilong.com.cn/svg/empty.svg"></el-empty>
+                            </div>
+                        </el-col>
+
                         <!--                    中部表单    -->
-                        <div v-for="(item,index) in tableData" style="text-decoration: none;cursor:pointer;">
-                            <el-card shadow="none" class="card_discuss" style="line-height: 2">
+
+                        <div v-for="(item,index) in tableData" style="text-decoration: none;" @click="enterDiscuss(item)">
+                            <transition name="el-fade-in-linear">
+                            <el-card shadow="none" class="card_discuss" style="line-height: 2;cursor: pointer;" >
                                 <el-row style="line-height: 1;margin-top: -5px;margin-left: -5px;">
                                     <el-col :span="2" style="float: left;">
                                         <el-avatar :size="40" :src="item.userAvatarUrl"></el-avatar>
@@ -247,7 +290,7 @@
                                         <h4>{{item.theme}}</h4>
                                     </el-col>
                                     <el-col :span="4" style="font-size: 10px;">
-                                        {{item.date}}
+                                        {{item.submitDate}}
                                     </el-col>
                                 </el-row>
 
@@ -262,27 +305,25 @@
                                         <div style="float: left;margin-top: -28px;margin-bottom: 8px;">
                                             <el-tag
                                                     v-for="tag in item.label"
-                                                    :key="tag"
-                                                    type="danger"
+                                                    :key="tag.name"
+                                                    :type="tag.type"
                                                     size="small"
                                                     style="margin-top: 30px;border-radius: 25px;margin-left: 5px;">
-                                                {{tag}}
+                                                {{tag.name}}
                                             </el-tag>
                                         </div>
                                     </el-col>
                                 </div>
 
                             </el-card>
+                    </transition>
                             <div style="height: 10px;"></div>
                         </div>
-                        <div style="margin-top: -36px;">
+
+                        <div style="margin-top: -36px;" v-if="this.tableData.length>0">
                             <el-button type="primary" @click="add_tableData" class="add_tableData_button--primary">
                                 加载更多
                             </el-button>
-                        </div>
-
-                        <div v-show="this.tableData.length<=0" style="height: 600px;">
-                            <h3>空啦！</h3>
                         </div>
 
 <!--                    发讨论的对话框-->
@@ -329,8 +370,8 @@
                                 </el-tag>
                             </div>
 
-                            <div id="my-editor" style="line-height: 1;height: 400px;width: 862px;margin-left: -20px;margin-top: 65px;">
-                                <textarea style="display:none;"  id="my-editormd-markdown-doc" name="my-editormd-markdown-doc">
+                            <div id="my-editor" style="line-height: 1;height: 400px;width: 862px;margin-left: -18px;margin-top: 65px;">
+                                <textarea style=""  id="my-editormd-markdown-doc" name="my-editormd-markdown-doc">
                                  </textarea>
                             </div>
 
@@ -375,7 +416,7 @@
                         </div>
                         <div style="height: 6px;"></div>
 
-                        <div v-for="(item,index) in hotList" style="margin-left: -20px;line-height: 0.7;">
+                        <div v-for="(item,index) in hotList" style="margin-left: -20px;line-height: 0.7;" @click="enterDiscuss(item)">
                             <el-button type="primary" plain class="hot_item">
                                 <el-row>
                                     <el-col :span="2" style="margin-left: -5px;">
@@ -384,8 +425,9 @@
                                     <el-col :span="4" style="">
                                         <el-avatar :size="25" :src="item.userAvatarUrl" style="float: left;margin-left: 4px;"></el-avatar>
                                     </el-col>
-                                    <el-col :span="4">
-                                        <p style="text-align: left;line-height: 2px;margin-left: 7px;font-size: 14px;">{{item.theme.substring(0,11)}}</p>
+                                    <el-col :span="18" style="line-height: 0;">
+                                        <p style="text-align: left;margin-left: 7px;font-size: 14px;">{{item.theme}}</p>
+<!--                                        <span v-show="item.text.length>=15">...</span>-->
                                     </el-col>
                                 </el-row>
                             </el-button>
@@ -396,7 +438,7 @@
                     </el-card>
                 </div>
 
-                <div style="margin-top: 25px;margin-right: 130px;">
+                <div style="margin-top: 30px;margin-right: 130px;">
                     <img src="https://cdn.pipilong.com.cn/svg/discuss3.svg" style="width: 210px;"/>
                 </div>
 
@@ -480,7 +522,7 @@
                     let formData = new FormData();
                     let last = '';
                     formData.append("file", file);
-                    service.post('http://localhost:8080/upload/image', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
+                    service.post('https://www.pipilong.com.cn/upload/image', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
                         last=res.data;
                         let index=$(this).val().lastIndexOf('\\');
                         editor.cm.replaceSelection("![](https://cdn.pipilong.com.cn/images/"+last+"_"+$(this).val().substring(index+1)+")");
@@ -511,19 +553,19 @@
         mounted() {
             this.isShowDialog=false;
 
-            service.get("http://localhost:8080/verification/isLogin").then(res => {
+            service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
                 this.isLogin = true;
 
-                service.get("http://localhost:8080/user/getprofile").then(res=>{
+                service.get("https://www.pipilong.com.cn/user/getprofile").then(res=>{
                     this.username=res.data.username;
                 }).catch(error=>{
                     this.$message.error('登录异常，请重新登录！');
                 });
             });
 
-            let data={
+            let conditional={
                 "query": {
                     "match_all": {}
                 },
@@ -535,25 +577,39 @@
                 "from": 0,
                 "size": 5
             }
-            service.get("http://localhost:9200/discuss/_search",data).then(res=>{
-                this.tableData=res.data.hits.hits;
+
+            service.post("https://www.pipilong.com.cn/query/es",conditional).then(res=>{
+                this.tableData=res.data;
+                for(let i=0;i<this.tableData.length;i++){
+                    this.tableData[i].label = JSON.parse(this.tableData[i].label);
+                    let oldDate=new Date(this.tableData[i].submitDate);
+                    let newDate=new Date();
+                    let diff=(newDate-oldDate)/1000/3600/24;
+                    diff=Math.round(diff)-1;
+                    if(diff===0) this.tableData[i].submitDate='今天';
+                    else{
+                        if(diff===1) this.tableData[i].submitDate='昨天';
+                        else{
+                            if(diff===2) this.tableData[i].submitDate=diff+'天前';
+                        }
+                    }
+                }
+                for(let i=0;i<Math.min(this.tableData.length,6);i++){
+                    this.light.push(this.tableData[i]);
+                }
+
             }).catch(error=>{
+                console.info(error.response.data);
                 this.$message.error('加载错误！');
             });
 
-            for(let i=1;i<=10;i++){
-                this.hotList[i-1].indexUrl='https://cdn.pipilong.com.cn/svg/数字'+i+'.svg';
-            }
-
-            for(let i=0;i<this.tableData.length;i++){
-                let oldDate=new Date(this.tableData[i].date);
-                let newDate=new Date();
-                let diff=(newDate-oldDate)/1000/3600/24;
-                diff=Math.round(diff);
-                console.info(diff);
-                if(diff===0) this.tableData[i].date='今天';
-                else this.tableData[i].date=diff+'天前';
-            }
+            service.get("https://www.pipilong.com.cn/query/rankingList").then(res=>{
+               this.hotList=res.data;
+               this.hotList.forEach((item,index)=>{
+                   Object.assign(item,{'indexUrl':'https://cdn.pipilong.com.cn/svg/数字'+(index+1)+'.svg'});
+               });
+               console.info(this.hotList);
+            });
 
 
         },
@@ -578,13 +634,49 @@
                 return '';
             },
             add_tableData() {
-                this.tableData.push("{\n" +
-                    "                    \"id\": '',\n" +
-                    "                    \"theme\": '你',\n" +
-                    "                    \"text\":'反对拉萨快点回家阿范德萨范德萨范德萨及辅导老师附近的拉萨的飞机老师点卡力扣安居房了烦啦看JFK拉萨发阿里阿靖；解法六十九开发了；激发了大家来看飞机拉萨大家复读机啊减肥的拉萨解放和管理的撒谎弗兰克罗斯的里',\n" +
-                    "                    \"userAvatarUrl\":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',\n" +
-                    "                    \"label\": ['Java','并发','JVM'],\n" +
-                    "                    }");
+                let newData;
+
+                let conditional={
+                    "query": {
+                        "match_all": {}
+                    },
+                    "sort": {
+                        "submitDate": {
+                            "order": "asc"
+                        }
+                    },
+                    "from": (this.page+1)*5,
+                    "size": 5
+                }
+
+                service.post("https://www.pipilong.com.cn/query/es",conditional).then(res=>{
+                    if(res.data.length===0){
+                        this.$message({
+                            message: '没有数据了！',
+                            type: 'warning'
+                        });
+                        return;
+                    }
+                    newData=res.data;
+                    for(let i=0;i<newData.length;i++){
+                        newData[i].label = JSON.parse(newData[i].label);
+                        let oldDate=new Date(newData[i].submitDate);
+                        let newDate=new Date();
+                        let diff=(newDate-oldDate)/1000/3600;
+                        if(diff===0) newData[i].submitDate='今天';
+                        else{
+                            if(diff===1) newData[i].submitDate='昨天';
+                            else{
+                                if(diff===2) newData[i].submitDate=diff+'天前';
+                            }
+                        }
+                        this.tableData.push(newData[i]);
+                    }
+                    this.page++;
+                }).catch(error=>{
+                    console.info(error.response.data);
+                    this.$message.error('加载错误！');
+                });
 
             },
             avatarShow() {
@@ -598,7 +690,7 @@
             },
             logout(){
 
-                service.get('http://localhost:8080/logout').then(res=>{
+                service.get('https://www.pipilong.com.cn/logout').then(res=>{
                    window.location.href='./index.html';
                 }).catch(error=>{
                     this.$message.error('退出登录失败！');
@@ -626,6 +718,10 @@
                 this.isShowDialog=false;
             },
             submitDiscuss(){
+                if(!this.isLogin){
+                    window.open('./html/login.html');
+                    return 0;
+                }
                 this.fullscreenLoading=true;
                 if(!this.isLogin){
                     this.$message.error('请先登录！');
@@ -643,9 +739,9 @@
                     "user_id":this.user_id,
                     "text": $("#my-editormd-markdown-doc").val(),
                     "username": this.username,
-                    "label": JSON.stringify(Array.from(this.tags,({name})=>name))
+                    "label": JSON.stringify(this.tags)
                 }
-                service.post('http://localhost:8080/upload/discuss',data,{
+                service.post('https://www.pipilong.com.cn/upload/discuss',data,{
                     headers: {
                         'Content-Type': 'application/json; charset=utf-8',
                     }
@@ -656,11 +752,21 @@
                         message: '发布成功！',
                         type: 'success'
                     });
+                    this.theme='';
+                    this.label='';
                 }).catch(error=>{
                     this.fullscreenLoading=false;
                     this.$message.error(error.response.data);
                 });
 
+            },
+            enterDiscuss(item){
+                let url='./html/discuss.html?id=' + item.discussId;
+                window.open(url);
+            },
+            searchMethod(){
+                let url = encodeURI('./html/search-page.html?query='+this.search);
+                window.open(url);
             }
         },
 
@@ -672,84 +778,8 @@
                 fit: 'fill',
                 reference: false,
                 dialogVisibleLogin: false,
-                tableData: [{
-                    "id": '',
-                    "theme": '你',
-                    "text":'反对拉萨快点回家阿范德萨范德萨范德萨及辅导老师附近的拉萨的飞机老师点卡力扣安居房了烦啦看JFK拉萨发阿里阿靖；解法六十九开发了；激发了大家来看飞机拉萨大家复读机啊减肥的拉萨解放和管理的撒谎弗兰克罗斯的里',
-                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "label": ['Java','并发','JVM'],
-                    "date": "2023-02-05"
-                    },{
-                    "id": '',
-                    "theme": '你好好范德萨立法就是杜拉拉护肤老师打',
-                    "text":'反离开',
-                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "label": ['Java','并发','JVM'],
-                    "date": "2023-02-05"
-                    },{
-                    "id": '',
-                    "theme": '你老师打',
-                    "text":'反对拉萨咖啡看来大家撒赖咖啡碱但是看了附近的拉萨解放离开',
-                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "label": ["Java",'并发','JVM'],
-                    "date": "2023-02-05"
-                    },{
-                    "id": '',
-                    "theme": '你好好范德萨立法就是杜拉拉护肤老师打',
-                    "text":'反对拉萨咖啡看来大家撒赖咖啡碱但是看了附近的拉萨解放离开',
-                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "label": ['Java','并发','JVM'],
-                    "date": "2023-02-05"
-                    },{
-                    "id": '',
-                    "theme": '你好好范德萨立法就是杜拉拉护肤老师打',
-                    "text":'反对拉萨咖啡看来大家撒赖咖啡碱但是看了附近的拉萨解放离开',
-                    "userAvatarUrl":'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "label": ['Java','并发','JVM'],
-                    "date": "2023-02-05"
-                    },
-                ],
-                hotList: [{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗发动机辣椒粉反对就奥利弗就到了就',
-                    "indexUrl": ''
-                },{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗就',
-                    "indexUrl": ''
-                },{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗就',
-                    "indexUrl": ''
-                },{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗就',
-                    "indexUrl": ''
-                },{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗就',
-                    "indexUrl": ''
-                },{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗就',
-                    "indexUrl": ''
-                },{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗就',
-                    "indexUrl": ''
-                },{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗就',
-                    "indexUrl": ''
-                },{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗就',
-                    "indexUrl": ''
-                },{
-                    "userAvatarUrl": 'https://cdn.pipilong.com.cn/UserAvatar/10037994.jpg',
-                    "theme": '反对就奥利弗就',
-                    "indexUrl": ''
-                }],
+                tableData: [],
+                hotList: [],
                 isAvatarShow: false,
                 username: '',
                 isShowDialog: true,
@@ -765,6 +795,8 @@
                     {label:'Spring'},{label:'SpringBoot'},{label:'MyBatis'},{label:'Netty'},{label:'设计模式'},{label:'SpringSecurity'},{label:'SpringData'},{label:'JWT'},{label:'单点登录'},{label:'WebSocket'},{label:'分布式'},
                     {label:'RPC'},{label:'负载均衡'},{label:'CDN'},{label:'消息队列'},{label:'MySQL优化'},{label:'读写分离'},{label:'网关'},{label:'熔断'}
                 ],
+                page: 0,
+                light: [],
             }
         }
     });

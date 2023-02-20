@@ -1,7 +1,6 @@
 package com.pipilong.pojo;
 
 import com.pipilong.enums.MessageType;
-import com.pipilong.pojo.Abstract.Message;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ import java.io.Serializable;
 public class PersonMessage extends Message implements Serializable {
 
     private Long id;
-    private Enum<MessageType> messageType;
+    private MessageType messageType;
     private String eventSourceId;
     private String eventSourceUrl;
     private String messageId;

@@ -89,6 +89,21 @@ public interface MessageMapper {
      * @param friendId 好友id
      */
     void updateNoReadCount(@Param("userid")String userId,@Param("friendid") String friendId);
+
+    /**
+     * 更新个人消息的未读字段
+     * @param userId 用户id
+     * @param messageType 消息类型
+     */
+    void updateNoReadMessage(@Param("userid") String userId,@Param("type") MessageType messageType);
+
+
+    /**
+     * 更新系统未读消息
+     * @param userId 用户id
+     */
+    void updateNoReadSystemMessage(@Param("userid") String userId);
+
 }
 
 

@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
         email.setAuthentication("official@pipilong.com.cn","tHo7C8jao8kEDdd3");
 //            email.setAuthentication("2534158602@qq.com", "tazojgkxgzrhdijj");//此处填写邮箱地址和客户端授权码
         email.setSubject(emailHead);//此处填写邮件名，邮件名可任意填写
-        email.setMsg(message);//此处填写邮件内容
+        email.setHtmlMsg(message);//此处填写邮件内容
         email.send();
     }
 

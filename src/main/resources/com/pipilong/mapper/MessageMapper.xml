@@ -26,7 +26,7 @@
         <result property="eventSourceId" column="event_source_id"/>
         <result property="eventSourceUrl" column="event_source_url"/>
         <result property="messageId" column="message_id"/>
-        <result property="messageType" column="message_type"/>
+        <result property="messageType" column="message_type" typeHandler="com.pipilong.handler.MessageTypeEnumTypeHandler"/>
     </resultMap>
 
     <insert id="insertRecord">
@@ -36,13 +36,17 @@
         insert into chat_room value (null,'${room.userAvatarUrl}',${userid},'${room.friendName}','${room.date}','${room.text}',${room.friendId},1);
     </insert>
 
-
-
     <update id="updateChatRoom">
         update chat_room set no_read_count = no_read_count + ${count},date='${date}',text='${text}' where user_id = ${userid} and friend_id=${friendid};
     </update>
     <update id="updateNoReadCount">
         update chat_room set no_read_count=0 where user_id=${userid} and friend_id=${friendid};
+    </update>
+    <update id="updateNoReadMessage">
+        update person_message set is_read = true where user_id = ${userid} and message_type = '${type.getValue()}';
+    </update>
+    <update id="updateNoReadSystemMessage">
+        update system_message set is_read = true where user_id = ${userid};
     </update>
     <delete id="deleteChatRoom">
         delete  from chat_room  where user_id = ${userid} and friend_id = ${friendid};
@@ -51,19 +55,22 @@
     <select id="getChatRoom" resultMap="chatRoom">
         select * from chat_room where user_id = ${userid} order by date limit 100;
     </select>
+
     <select id="getChatRecord" resultMap="chatRecord">
         select * from chat_record where user_id = ${userid} and friend_id = ${friendId} order by date desc limit 100;
     </select>
+
     <select id="getSystemMessage" resultMap="systemMessage">
-        select * from system_message where user_id = ${userid} order by date limit 40;
+        select * from system_message where user_id = ${userid} order by date desc limit 100;
     </select>
-    <select id="getPersonMessage" resultType="com.pipilong.pojo.PersonMessage">
-        select * from person_message where user_id = ${userid} and message_type = '${messageType.getValue()}' order by date desc limit 40;
+
+    <select id="getPersonMessage" resultMap="personMessage">
+        select * from person_message where user_id = ${userid} and message_type = '${messageType.getValue()}' order by date desc limit 100;
     </select>
+
     <select id="isExistChatRoom" resultType="java.lang.Integer">
         select id from chat_room where user_id = ${userid} and friend_id = ${friendid};
     </select>
-
 
 </mapper>
 

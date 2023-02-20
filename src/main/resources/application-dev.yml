@@ -6,15 +6,15 @@ spring:
       username: root
       password: 26237447
   redis:
-    host: 101.43.24.234
+    host: 192.168.43.148
     port: 6379
-    password: ZSLnlshb2623
     jedis:
       pool:
         enabled: true
         max-active: 16
   rabbitmq:
     host: 192.168.43.148
+
 
 es:
   hostAndPort: "localhost:9200"

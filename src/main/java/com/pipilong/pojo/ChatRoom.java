@@ -15,7 +15,6 @@ import java.util.List;
 @Data
 public class ChatRoom implements Serializable {
 
-
     private String userAvatarUrl;
     private String friendName;
     private String friendId;
@@ -23,6 +22,7 @@ public class ChatRoom implements Serializable {
     private String date;
     private List<ChatRecord> chatRecords;
     private String noReadCount;
+    private String userId;
 
 }
 

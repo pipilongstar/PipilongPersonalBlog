@@ -15,12 +15,30 @@
         <result property="numberOfCollections" column="number_of_collections"/>
     </resultMap>
 
+    <resultMap id="discussMap" type="com.pipilong.pojo.Discuss">
+        <result property="userId" column="user_id"/>
+        <result property="userAvatarUrl" column="user_avatar_url"/>
+        <result property="discussId" column="discuss_id"/>
+        <result property="submitDate" column="date"/>
+    </resultMap>
+
+    <resultMap id="follow" type="com.pipilong.pojo.Follow">
+        <result property="text" column="personal_message"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
     <insert id="registerUserToSecurity">
         insert into account_security value (null,${userId},'${email}','${telephone}',null,null,null);
     </insert>
 
     <insert id="registerUserToData">
         insert into user_data(id,user_id,username) value (null,'${userId}','${username}');
+    </insert>
+    <insert id="follow">
+        insert into user_relationship value (null,${userid},${friendid});
+    </insert>
+    <insert id="createChatRoom">
+        insert into chat_room value (null,'${room.userAvatarUrl}',${room.userId},'${room.friendName}','${room.date}','',${room.friendId},0);
     </insert>
 
     <select id="getUserIdByTelephone" resultType="java.lang.String">
@@ -96,6 +114,19 @@
     <select id="getUserNameByUserId" resultType="java.lang.String">
         select username from user_data where user_id = ${userid};
     </select>
+    <select id="getDynamic" resultMap="discussMap">
+        select * from discuss where user_id = ${userid};
+    </select>
+    <select id="getCollection" resultMap="discussMap">
+        select * from discuss where discuss_id in (select discuss_id from collection where collection.user_id = ${userid} and is_able is true);
+    </select>
+    <select id="getFollowed" resultMap="follow">
+        select user_id,username,personal_message from user_data where user_id in (select userA_id from user_relationship where userB_id= ${userid});
+    </select>
+    <select id="getFollow" resultMap="follow">
+        select user_id,username,personal_message from user_data where user_id in (select userB_id from user_relationship where userA_id= ${userid});
+    </select>
+
 </mapper>
 
 

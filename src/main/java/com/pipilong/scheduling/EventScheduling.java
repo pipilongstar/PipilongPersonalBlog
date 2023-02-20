@@ -90,8 +90,8 @@ public class EventScheduling {
 
             message.setEventSourceUrl((String) ops.get(key,"eventSourceUrl"));
             message.setEventSourceId(discussId);
-            message.setText("<span style=\"#5b91d9\">"+(String) ops.get(key,"username")+"</span>"+ "等"
-                    +ops.get(key,"count")+"人 赞了你发布的讨论 "+"<span style=\"color = #5b91d9\">"+ops.get(key,"discussTheme")+"</span>");
+            message.setText("<span style=\"color:#5b91d9\">"+(String) ops.get(key,"username")+"</span>"+ "等"
+                    +ops.get(key,"count")+"人 赞了你发布的讨论 "+"<span style=\"color:#5b91d9\">"+ops.get(key,"discussTheme")+"</span>");
             message.setDate((String) ops.get(key,"date"));
 
             eventMapper.insertPersonMessage(message);

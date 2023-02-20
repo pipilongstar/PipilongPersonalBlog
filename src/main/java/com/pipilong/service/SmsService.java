@@ -24,7 +24,7 @@ public interface SmsService {
      * @param telephone 手机号
      * @param message 发送短信的内容
      */
-    void sendSMS(String telephone, String message);
+    void sendSMS(String telephone, String message,String textTemplateId);
 
     /**
      * 根据用户id找到手机号，并发送短信

@@ -5,10 +5,7 @@ import com.pipilong.mapper.MessageMapper;
 import com.pipilong.mapper.UserMapper;
 import com.pipilong.pojo.ChatRecord;
 import com.pipilong.pojo.ChatRoom;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author pipilong
@@ -38,10 +36,9 @@ public class ChatRecordConsumer {
 
     @ErrorLog
     @RabbitListener(queues = "chatRecordQueue")
-    public void consumer(@NotNull Pair<ChatRecord, Boolean> pair){
-
-        ChatRecord chatRecord = pair.getKey();
-        Boolean isRead = pair.getValue();
+    public void consumer(List<Object> data){
+        ChatRecord chatRecord = (ChatRecord) data.get(0);
+        Boolean isRead = (Boolean) data.get(1);
         //保存到自己的聊天记录中，只有发消息的时候会保存记录，且是双方记录
         String date = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
         chatRecord.setDate(date);
@@ -56,7 +53,6 @@ public class ChatRecordConsumer {
         chatRecord.setPosition("left");
         messageMapper.insertRecord(chatRecord);
         Integer existChatRoom = messageMapper.isExistChatRoom(friendId, userId);
-        log.info(String.valueOf(existChatRoom));
         if(existChatRoom == null) {
             ChatRoom chatRoom = new ChatRoom();
             chatRoom.setFriendId(userId);

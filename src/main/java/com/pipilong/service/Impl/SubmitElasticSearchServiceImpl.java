@@ -1,29 +1,23 @@
 package com.pipilong.service.Impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.pipilong.annotation.ErrorLog;
 import com.pipilong.pojo.Discuss;
 import com.pipilong.service.SubmitElasticSearchService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpEntity;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.*;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,7 +54,7 @@ public class SubmitElasticSearchServiceImpl implements SubmitElasticSearchServic
 
     @ErrorLog(true)
     @Override
-    public String query(String conditional) throws IOException, JSONException {
+    public String query(String conditional) throws Exception {
 
         this.request.setJsonEntity(conditional);
         Response response = restHighLevelClient.getLowLevelClient().performRequest(this.request);
@@ -74,7 +68,7 @@ public class SubmitElasticSearchServiceImpl implements SubmitElasticSearchServic
     }
 
     @Override
-    public String search(String conditional) throws IOException, JSONException {
+    public String search(String conditional) throws Exception {
         this.request.setJsonEntity(conditional);
         Response response = restHighLevelClient.getLowLevelClient().performRequest(this.request);
         InputStream inputStream = response.getEntity().getContent();
@@ -87,13 +81,13 @@ public class SubmitElasticSearchServiceImpl implements SubmitElasticSearchServic
     }
 
     @ErrorLog
-    private String parseHighLight(String responseBody) throws JSONException {
+    private String parseHighLight(String responseBody) throws Exception {
         List<String> list = new ArrayList<>();
 
-        JSONObject jsonObject = new JSONObject(responseBody);
+        JSONObject jsonObject = JSONObject.parseObject(responseBody);
         JSONObject hits = (JSONObject) jsonObject.get("hits");
         JSONArray hits1 = hits.getJSONArray("hits");
-        for(int i=0;i<hits1.length();i++){
+        for(int i=0;i<hits1.size();i++){
             JSONObject source = hits1.getJSONObject(i).getJSONObject("_source");
             String dis = hits1.getJSONObject(i).getJSONObject("highlight").getJSONArray("theme").get(0).toString();
 
@@ -105,13 +99,13 @@ public class SubmitElasticSearchServiceImpl implements SubmitElasticSearchServic
     }
 
     @ErrorLog
-    private List<String> parseJsonData(String data) throws JSONException {
+    private List<String> parseJsonData(String data) throws Exception {
         List<String> list = new ArrayList<>();
 
-        JSONObject jsonObject = new JSONObject(data);
+        JSONObject jsonObject = JSONObject.parseObject(data);
         JSONObject hits = (JSONObject) jsonObject.get("hits");
         JSONArray hits1 = hits.getJSONArray("hits");
-        for(int i=0;i<hits1.length();i++){
+        for(int i=0;i<hits1.size();i++){
             list.add(hits1.getJSONObject(i).getString("_source"));
         }
 

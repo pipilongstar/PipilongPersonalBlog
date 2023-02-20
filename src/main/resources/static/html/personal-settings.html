@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:width="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>个人设置</title>
     <link rel="stylesheet" href="../css/settings.css">
+    <link rel="stylesheet" href="../css/settings.scss">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="../css/search-style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -33,12 +33,16 @@
                 </el-col>
                 <el-col :span="2">
                     <div>
-                        <a href="/" class="home-page-style1">首页</a>
+                        <a href="../index.html" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 21px;padding-left: 54px;"><img src="https://cdn.pipilong.com.cn/svg/home.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 6px;">首页</div></a>
                     </div>
                 </el-col>
                 <el-col :span="2">
                     <div>
-                        <a href="/" class="home-page-style2">面经</a>
+                        <a href="./interview-experience.html" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 21px;padding-left: 50px;"><img src="https://cdn.pipilong.com.cn/svg/book.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 10px;">面经</div></a>
                     </div>
                 </el-col>
                 <el-col :span="8">
@@ -51,14 +55,21 @@
                     </div>
                 </el-col>
                 <el-col :span="2">
+
                     <div>
-                        <a href="/" class="home-page-style">八股文</a>
+                        <a href="./java.html" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 19px;padding-left: 10px;"><img src="https://cdn.pipilong.com.cn/svg/java.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 34px;">八股文</div></a>
                     </div>
                 </el-col>
                 <el-col :span="2">
+
                     <div>
-                        <a href="/" class="home-page-style">消息</a>
+                        <a href="./message.html" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 20px;padding-left: 20px;"><img src="https://cdn.pipilong.com.cn/svg/message.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 40px;">消息</div></a>
                     </div>
+
                 </el-col>
                 <el-col :span="2">
                     <div>
@@ -70,16 +81,21 @@
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item>
                                     <i class="el-icon-s-custom"></i>
-                                    作者介绍
+                                    <a href="https://cos.pipilong.com.cn/作者介绍.html" class="home-page-style5" target="_blank">作者介绍</a>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <i class="ri-booklet-fill"></i>
                                     网站日志
                                 </el-dropdown-item>
                                 <el-dropdown-item>
-                                    <i class="ri-github-fill"></i>
+                                    <i><img src="https://cdn.pipilong.com.cn/svg/github.svg" width="15px;" alt=""/></i>
                                     <a href="https://github.com/pipilongstar/PipilongPersonalBlog" target="_blank"
-                                       class="home-page-style">项目源码</a>
+                                       class="home-page-style5">项目源码</a>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <i><img src="https://cdn.pipilong.com.cn/svg/gitee.svg" width="14px;" alt=""/></i>
+                                    <a href="https://gitee.com/pipilongstar/PipilongPersonalBlog" target="_blank"
+                                       class="home-page-style5">项目源码</a>
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -88,14 +104,14 @@
 
                 <el-col :span="3">
                     <div v-if="!isLogin">
-                        <a href="./login.html">
+                        <a href="./login.html" target="_blank">
                             <el-button round type="primary" class="login_button--primary">登录/注册</el-button>
                         </a>
                     </div>
                     <div v-if="isLogin">
 
                         <div style="margin-top: 13px;">
-                            <a href="./personal-center.html" @mouseover="avatarShow"
+                            <a href="./personal-center.html" target="_blank" @mouseover="avatarShow"
                                @mouseleave="avatarShut">
                                 <el-avatar shape="circle" :size="40" :fit="fit" :src="avatarUrl"
                                            class="avatar-style"></el-avatar>
@@ -107,19 +123,24 @@
                             <div v-show="isAvatarShow" class="isAvatarShow_style" @mouseover="avatarShow"
                                  @mouseleave="avatarShut">
                                 <el-card shadow="always" style="height: 220px;width: 190px;border-radius: 16px;">
-                                    <a href="./personal-center.html">
+                                    <a href="./personal-center.html" target="_blank">
                                         <div style="margin-top: -5px;">
                                             <el-avatar :src="avatarUrl"
                                                        :size="60"></el-avatar>
                                         </div>
                                     </a>
                                     <div style="margin-top: -50px;">
-                                        <h3>{{user.username}}</h3>
+                                        <span v-if="user.username.length===0" style="color: #dc6a6a"><h3>还没有名称哦！</h3></span>
+                                        <span v-if="user.username.length<=7&&user.username.length>0">
+                                            <h3>{{user.username}}</h3>
+                                        </span>
+                                        <span v-if="user.username.length>7">
+                                            <h3>{{user.username.substring(0,7)}}...</h3>
+                                        </span>
                                     </div>
 
                                     <div style="margin-top: -28px;margin-left: -26px;">
-                                        <el-button type="primary" plain class="avatar_card_item--primary"
-                                                   @click="openPersonalSettings">
+                                        <el-button type="primary" plain class="avatar_card_item--primary" @click="openPersonalSettings">
                                             <div style="font-size: 18px;float: left;margin-left: 14px;">
                                                 <i class="ri-user-settings-line"></i>
                                             </div>
@@ -130,8 +151,7 @@
                                     </div>
 
                                     <div style="margin-left: -26px;margin-top: -6px;">
-                                        <el-button type="primary" plain class="avatar_card_item--primary"
-                                                   @click="logout">
+                                        <el-button type="primary" plain class="avatar_card_item--primary" @click="logout">
                                             <div style="font-size: 18px;float: left;margin-left: 14px;">
                                                 <i class="ri-arrow-left-circle-line"></i>
                                             </div>
@@ -140,11 +160,7 @@
                                             </div>
                                         </el-button>
                                     </div>
-                                    <!--                                    <a href="#">-->
-                                    <!--                                        <div class="avatar_card_item">-->
-                                    <!--                                            退出登录-->
-                                    <!--                                        </div>-->
-                                    <!--                                    </a>-->
+
                                 </el-card>
                             </div>
                         </el-collapse-transition>
@@ -159,6 +175,9 @@
             <!--            左侧-->
             <el-aside width="300px" style="background-color: #f5f5f5">
 
+                <div style="margin-top: 110px;">
+                    <img src="https://cdn.pipilong.com.cn/svg/setting1.svg" style="width: 220px;"/>
+                </div>
 
             </el-aside>
             <el-container>
@@ -174,7 +193,7 @@
                         <div style="margin-top: -53px;">
 
                             <el-upload
-                                    action="http://localhost:8080/upload/avatar"
+                                    action="https://www.pipilong.com.cn/upload/avatar"
                                     :multiple="true"
                                     :with-credentials="true"
                                     :show-file-list="false"
@@ -377,26 +396,66 @@
                                 </el-col>
                             </el-row>
 
-                            <div style="border-radius: 10px;">
+<!--                            更新手机对话框-->
+                            <div>
                                 <el-dialog
                                         :visible.sync="dialogUpdateTelephone"
-                                        width="300"
+                                        width="30%"
                                         :before-close="handleClose"
-                                        show-close="false">
-                                    <span slot="title">
-                                        <el-steps :active="active1" finish-status="success">
-                                        <el-step title="验证当前手机号">
-<!--                                            <el-input-->
-                                            <!--                                                    :placeholder="telephone"-->
-                                            <!--                                                    v-model="telephone"-->
-                                            <!--                                                    :disabled="true">-->
-                                            <!--                                                <template slot="prepend">+86</template>-->
-                                            <!--                                            </el-input>-->
-                                        </el-step>
-                                        <el-step title="更改为新手机号"></el-step>
-                                        <el-step title="更改完成"></el-step>
-                                    </el-steps>
+                                        :show-close="false"
+                                        class="dialog_style">
+                                    <span>
+                                        <el-steps :active="active1" finish-status="success" align-center style="line-height: 1;width: 400px;margin-top: -30px;">
+                                            <el-step title="验证当前手机号"></el-step>
+                                            <el-step title="更改为新手机号"></el-step>
+                                            <el-step title="更改完成"></el-step>
+                                        </el-steps>
                                     </span>
+                                    <div v-show="active1==0" style="margin-top: 26px;">
+<!--                                        验证当前手机号-->
+                                        <el-input
+                                                :placeholde="telephone"
+                                                v-model="telephone"
+                                                :disabled="true"
+                                                style="width: 250px;">
+                                        </el-input><br>
+                                        <el-input v-model="code" placeholder="请输入验证码" @blur="verificationCode" style="width: 250px;margin-top: 10px;">
+                                            <template #suffix>
+                                                <el-button id="sendCodeId" type="text" class="sendSms_button--text" @click="sendSms"
+                                                           :disabled="disable">
+                                                    {{sendSmsButtonName}}
+                                                </el-button>
+                                            </template>
+                                        </el-input>
+                                        <div style="color: #ff4e4e;margin-left: -170px;height: 30px;margin-top: -20px; font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_code}}</div>
+                                    </div>
+                                    <div v-show="active1 === 1" style="margin-top: 26px;">
+<!--                                        输入新手机号-->
+                                        <el-input
+                                                :placeholde="telephone"
+                                                v-model="telephone"
+                                                style="width: 250px;">
+                                        </el-input><br>
+                                        <el-input v-model="code" placeholder="请输入验证码" @blur="verificationCode" style="width: 250px;margin-top: 10px;">
+                                            <template #suffix>
+                                                <el-button id="sendCodeId" type="text" class="sendSms_button--text" @click="sendSms"
+                                                           :disabled="disable">
+                                                    {{sendSmsButtonName}}
+                                                </el-button>
+                                            </template>
+                                        </el-input>
+                                        <div style="color: #ff4e4e;margin-left: -170px;height: 30px;margin-top: -20px; font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_code}}</div>
+                                    </div>
+                                    <div v-show="active1 === 3">
+                                        <el-result icon="success" title="更新成功"></el-result>
+                                        <div style="margin-bottom: -20px;">
+                                            <el-button type="primary" plain @click="next1" class="next_style--primary">完成</el-button>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: -20px;padding-top: 20px;" v-show="active1 < 2">
+                                        <el-button type="primary" plain @click="next1" class="next_style--primary">下一步</el-button>
+                                    </div>
 
                                 </el-dialog>
                             </div>
@@ -425,6 +484,70 @@
                                 </el-col>
                             </el-row>
 
+<!--                            更新电子邮件-->
+                            <div>
+                                <el-dialog
+                                        :visible.sync="dialogUpdateEmail"
+                                        width="30%"
+                                        :before-close="handleClose"
+                                        :show-close="false"
+                                        class="dialog_style">
+                                    <span>
+                                        <el-steps :active="active2" finish-status="success" align-center style="line-height: 1;width: 400px;margin-top: -30px;">
+                                            <el-step title="验证当前邮箱"></el-step>
+                                            <el-step title="更改为新邮箱"></el-step>
+                                            <el-step title="更改完成"></el-step>
+                                        </el-steps>
+                                    </span>
+                                    <div v-show="active2===0" style="margin-top: 26px;">
+                                        <!--                                        验证当前邮箱-->
+                                        <el-input
+                                                :placeholde="email"
+                                                v-model="email"
+                                                :disabled="true"
+                                                style="width: 250px;">
+                                        </el-input><br>
+                                        <el-input v-model="code" placeholder="请输入验证码" @blur="verificationCode" style="width: 250px;margin-top: 10px;">
+                                            <template #suffix>
+                                                <el-button id="sendCodeId" type="text" class="sendSms_button--text" @click="sendSms"
+                                                           :disabled="disable">
+                                                    {{sendSmsButtonName}}
+                                                </el-button>
+                                            </template>
+                                        </el-input>
+                                        <div style="color: #ff4e4e;margin-left: -170px;height: 30px;margin-top: -20px; font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_code}}</div>
+                                    </div>
+                                    <div v-show="active2 === 1" style="margin-top: 26px;">
+                                        <!--                                        输入新邮箱-->
+                                        <el-input
+                                                :placeholde="email"
+                                                v-model="email"
+                                                style="width: 250px;">
+                                        </el-input><br>
+                                        <el-input v-model="code" placeholder="请输入验证码" @blur="verificationCode" style="width: 250px;margin-top: 10px;">
+                                            <template #suffix>
+                                                <el-button id="sendCodeId" type="text" class="sendSms_button--text" @click="sendSms"
+                                                           :disabled="disable">
+                                                    {{sendSmsButtonName}}
+                                                </el-button>
+                                            </template>
+                                        </el-input>
+                                        <div style="color: #ff4e4e;margin-left: -170px;height: 30px;margin-top: -20px; font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_code}}</div>
+                                    </div>
+                                    <div v-show="active2 === 3">
+                                        <el-result icon="success" title="更新成功"></el-result>
+                                        <div style="margin-bottom: -20px;">
+                                            <el-button type="primary" plain @click="next2" class="next_style--primary">完成</el-button>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: -20px;padding-top: 20px;" v-show="active2 < 2">
+                                        <el-button type="primary" plain @click="next2" class="next_style--primary">下一步</el-button>
+                                    </div>
+
+                                </el-dialog>
+                            </div>
+
 
                             <el-row>
                                 <el-col :span="6" style="margin-top: -100px;margin-left: -14px;color: #333333;">
@@ -444,6 +567,103 @@
                                 </el-col>
                             </el-row>
 
+<!--                            更新密码-->
+                            <div>
+                                <el-dialog
+                                        :visible.sync="dialogUpdatePassword"
+                                        width="30%"
+                                        :before-close="handleClose"
+                                        :show-close="false"
+                                        class="dialog_style">
+                                    <span>
+                                        <el-steps :active="active3" finish-status="success" align-center style="line-height: 1;width: 400px;margin-top: -30px;margin-left: -6px;">
+                                            <el-step title="更改密码"></el-step>
+                                            <el-step title="更改完成"></el-step>
+                                        </el-steps>
+                                    </span>
+                                    <div v-show="active3 === 0" style="margin-top: 26px;">
+                                        <!--                                        -->
+                                        <el-input
+                                                placeholder='请输入当前密码'
+                                                v-model="oldPassword"
+                                                style="width: 250px;"
+                                                show-password>
+                                        </el-input><br>
+                                        <el-input
+                                                placeholder="请输入新密码"
+                                                v-model="newPassword1"
+                                                style="width: 250px;"
+                                                show-password>
+                                        </el-input><br>
+                                        <el-input
+                                                placeholder="请重新输入新密码"
+                                                v-model="newPassword2"
+                                                style="width: 250px;"
+                                                show-password>
+                                        </el-input><br>
+
+                                        <div style="color: #ff4e4e;float: left;margin-left: 70px;height: 30px;margin-top: -20px; font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_password}}</div>
+                                    </div>
+                                    <div v-show="active3 === 2" style="margin-top: 26px;">
+                                        <!--                                        -->
+                                        <el-result icon="success" title="更新成功"></el-result>
+                                        <div style="margin-bottom: -20px;">
+                                            <el-button type="primary" plain @click="next3" class="next_style--primary">完成</el-button>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: -20px;padding-top: 20px;" v-show="active3 === 0">
+                                        <el-button type="primary" plain @click="modifyPassword" class="next_style--primary">点击更改</el-button>
+                                    </div>
+
+                                </el-dialog>
+                            </div>
+
+<!--                        设置密码-->
+                            <div>
+                                <el-dialog
+                                        :visible.sync="dialogSettingPassword"
+                                        width="30%"
+                                        :before-close="handleClose"
+                                        :show-close="false"
+                                        class="dialog_style">
+                                    <span>
+                                        <el-steps :active="active3" finish-status="success" align-center style="line-height: 1;width: 400px;margin-top: -30px;margin-left: -6px;">
+                                            <el-step title="设置密码"></el-step>
+                                            <el-step title="设置完成"></el-step>
+                                        </el-steps>
+                                    </span>
+                                    <div v-show="active3 === 0" style="margin-top: 26px;">
+                                        <!--                                        -->
+                                        <el-input
+                                                placeholder="请设置密码"
+                                                v-model="newPassword1"
+                                                style="width: 250px;"
+                                                show-password>
+                                        </el-input><br>
+                                        <el-input
+                                                placeholder="请重新输入密码"
+                                                v-model="newPassword2"
+                                                style="width: 250px;"
+                                                show-password>
+                                        </el-input><br>
+
+                                        <div style="color: #ff4e4e;float: left;margin-left: 70px;height: 30px;margin-top: -20px; font-family: 'Noto Sans SC', sans-serif !important;">{{this.error_password}}</div>
+                                    </div>
+                                    <div v-show="active3 === 2" style="margin-top: 26px;">
+                                        <!--                                        -->
+                                        <el-result icon="success" title="设置成功"></el-result>
+                                        <div style="margin-bottom: -20px;">
+                                            <el-button type="primary" plain @click="next3" class="next_style--primary">完成</el-button>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: -20px;padding-top: 20px;" v-show="active3 === 0">
+                                        <el-button type="primary" plain @click="settingPassword" class="next_style--primary">点击设置</el-button>
+                                    </div>
+
+                                </el-dialog>
+                            </div>
                         </div>
 
                         <div style="background-color: #eceaea;height: 2px;margin-top: -20px;"></div>
@@ -477,8 +697,6 @@
 
                         </div>
 
-                        <a href="/oauth2/authorization/github">github登录</a>
-
                     </el-card>
 
                 </el-main>
@@ -497,7 +715,7 @@
                                 text-align: center;
                                 line-height: 50px;
                                 color: #10b2a0;
-                                border-radius: 12px;
+                                border-radius: 16px;
                                 }">
                         <div style="font-size: 30px;">
                             <i class="ri-rocket-2-fill"></i>
@@ -536,7 +754,7 @@
 
         mounted() {
 
-            service.get("http://localhost:8080/verification/isLogin").then(res => {
+            service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
                 this.imageUrl = this.avatarUrl;
@@ -545,8 +763,10 @@
                 window.open('./login.html', '_parent', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
             });
 
-            service.get("http://localhost:8080/user/getprofile").then(res=>{
-               this.user=res.data;
+            service.get("https://www.pipilong.com.cn/user/getprofile").then(res=>{
+                this.user=res.data;
+                this.telephone = res.data.telephone;
+                this.email = res.data.email;
             }).catch(error=>{
                 this.$message.error('登录异常，请重新登录！');
             });
@@ -585,7 +805,7 @@
             },
             logout() {
 
-                service.get('http://localhost:8080/logout').then(res=>{
+                service.get('https://www.pipilong.com.cn/logout').then(res=>{
                     window.location.href='./index.html';
                 }).catch(error=>{
                     this.$message.error('退出登录失败！');
@@ -611,7 +831,7 @@
             upload() {
                 let formData = new FormData();
                 formData.append("file", this.file);
-                service.post('http://localhost:8080/upload/avatar', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
+                service.post('https://www.pipilong.com.cn/upload/avatar', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
                     this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id+".jpg";
                     this.imageUrl = this.avatarUrl;
                     this.$message({
@@ -624,7 +844,7 @@
             },
             save() {
 
-                service.put('http://localhost:8080/user/modifyprofile',this.user).then(res=>{
+                service.put('https://www.pipilong.com.cn/user/modifyprofile',this.user).then(res=>{
                     this.$message({
                         message: '保存成功',
                         type: 'success'
@@ -641,7 +861,7 @@
 
                 //绑定github
                 if(!this.isBindGitHub){
-                    service.get('http://localhost:8080/oauth2/authorization/github').then(res=>{
+                    service.get('https://www.pipilong.com.cn/oauth2/authorization/github').then(res=>{
                         this.isBindGitHub=true;
                         this.$message({
                             message: '绑定成功！',
@@ -660,27 +880,206 @@
 
             },
             updateTelephone() {
-                this.dialogUpdateTelephone = !this.dialogUpdateTelephone;
+                this.active1=0;
+                this.error_code='';
+                this.code='';
+                this.code_verification=false;
+                this.dialogUpdateTelephone = true;
             },
             updateEmail() {
-
+                this.active2=0;
+                this.error_code='';
+                this.code='';
+                this.code_verification=false;
+                this.dialogUpdateEmail = true;
             },
             updatePassword() {
-
+                this.active3=0;
+                this.error_password='';
+                this.oldPassword='';
+                this.newPassword2='';
+                this.newPassword1='';
+                service.get("https://www.pipilong.com.cn//password/"+this.user_id).then(res=>{
+                    this.dialogUpdatePassword = true;
+                }).catch(error=>{
+                    this.dialogSettingPassword = true;
+                });
             },
             next1() {
-                if (this.active1++ > 2) this.active1 = 0;
+                if (this.active1 === 0 ) {
+                    if(!this.code_verification) return;
+                    this.code='';
+                    this.code_verification=false;
+                    this.count=0;
+                    this.error_code='';
+                    this.active1++;
+                }else{
+                    if(this.active1 === 1){
+                        if(!this.code_verification) return;
+                        this.code='';
+                        this.code_verification=false;
+                        this.modifyPhone();
+                        this.error_code='';
+                        this.active1+=2;
+                    }else{
+                        if(this.active1 === 3){
+                            this.dialogUpdateTelephone = false;
+                        }
+                    }
+                }
             },
             next2() {
-                if (this.active2++ > 2) this.active2 = 0;
+                if (this.active2 === 0 ) {
+                    if(!this.code_verification) return;
+                    this.code='';
+                    this.code_verification=false;
+                    this.count=0;
+                    this.error_code='';
+                    this.active2++;
+                }else{
+                    if(this.active2 === 1){
+                        if(!this.code_verification) return;
+                        this.code='';
+                        this.code_verification=false;
+                        this.modifyEmail();
+                        this.error_code='';
+                        this.active2+=2;
+                    }else{
+                        if(this.active2 === 3){
+                            this.dialogUpdateEmail = false;
+                        }
+                    }
+                }
             },
             next3() {
-                if (this.active3++ > 2) this.active3 = 0;
+                if(this.active3 === 2){
+                    this.dialogUpdatePassword = false;
+                }
+            },
+            sendSms() {
+                this.error_code = '';
+                if (this.isSendSms) return;
+                this.isSendSms = true;
+                let url = null;
+                let data=null;
+                if(this.dialogUpdateTelephone){
+                    url="https://www.pipilong.com.cn/sendcode/"+this.telephone;
+                }else{
+                    url="https://www.pipilong.com.cn/sendemail"
+                    data = new FormData();
+                    data.append('userid',this.user_id);
+                }
+                service.post(url,data).then((res) => {
+                    console.info("kaishi");
+                    var timeout = setInterval(() => {
+                        if (this.count < 1) {
+                            this.disable = false;
+                            this.sendSmsButtonName = "获取验证码";
+                            this.count = 60;
+                            this.isSendSms = false;
+                            clearInterval(timeout);
+                        } else {
+                            this.disable = true;
+                            this.sendSmsButtonName = this.count-- + "s后重发";
+                        }
+                    }, 1000);
+                }).catch((error) => {
+                    this.error_code = error.response.data;
+                    this.isSendSms = false;
+                });
+            },
+            verificationCode(){
+                if(this.code === '') return;
+                service.get('https://www.pipilong.com.cn/verification/code/'+this.code).then(res=>{
+                    this.code_verification=true;
+                }).catch(error=>{
+                    this.code_verification=false;
+                   this.error_code=error.response.data;
+                });
+
+            },
+            modifyPhone(){
+
+                let form = new FormData();
+                form.append('telephone',this.telephone);
+                form.append('userid',this.user_id);
+                service.put('https://www.pipilong.com.cn/user/modifyphone',form).then(res=>{
+                }).catch(error=>{
+                    this.dialogUpdateTelephone=false;
+                    this.active1=0;
+                    this.$message.error('修改失败');
+                });
+
+            },
+            modifyEmail(){
+
+                let form = new FormData();
+                form.append('email',this.email);
+                form.append('userid',this.user_id);
+                service.put('https://www.pipilong.com.cn/user/modifyemail',form).then(res=>{
+                }).catch(error=>{
+                    this.dialogUpdateEmail=false;
+                    this.active2=0;
+                    this.$message.error('修改失败');
+                });
+            },
+            modifyPassword(){
+
+                if(this.oldPassword === ''){
+                    this.error_password = '请输入密码！';
+                    return;
+                }
+                if(this.newPassword1 !== this.newPassword2){
+                    this.error_password = '新密码两次不一致，请重新输入！';
+                    return;
+                }
+
+                let from = new FormData();
+                from.append('oldpassword',this.oldPassword);
+                from.append('newpassword',this.newPassword1);
+                from.append('userid',this.user_id);
+                service.post('https://www.pipilong.com.cn/user/modifypassword',from).then(res=>{
+                    this.error_password='';
+                    this.active3=2;
+                }).catch(error=>{
+                   this.error_password=error.response.data;
+                });
+
+            },
+            settingPassword(){
+                if(this.newPassword1 === ''){
+                    this.error_password = '请输入密码！';
+                    return;
+                }
+                if(this.newPassword1 !== this.newPassword2){
+                    this.error_password = '新密码两次不一致，请重新输入！';
+                    return;
+                }
+                let data = new FormData();
+                data.append('newPassword',this.newPassword1);
+                data.append('userId',this.user_id);
+                service.post("https://www.pipilong.com.cn/user/settingPassword",data).then(res=>{
+                    this.active3=2;
+                }).catch(error=>{
+                    this.$message.error("设置失败！");
+                    this.dialogSettingPassword=false;
+                });
             }
         },
 
         data() {
             return {
+                oldPassword: '',
+                newPassword1: '',
+                newPassword2: '',
+                error_password: '',
+                code_verification: false,
+                code: '',
+                error_code: '',
+                isSendSms: false,
+                sendSmsButtonName: '获取验证码',
+                disable: false,
+                count: 60,
                 search: '',
                 isLogin: true,
                 imageUrl: '',
@@ -701,12 +1100,15 @@
                     'github_url': '',
                     'school': ''
                 },
-                telephone: 18226237447,
-                email: 'official@pipilong.com.cn',
+                telephone: '',
+                email: '',
                 file: null,
                 isBindQQ: true,
                 isBindGitHub: false,
                 dialogUpdateTelephone: false,
+                dialogUpdateEmail: false,
+                dialogUpdatePassword: false,
+                dialogSettingPassword: false,
                 active1: 0,
                 active2: 0,
                 active3: 0,

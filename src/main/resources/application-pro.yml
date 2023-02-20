@@ -6,6 +6,20 @@ spring:
       username: pipilong
       password: ZSLnlshb2623
 
+  redis:
+    host: localhost
+    port: 6379
+    password: ZSLnlshb2623
+    jedis:
+      pool:
+        enabled: true
+        max-active: 16
+  rabbitmq:
+    host: 172.17.0.2
+
+es:
+  hostAndPort: "172.17.0.3:9200"
+
 
 logging:
   file:

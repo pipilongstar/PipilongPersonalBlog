@@ -86,4 +86,25 @@ public interface DiscussMapper{
      * @return 评论列表
      */
     List<Comment> getComment(@Param("discussId") String discussId);
+
+    /**
+     * 更新讨论的点赞数
+     * @param discussId 用户id
+     * @param count 更新数
+     */
+    void updateDiscussLikeCount(@Param("discussId") String discussId,@Param("count") String count);
+
+    /**
+     * 更新讨论的收藏数
+     * @param discussId 用户id
+     * @param count 更新数
+     */
+    void updateDiscussCollectionCount(@Param("discussId") String discussId,@Param("count") String count);
+
+    /**
+     * 更新讨论的阅读数
+     * @param discussId 用户id
+     * @param count 更新数
+     */
+    void updateDiscussReadCount(@Param("discussId") String discussId,@Param("count") String count);
 }

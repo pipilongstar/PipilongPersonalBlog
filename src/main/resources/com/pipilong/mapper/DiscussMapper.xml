@@ -38,6 +38,16 @@
     <update id="updateCollection">
         update collection set is_able = ${dianZan} where discuss_id=${discussId} and user_id=${userId};
     </update>
+    <update id="updateDiscussLikeCount">
+        update discuss set number_of_likes = number_of_likes + ${count} where discuss_id = ${discussId};
+    </update>
+    <update id="updateDiscussCollectionCount">
+        update discuss set number_of_collections = number_of_collections + ${count} where discuss_id = ${discussId};
+    </update>
+    <update id="updateDiscussReadCount">
+        update discuss set number_of_read = number_of_read + ${count} where discuss_id = ${discussId};
+    </update>
+
     <select id="getDiscuss" resultMap="map">
         select * from discuss where discuss_id = ${discussId};
     </select>

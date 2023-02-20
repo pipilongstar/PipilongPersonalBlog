@@ -1,10 +1,13 @@
 package com.pipilong.service;
 
 import com.pipilong.exception.ModifyException;
+import com.pipilong.pojo.Discuss;
+import com.pipilong.pojo.Follow;
 import com.pipilong.pojo.User;
-import com.sun.deploy.association.RegisterFailedException;
+
 import org.springframework.stereotype.Service;
 import javax.security.auth.login.LoginException;
+import java.util.List;
 
 /**
  * @author pipilong
@@ -20,7 +23,7 @@ public interface UserService {
      * @param sessionId 用户sessionId
      * @return 返回用户id
      */
-    String register(User user, String sessionId) throws RegisterFailedException;
+    String register(User user, String sessionId) throws Exception;
 
     /**
      * 用户使用验证码登录
@@ -74,6 +77,53 @@ public interface UserService {
      * @return User,用户信息
      */
     User getProfile(String sessionId) throws LoginException;
+
+
+    /**
+     * 获取动态信息
+     * @param userId 用户id
+     * @return 用户发布的动态信息
+     */
+    List<Discuss> getDynamic(String userId);
+
+    /**
+     * 获取收藏信息
+     * @param userId 用户id
+     * @return 收藏的信息
+     */
+    List<Discuss> getCollection(String userId);
+
+    /**
+     * 关注好友
+     * @param userId 用户id
+     * @param friendId 好友id
+     */
+    void follow(String userId,String friendId);
+
+    /**
+     * 获取粉丝信息
+     * @param userId 用户id
+     * @return 粉丝列表
+     */
+    List<Follow> getFollowed(String userId);
+
+    /**
+     * 获取关注信息
+     * @param userId 用户id
+     * @return 关注列表
+     */
+    List<Follow> getFollow(String userId);
+
+    /**
+     * 创建聊天室
+     */
+    void createChatRoom(String userId,String friendId,String username);
+
+    /**
+     * 设置密码
+     * @param newPassword 新密码
+     */
+    void settingPassword(String newPassword,String userId);
 }
 
 

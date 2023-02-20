@@ -37,3 +37,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/static/css/
+/src/main/resources/static/editormd/

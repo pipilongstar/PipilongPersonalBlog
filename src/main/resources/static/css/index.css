@@ -1,5 +1,50 @@
 
 
+.submit_button--primary{
+    /*font-size: 7px !important;*/
+    width: 170px;
+    box-shadow: 0 2px 12px 0 rgb(168, 196, 69);
+    background: #a8c445 !important;
+    border-color: #a8c445 !important;
+}
+
+.submit_button--primary:hover{
+    background: #87a12b !important;
+    border-color: #87a12b !important;
+    color: #FFF !important;
+    opacity: 0.8;
+}
+
+.cancel_button--primary{
+    width: 170px;
+    /*font-size: 7px !important;*/
+    box-shadow: 0 2px 12px 0 rgb(185, 185, 177);
+    background: #b9b9b1 !important;
+    border-color: #b9b9b1 !important;
+}
+
+.cancel_button--primary:hover{
+    background: #73736c !important;
+    border-color: #73736c !important;
+    color: #FFF !important;
+    opacity: 0.8;
+}
+
+.tag_button--primary{
+    /*font-size: 7px !important;*/
+    box-shadow: 0 2px 12px 0 rgb(217, 186, 84);
+    background: #d9ba54 !important;
+    border-color: #d9ba54 !important;
+}
+
+.tag_button--primary:hover{
+    background: #e5c55d !important;
+    border-color: #e5c55d !important;
+    color: #FFF !important;
+    opacity: 0.8;
+}
+
+
 .avatar_card_item--primary{
     background: #fdfdfd !important;
     width: 200px !important;
@@ -27,7 +72,7 @@
 .hot_item{
     background: #ffffff !important;
     width: 240px !important;
-    height: 50px !important;
+
     color: #333333 !important;
     border-color: #ffffff !important;
 }
@@ -35,13 +80,13 @@
 .hot_item:hover{
     background: #eeeded !important;
     width: 240px !important;
-    height: 50px !important;
+
     color: #333333 !important;
     border-color: #eeeded !important;
 }
 
 .card_discuss{
-    height: 130px;
+    /*height: 130px;*/
     border-style: none;
 }
 
@@ -92,8 +137,7 @@
 
 
 .head_icon{
-    height: 10px;
-    float: top;
+    line-height: 1;
 }
 
 .title{
@@ -192,6 +236,11 @@
 
 
 .home-page-style{
+    font-size: 16px;
+    color: #333333;
+    text-decoration: none;
+}
+.home-page-style5{
     color: #333333;
     text-decoration: none;
 }

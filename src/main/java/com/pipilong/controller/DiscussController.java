@@ -136,10 +136,12 @@ public class DiscussController {
      * @return null
      */
     @PostMapping("/read")
-    public ResponseEntity<String> read(@RequestBody String authorId){
+    public ResponseEntity<String> read(
+            @RequestParam("authorId") String authorId,
+            @RequestParam("discussId") String discussId
+       ){
 
-        log.info(authorId.substring(0,8));
-        discussService.readDiscuss(authorId.substring(0,8));
+        discussService.readDiscuss(authorId,discussId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -26,9 +26,9 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping("/chatRoom/{userId}")
-    public ResponseEntity<List<ChatRoom>> getChatRoom(@PathVariable("userId") String userId){
+    public ResponseEntity<List<Object>> getChatRoom(@PathVariable("userId") String userId){
 
-        List<ChatRoom> chatRooms = messageService.getChatRoom(userId);
+        List<Object> chatRooms = messageService.getChatRoom(userId);
 
         return new ResponseEntity<>(chatRooms, HttpStatus.OK);
     }
@@ -44,8 +44,8 @@ public class MessageController {
 
     @GetMapping("/systemMessage/{userId}")
     public ResponseEntity<List<Object>> getSystemMessage(@PathVariable("userId") String userId){
-
         List<Object> list = messageService.getSystemMessage(userId);
+
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
@@ -82,6 +82,17 @@ public class MessageController {
         messageService.deleteChatRoom(userId,friendId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/updateNoRead")
+    public ResponseEntity<String> updateNoRead(
+            @RequestParam("userId") String userId,
+            @RequestParam("type") String type
+    ){
+
+        messageService.updateNoRead(userId,type);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
 
 

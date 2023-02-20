@@ -26,14 +26,14 @@ public interface SubmitElasticSearchService {
      * @param conditional 条件
      * @return 查询到的数据
      */
-    String query(String conditional) throws IOException, JSONException;
+    String query(String conditional) throws Exception;
 
     /**
      * 搜索显示高亮
      * @param conditional 搜索条件
      * @return 搜索内容
      */
-    String search(String conditional) throws IOException, JSONException;
+    String search(String conditional) throws Exception;
 
 }
 

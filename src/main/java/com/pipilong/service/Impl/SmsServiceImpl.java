@@ -61,11 +61,11 @@ public class SmsServiceImpl implements SmsService {
 
         stringRedisTemplate.opsForValue().set(key,code,300, TimeUnit.SECONDS);
         stringRedisTemplate.opsForValue().set(key1,"",300,TimeUnit.SECONDS);
-        sendSMS(telephone,code);
+        sendSMS(telephone,code,"1667715");
     }
 
     @Override
-    public void sendSMS(String telephone, String message) {
+    public void sendSMS(String telephone, String message,String textTemplateId) {
         try {
 
             Credential cred = new Credential("AKIDMUZgkaAUZNvDhxxgCWdUAcomYYxDHI7h", "Tq56rNkxwhBON9i27vUm198wZ4NZZIn4");
@@ -88,8 +88,7 @@ public class SmsServiceImpl implements SmsService {
             String signName = "皮皮龙技术个人网";
             req.setSignName(signName);
 
-            String templateId = "1667715";
-            req.setTemplateId(templateId);
+            req.setTemplateId(textTemplateId);
 
             String[] templateParamSet = {message};
             req.setTemplateParamSet(templateParamSet);

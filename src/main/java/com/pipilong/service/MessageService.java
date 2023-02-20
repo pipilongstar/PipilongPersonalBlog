@@ -21,7 +21,7 @@ public interface MessageService {
      * @param userId 用户id
      * @return 聊天室信息
      */
-    List<ChatRoom> getChatRoom(String userId);
+    List<Object> getChatRoom(String userId);
 
     /**
      * 获取聊天记录
@@ -65,4 +65,12 @@ public interface MessageService {
      * @param friendId 好友id
      */
     void deleteChatRoom(String userId,String friendId);
+
+    /**
+     * 更新个人信息未读
+     * @param userId 用户id
+     * @param type 信息类型
+     */
+    void updateNoRead(String userId,String type);
 }
+

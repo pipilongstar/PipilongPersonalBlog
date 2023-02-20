@@ -81,7 +81,7 @@ public class VerificationController {
     @GetMapping("/password/{userid}")
     public ResponseEntity<String> isExistPassword(@PathVariable("userid") String userId){
 
-        if(!selectExistService.password(userId)) return new ResponseEntity<>("null",HttpStatus.OK);
+        if(!selectExistService.password(userId)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>("notNull",HttpStatus.OK);
     }
@@ -95,7 +95,6 @@ public class VerificationController {
     public ResponseEntity<String> isLogin(HttpSession httpSession){
         String sessionId=httpSession.getId();
 
-        log.info("sessionId:"+sessionId);
         String userId = verificationService.isLogin(sessionId);
         if(userId==null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(userId,HttpStatus.OK);

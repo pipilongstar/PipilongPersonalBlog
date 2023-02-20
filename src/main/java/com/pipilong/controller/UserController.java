@@ -1,10 +1,12 @@
 package com.pipilong.controller;
 
 import com.pipilong.exception.ModifyException;
+import com.pipilong.pojo.Discuss;
+import com.pipilong.pojo.Follow;
 import com.pipilong.pojo.User;
 import com.pipilong.service.UserService;
 import com.pipilong.service.VerificationService;
-import com.sun.deploy.association.RegisterFailedException;
+import com.tencentcloudapi.common.profile.HttpProfile;
 import javafx.scene.input.DataFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import sun.text.resources.FormatData;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.logging.SimpleFormatter;
 
 /**
@@ -46,7 +49,7 @@ public class UserController {
             @RequestBody User user,
             @PathVariable("code") String code,
             HttpSession session
-    ) throws RegisterFailedException {
+    ) throws Exception {
         String sessionId = session.getId();
         if(verificationService.verificationCode(code, sessionId)){
             return new ResponseEntity<>("验证码错误", HttpStatus.UNAUTHORIZED);
@@ -89,7 +92,6 @@ public class UserController {
      * 修改电子邮箱
      * @param email 新电子邮箱
      * @param userid 用户id
-     * @param code 验证码
      * @param session 用户session
      * @return nothing
      */
@@ -138,6 +140,76 @@ public class UserController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
+    /**
+     * 获取动态信息
+     * @param userId 用户id
+     * @return 动态信息
+     */
+    @GetMapping("/dynamic/{userId}")
+    public ResponseEntity<List<Discuss>> getDynamic(@PathVariable("userId")String userId){
+
+        List<Discuss> dynamic = userService.getDynamic(userId);
+
+        return new ResponseEntity<>(dynamic,HttpStatus.OK);
+    }
+
+    /**
+     * 获取收藏信息
+     * @param userId 用户id
+     * @return 收藏信息
+     */
+    @GetMapping("/collection/{userId}")
+    public ResponseEntity<List<Discuss>> getCollection(@PathVariable("userId")String userId){
+
+        List<Discuss> collection = userService.getCollection(userId);
+
+        return new ResponseEntity<>(collection,HttpStatus.OK);
+    }
+
+    @PostMapping("/follow")
+    public ResponseEntity<String> follow(
+            @RequestParam("userId") String userId,
+            @RequestParam("friendId") String friendId
+    ){
+
+        userService.follow(userId,friendId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/getFollowed/{userId}")
+    public ResponseEntity<List<Follow>> getFollowed(@PathVariable("userId") String userId){
+
+        List<Follow> followed = userService.getFollowed(userId);
+        return new ResponseEntity<>(followed,HttpStatus.OK);
+    }
+
+    @GetMapping("/getFollow/{userId}")
+    public ResponseEntity<List<Follow>> getFollow(@PathVariable("userId") String userId){
+
+        List<Follow> follow = userService.getFollow(userId);
+        return new ResponseEntity<>(follow, HttpStatus.OK);
+    }
+
+    @PostMapping("/createChatRoom")
+    public ResponseEntity<String> createChatRoom(
+            @RequestParam("userId") String userId,
+            @RequestParam("friendId") String friendId,
+            @RequestParam("username") String username
+    ){
+
+        userService.createChatRoom(userId,friendId,username);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/settingPassword")
+    public ResponseEntity<String> settingPassword(
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("userId") String userId
+    ){
+
+        userService.settingPassword(newPassword,userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
 
 

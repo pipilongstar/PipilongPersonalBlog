@@ -1,5 +1,8 @@
 package com.pipilong.mapper;
 
+import com.pipilong.pojo.ChatRoom;
+import com.pipilong.pojo.Discuss;
+import com.pipilong.pojo.Follow;
 import com.pipilong.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -152,6 +155,48 @@ public interface UserMapper {
      * @return 用户名
      */
     String getUserNameByUserId (@Param("userid") String userId);
+
+    /**
+     * 获取用户动态信息
+     * @param userId 用户id
+     * @return 动态信息
+     */
+    List<Discuss> getDynamic(@Param("userid") String userId);
+
+    /**
+     * 获取收藏信息
+     * @param userId 用户id
+     * @return 收藏的信息
+     */
+    List<Discuss> getCollection(@Param("userid") String userId);
+
+    /**
+     * 关注好友
+     * @param userId 用户id
+     * @param friendId 好友id
+     */
+    void follow(@Param("userid") String userId,@Param("friendid") String friendId);
+
+    /**
+     * 获取粉丝列表
+     * @param userId 用户id
+     * @return 粉丝列表
+     */
+    List<Follow> getFollowed(@Param("userid") String userId);
+
+    /**
+     * 获取关注列表
+     * @param userId 用户id
+     * @return 好友列表
+     */
+    List<Follow> getFollow(@Param("userid") String userId);
+
+    /**
+     * 创建聊天室
+     * @param chatRoom 聊天室信息
+     */
+    void createChatRoom(@Param("room")ChatRoom chatRoom);
+
 }
 
 

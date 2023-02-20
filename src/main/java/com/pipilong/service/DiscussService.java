@@ -68,5 +68,5 @@ public interface DiscussService {
      * 讨论被阅读
      * @param authorId 作者id
      */
-    void readDiscuss(String authorId);
+    void readDiscuss(String authorId, String discussId);
 }
