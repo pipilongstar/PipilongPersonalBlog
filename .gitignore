@@ -17,7 +17,7 @@ target/
 .idea
 .mvn
 /src/test
-/src/main/resources/static
+/src/main/resources/static/editormd
 *.iws
 *.iml
 *.ipr

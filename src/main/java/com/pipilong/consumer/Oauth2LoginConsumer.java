@@ -18,13 +18,13 @@ public class Oauth2LoginConsumer {
     @RabbitListener(queues = "githubQueue")
     public void github(Map<String,String> userData){
 
-
+        System.out.println(userData);
     }
 
     @RabbitListener(queues = "giteeQueue")
     public void gitee(Map<String,String> userData){
 
-        System.out.println(userData);
+//        System.out.println(userData);
     }
 
 }
