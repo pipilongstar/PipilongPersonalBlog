@@ -1,22 +1,21 @@
 package com.pipilong.config;
 
+import com.google.common.hash.BloomFilter;
+import com.google.common.hash.Funnels;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.http.HttpProtocol;
 import com.qcloud.cos.region.Region;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
 
 /**
@@ -60,6 +59,15 @@ public class GeneralConfig implements ErrorPageRegistrar {
                 new ArrayBlockingQueue<>(100),
                 Executors.defaultThreadFactory(),
                 new ThreadPoolExecutor.AbortPolicy()
+        );
+    }
+
+    @Bean
+    public BloomFilter<String> bloomFilter(){
+        return BloomFilter.create(
+                Funnels.stringFunnel(StandardCharsets.UTF_8),
+                1000000,
+                0.01
         );
     }
 

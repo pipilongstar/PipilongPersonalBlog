@@ -90,7 +90,7 @@
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item>
                                     <i class="el-icon-s-custom"></i>
-                                    <a href="https://cos.pipilong.com.cn/作者介绍.html" class="home-page-style5" target="_blank">作者介绍</a>
+                                    作者介绍
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <i class="ri-booklet-fill"></i>
@@ -522,7 +522,7 @@
                     let formData = new FormData();
                     let last = '';
                     formData.append("file", file);
-                    service.post('https://www.pipilong.com.cn/upload/image', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
+                    service.post('http://localhost:8080/upload/image', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
                         last=res.data;
                         let index=$(this).val().lastIndexOf('\\');
                         editor.cm.replaceSelection("![](https://cdn.pipilong.com.cn/images/"+last+"_"+$(this).val().substring(index+1)+")");
@@ -553,12 +553,12 @@
         mounted() {
             this.isShowDialog=false;
 
-            service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
+            service.get("http://localhost:8080/verification/isLogin").then(res => {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
                 this.isLogin = true;
 
-                service.get("https://www.pipilong.com.cn/user/getprofile").then(res=>{
+                service.get("http://localhost:8080/user/getprofile").then(res=>{
                     this.username=res.data.username;
                 }).catch(error=>{
                     this.$message.error('登录异常，请重新登录！');
@@ -578,7 +578,7 @@
                 "size": 5
             }
 
-            service.post("https://www.pipilong.com.cn/query/es",conditional).then(res=>{
+            service.post("http://localhost:8080/query/es",conditional).then(res=>{
                 this.tableData=res.data;
                 for(let i=0;i<this.tableData.length;i++){
                     this.tableData[i].label = JSON.parse(this.tableData[i].label);
@@ -603,7 +603,7 @@
                 this.$message.error('加载错误！');
             });
 
-            service.get("https://www.pipilong.com.cn/query/rankingList").then(res=>{
+            service.get("http://localhost:8080/query/rankingList").then(res=>{
                this.hotList=res.data;
                this.hotList.forEach((item,index)=>{
                    Object.assign(item,{'indexUrl':'https://cdn.pipilong.com.cn/svg/数字'+(index+1)+'.svg'});
@@ -611,7 +611,9 @@
                console.info(this.hotList);
             });
 
-
+            let url = window.location.href;
+            let jwt=url.split('?')[1].split('=')[1];
+            console.info('jwt'+jwt);
         },
 
         methods: {
@@ -649,7 +651,7 @@
                     "size": 5
                 }
 
-                service.post("https://www.pipilong.com.cn/query/es",conditional).then(res=>{
+                service.post("http://localhost:8080/query/es",conditional).then(res=>{
                     if(res.data.length===0){
                         this.$message({
                             message: '没有数据了！',
@@ -690,7 +692,7 @@
             },
             logout(){
 
-                service.get('https://www.pipilong.com.cn/logout').then(res=>{
+                service.get('http://localhost:8080/logout').then(res=>{
                    window.location.href='./index.html';
                 }).catch(error=>{
                     this.$message.error('退出登录失败！');
@@ -741,7 +743,7 @@
                     "username": this.username,
                     "label": JSON.stringify(this.tags)
                 }
-                service.post('https://www.pipilong.com.cn/upload/discuss',data,{
+                service.post('http://localhost:8080/upload/discuss',data,{
                     headers: {
                         'Content-Type': 'application/json; charset=utf-8',
                     }

@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .csrf().disable()
             .authorizeRequests()
+                .anyRequest().permitAll()
 //                .antMatchers("/sendcode/*").permitAll()
 //                .antMatchers("/html/**").permitAll()
 //                .antMatchers("/css/**").permitAll()
@@ -63,11 +64,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .invalidateHttpSession(true)
                 .and()
-            .oauth2Login()
-                .redirectionEndpoint()
-                    .baseUri("/login/oauth2/code/github")
-                .and()
-                .and()
+//            .oauth2Login()
+//                .redirectionEndpoint()
+//                    .baseUri("/login/oauth2/code/github")
+//                    .and()
+//                .defaultSuccessUrl("/index.html")
+//                .and()
             .sessionManagement()
                 .sessionFixation().none()
                 .maximumSessions(1);
@@ -92,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:63344","http://localhost:63344/"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:63344","http://localhost:63344/","http://localhost:63343/","http://localhost:63343/","*"));
         String[] methods={"GET","POST","PUT","DELETE","TRACE","OPTIONS","PATCH","HEAD"};
         corsConfiguration.setAllowedMethods(Arrays.asList(methods));
         corsConfiguration.setAllowCredentials(true);
@@ -101,7 +103,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**",corsConfiguration);
         return source;
     }
-
 
 }
 
