@@ -28,11 +28,17 @@
     </resultMap>
 
     <insert id="registerUserToSecurity">
-        insert into account_security value (null,${userId},'${email}','${telephone}',null,null,null);
+        insert into account_security value (null,${userId},'${email}'
+                                            ,${telephone}
+                                            ,null
+                                            ,${githubId}
+                                            ,${qqId}
+                                            ,${giteeId}
+                                           );
     </insert>
 
     <insert id="registerUserToData">
-        insert into user_data(id,user_id,username) value (null,'${userId}','${username}');
+        insert into user_data(id,user_id,username) value (null,${userId},'${username}');
     </insert>
     <insert id="follow">
         insert into user_relationship value (null,${userid},${friendid});
@@ -50,15 +56,19 @@
     </select>
 
     <update id="modifyProfile">
-        update user_data set username='${user.username}',
-                             gender='${user.gender}',
-                             <if test="user.birthday!=null">
-                                 birthday='${user.birthday}',
-                             </if>
-                             address='${user.address}',
-                             personal_message='${user.personalMessage}',
-                             github_url='${user.githubUrl}',
-                             school='${user.school}'
+        update user_data set
+                                username='${user.username}',
+                                gender='${user.gender}',
+                            <if test="user.birthday!=null">
+                                birthday='${user.birthday}',
+                            </if>
+                                address='${user.address}',
+
+                                personal_message='${user.personalMessage}',
+
+                                github_url='${user.githubUrl}',
+
+                                school='${user.school}'
                 where user_id=${user.userId};
     </update>
 

@@ -31,4 +31,11 @@ public interface SelectExistMapper {
      * @return true or false
      */
     String password(@Param("userid") String userId);
+
+    /**
+     * 查询githubId是否已经存在
+     * @param githubId githubId号
+     * @return true or false
+     */
+    Integer githubIdIfExist(String githubId);
 }

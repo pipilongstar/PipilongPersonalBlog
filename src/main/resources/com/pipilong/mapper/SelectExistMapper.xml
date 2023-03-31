@@ -16,6 +16,10 @@
         select password from account_security where user_id = ${userid};
     </select>
 
+    <select id="githubIdIfExist" resultType="java.lang.Integer">
+        select user_id from account_security where github_id = ${githubId};
+    </select>
+
 </mapper>
 
 

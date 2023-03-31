@@ -61,13 +61,17 @@ public class UploadServiceImpl implements UploadService {
         String key="user:"+sessionId;
         String userId = stringRedisTemplate.opsForValue().get(key);
 
+        this.upload(is,userId);
+    }
+
+    @Override
+    public void upload(InputStream is,String userId) throws IOException {
         String bucketName = "pipilong-blog-1313596756";
         String cosKey = "UserAvatar/"+ userId+".jpg";
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(is.available());
+//        metadata.setContentLength(is.available());
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, cosKey, is,metadata);
         cosClient.putObject(putObjectRequest);
-
     }
 
     @Override

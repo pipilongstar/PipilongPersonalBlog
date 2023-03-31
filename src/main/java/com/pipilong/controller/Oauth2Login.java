@@ -2,6 +2,9 @@ package com.pipilong.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.pipilong.mapper.SelectExistMapper;
+import com.pipilong.mapper.UserMapper;
+import com.pipilong.utils.CodeGenerator;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -73,10 +76,14 @@ public class Oauth2Login {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
     private String sessionId;
-
     private String username;
+    private String userId;
+    @Autowired
+    private CodeGenerator codeGenerator;
+
+    @Autowired
+    private SelectExistMapper selectExistMapper;
     /**
      * 实现GitHub登录
      * @return
@@ -107,7 +114,7 @@ public class Oauth2Login {
     public void githubLoginCallback(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
         String jwtToken = this.oauth2Login(code,githubClientId,githubClientSecret,githubrRedirectUri,githubTokenUri,githubUserInfoUri,"github");
         String key = "user:" + this.sessionId;
-        stringRedisTemplate.opsForValue().set(key,this.username,7, TimeUnit.DAYS);
+        stringRedisTemplate.opsForValue().set(key,this.userId,7, TimeUnit.DAYS);
         response.sendRedirect("/index.html?jwt=" + jwtToken);
     }
 
@@ -129,9 +136,19 @@ public class Oauth2Login {
         Map<String,String> userData =JSON.parseObject(userResponse,new TypeReference<Map<String, String>>() {});
         if("github".equals(type)) {
             this.username=userData.get("login");
+            Integer userId = selectExistMapper.githubIdIfExist(userData.get("id"));
+            if(userId!=null){
+                this.userId=userId.toString();
+                return this.username;
+            }
+            this.userId=codeGenerator.getCode(8);
+            userData.put("userId",this.userId);
             rabbitTemplate.convertAndSend("oauth2LoginExchange","github",userData);
         }
-        else if("gitee".equals(type)) rabbitTemplate.convertAndSend("oauth2LoginExchange","gitee",userData);
+        else if("gitee".equals(type)) {
+
+            rabbitTemplate.convertAndSend("oauth2LoginExchange","gitee",userData);
+        }
         return this.username;
     }
 

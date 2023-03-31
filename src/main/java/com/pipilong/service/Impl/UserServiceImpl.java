@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     public String register(User user, String sessionId) throws Exception {
         String userId = codeGenerator.getCode(8);
         while (userId.charAt(0)=='0') userId=codeGenerator.getCode(8);
-        userMapper.registerUserToSecurity(userId, user.getEmail(), user.getTelephone());
+        userMapper.registerUserToSecurity(userId, user.getEmail(), user.getTelephone(),null,null,null);
         userMapper.registerUserToData(userId, user.getUserName());
         String key = "user:" + sessionId;
         stringRedisTemplate.opsForValue().set(key, userId,7,TimeUnit.DAYS);

@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>消息</title>
+    <link rel="stylesheet" href="../css/message.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/css/search-style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../editormd/css/editormd.css" />
+</head>
+<body>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdn.pipilong.com.cn/editormd/editormd.min.js"></script>
+<script src="https://cdn.pipilong.com.cn/js/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.pipilong.com.cn/js/axios-0.18.0.js"></script>
+
+
+<div id="app">
+
+    <el-container>
+        <el-header style="background-color: #ffffff;margin-top: -8px;">
+            <!--            <div class="hr-double"></div>-->
+            <el-row class="row">
+                <el-col :span="1">
+                    <div></div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="../index.html">
+                            <img src="https://cdn.pipilong.com.cn/logo.png" class="logo" alt=""/>
+                        </a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="../index.html" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 21px;padding-left: 54px;"><img src="https://cdn.pipilong.com.cn/svg/home.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 6px;">首页</div></a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <a href="./interview-experience.html" target="_blank" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 21px;padding-left: 50px;"><img src="https://cdn.pipilong.com.cn/svg/book.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 10px;">面经</div></a>
+                    </div>
+                </el-col>
+                <el-col :span="8">
+                    <div>
+                        <el-input v-model="search" placeholder="Enter Your Search Content" class="txtb" @keyup.enter.native="searchMethod">
+                            <template #suffix>
+                                <el-button icon="el-icon-search" circle @click="searchMethod"></el-button>
+                            </template>
+                        </el-input>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+
+                    <div>
+                        <a href="./java.html" class="home-page-style1 head_icon" target="_blank">
+                            <div style="float: left;margin-top: 19px;padding-left: 10px;"><img src="https://cdn.pipilong.com.cn/svg/java.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 34px;">八股文</div></a>
+                    </div>
+                </el-col>
+                <el-col :span="2">
+
+                    <div>
+                        <a href="./message.html" class="home-page-style1 head_icon">
+                            <div style="float: left;margin-top: 20px;padding-left: 20px;"><img src="https://cdn.pipilong.com.cn/svg/message.svg" width="19px;"></div>
+                            <div style="float: right;margin-top: -38px;padding-right: 40px;">消息</div></a>
+                    </div>
+
+                </el-col>
+                <el-col :span="2">
+                    <div>
+                        <el-dropdown :hide-on-click="false" show-timeout="0" hide-timeout="100">
+                            <span class="el-dropdown-link">
+                                网站相关
+                                <i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item>
+                                    <i class="el-icon-s-custom"></i>
+                                    <a href="https://cos.pipilong.com.cn/作者介绍.html" class="home-page-style5" target="_blank">作者介绍</a>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <i class="ri-booklet-fill"></i>
+                                    网站日志
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <i><img src="https://cdn.pipilong.com.cn/svg/github.svg" width="15px;" alt=""/></i>
+                                    <a href="https://github.com/pipilongstar/PipilongPersonalBlog" target="_blank"
+                                       class="home-page-style5">项目源码</a>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <i><img src="https://cdn.pipilong.com.cn/svg/gitee.svg" width="14px;" alt=""/></i>
+                                    <a href="https://gitee.com/pipilongstar/PipilongPersonalBlog" target="_blank"
+                                       class="home-page-style5">项目源码</a>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                </el-col>
+
+                <el-col :span="3">
+                    <div v-if="!isLogin">
+                        <a href="./login.html" target="_blank">
+                            <el-button round type="primary" class="login_button--primary">登录/注册</el-button>
+                        </a>
+                    </div>
+                    <div v-if="isLogin">
+
+                        <div style="margin-top: 13px;">
+                            <a href="./personal-center.html" target="_blank" @mouseover="avatarShow"
+                               @mouseleave="avatarShut">
+                                <el-avatar shape="circle" :size="40" :fit="fit" :src="avatarUrl"
+                                           class="avatar-style"></el-avatar>
+                            </a>
+                        </div>
+
+                        <!--                        鼠标悬停头像小卡片-->
+                        <el-collapse-transition>
+                            <div v-show="isAvatarShow" class="isAvatarShow_style" @mouseover="avatarShow"
+                                 @mouseleave="avatarShut">
+                                <el-card shadow="always" style="height: 220px;width: 190px;border-radius: 16px;">
+                                    <a href="./personal-center.html" target="_blank">
+                                        <div style="margin-top: -5px;">
+                                            <el-avatar :src="avatarUrl"
+                                                       :size="60"></el-avatar>
+                                        </div>
+                                    </a>
+                                    <div style="margin-top: -50px;">
+                                        <span v-if="username.length===0" style="color: #dc6a6a"><h3>还没有名称哦！</h3></span>
+                                        <span v-if="username.length<=7&&username.length>0">
+                                            <h3>{{username}}</h3>
+                                        </span>
+                                        <span v-if="username.length>7">
+                                            <h3>{{username.substring(0,7)}}...</h3>
+                                        </span>
+                                    </div>
+
+                                    <div style="margin-top: -28px;margin-left: -26px;">
+                                        <el-button type="primary" plain class="avatar_card_item--primary" @click="openPersonalSettings">
+                                            <div style="font-size: 18px;float: left;margin-left: 14px;">
+                                                <i class="ri-user-settings-line"></i>
+                                            </div>
+                                            <div style="float: right;margin-right: 48px;font-size: 15px;margin-top: 4px;">
+                                                个人设置
+                                            </div>
+                                        </el-button>
+                                    </div>
+
+                                    <div style="margin-left: -26px;margin-top: -6px;">
+                                        <el-button type="primary" plain class="avatar_card_item--primary" @click="logout">
+                                            <div style="font-size: 18px;float: left;margin-left: 14px;">
+                                                <i class="ri-arrow-left-circle-line"></i>
+                                            </div>
+                                            <div style="float: right;margin-right: 48px;font-size: 15px;margin-top: 4px;">
+                                                退出登录
+                                            </div>
+                                        </el-button>
+                                    </div>
+                                    <!--                                    <a href="#">-->
+                                    <!--                                        <div class="avatar_card_item">-->
+                                    <!--                                            退出登录-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </a>-->
+                                </el-card>
+                            </div>
+                        </el-collapse-transition>
+
+                    </div>
+                </el-col>
+            </el-row>
+
+        </el-header>
+        <!--        中部-->
+        <el-container>
+            <!--            左侧-->
+            <el-aside width="250px" style="background-color: #f8f8f8">
+
+                <div style="height: 510px;">
+
+                    <el-menu
+                            :default-active="this.index"
+                            class="el-menu-vertical-demo"
+                            style="height: 100%;text-align: left;line-height: 1">
+                        <h2 style="margin-left: 70px;margin-top: 30px;">消息中心</h2>
+                        <el-menu-item index="1" style="font-size: 20px;margin-top: 40px;margin-left: 20px;" @click="change(1)">
+                            <el-badge :hidden="count1===0||count1==='00'" :value="count1" :max="99">
+                            <i class="ri-layout-grid-fill" style="font-size: 23px;"></i>
+                            </el-badge>
+                            <span slot="title">系统消息</span>
+                        </el-menu-item>
+                        <el-menu-item index="2" style="font-size: 20px;margin-top: 20px;margin-left: 20px;" @click="change(2)">
+                            <el-badge :hidden="count2===0 ||count2==='00'" :value="count2" :max="99">
+                            <i class="ri-fingerprint-2-fill" style="font-size: 23px;"></i>
+                            </el-badge>
+                            <span slot="title">赞和收藏</span>
+                        </el-menu-item>
+                        <el-menu-item index="3" style="font-size: 20px;margin-top: 20px;margin-left: 20px;" @click="change(3)">
+                            <el-badge :hidden="count3===0||count3==='00'" :value="count3" :max="99">
+                            <i class="ri-question-answer-fill" style="font-size: 23px;"></i>
+                            </el-badge>
+                            <span slot="title">评论和@</span>
+                        </el-menu-item>
+                        <el-menu-item index="4" style="font-size: 20px;margin-top: 20px;margin-left: 20px;" @click="change(4)">
+                            <el-badge :hidden="count4===0||count4==='00'" :value="count4" :max="99">
+                            <i class="ri-user-add-fill" style="font-size: 23px;"></i>
+                            </el-badge>
+                            <span slot="title">新增关注</span>
+                        </el-menu-item>
+                        <el-menu-item index="5" style="font-size: 20px;margin-top: 20px;margin-left: 20px;" @click="change(5)">
+                            <el-badge :hidden="count5===0" :value="count5" :max="99">
+                            <i class="ri-mail-send-fill" style="font-size: 23px;"></i>
+                            </el-badge>
+                            <span slot="title">私信</span>
+                        </el-menu-item>
+
+                    </el-menu>
+
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <img src="https://cdn.pipilong.com.cn/svg/message2.svg" style="width: 220px;" alt=""/>
+                </div>
+
+
+            </el-aside>
+            <el-container>
+                <!--                主-->
+                <el-main style="background-color: #f8f8f8">
+
+
+                        <div v-show="this.index === 1" style="">
+
+                            <div v-show="this.systemMessage.length===0" style="">
+                                <el-empty style="height: 660px" image="https://cdn.pipilong.com.cn/svg/empty.svg"></el-empty>
+                            </div>
+                            <div style="overflow: auto;overflow-x: hidden;height: 700px;">
+                                <div v-for="(item,index) in this.systemMessage">
+
+                                    <el-card shadow="always" style="border-radius: 16px; margin-top: 14px;width: 97%;margin-left: 10px;">
+
+                                        <div>
+                                            <p style="text-align: left;line-height: 2;margin-top: -3px;">
+                                                {{item.text}}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p style="text-align: left;line-height: 2;margin-bottom: -10px;color: #959695">
+                                                {{item.date}}
+                                            </p>
+                                        </div>
+
+                                    </el-card>
+
+                                </div>
+                                <div style="height: 10px;"></div>
+                            </div>
+
+                        </div>
+
+                        <div v-show="this.index===2">
+
+                            <div v-show="this.likeAndCollection.length===0" style="">
+                                <el-empty style="height: 660px" image="https://cdn.pipilong.com.cn/svg/empty.svg"></el-empty>
+                            </div>
+                            <div style="overflow: auto;overflow-x: hidden;height: 700px;">
+                                <div v-for="(item,index) in this.likeAndCollection" style="cursor: pointer;" @click="enterSourceEvent(item)">
+
+                                    <el-card shadow="always"
+                                             style="border-radius: 16px; margin-top: 14px;cursor: pointer;width: 97%;margin-left: 10px;line-height: 1">
+
+                                        <div v-html="item.text" style="text-align: left;">
+
+                                        </div>
+                                        <div>
+                                            <p style="text-align: left;line-height: 2;margin-bottom: -10px;color: #959695">
+                                                {{item.date}}
+                                            </p>
+                                        </div>
+
+                                    </el-card>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div v-show="this.index===3">
+
+                            <div v-show="this.commentAndAt.length===0" style="">
+                                <el-empty style="height: 660px" image="https://cdn.pipilong.com.cn/svg/empty.svg"></el-empty>
+                            </div>
+                            <div style="overflow: auto;overflow-x: hidden;height: 700px;">
+                                <div v-for="(item,index) in this.commentAndAt" style="cursor: pointer;" @click="enterSourceEvent(item)" >
+
+                                    <el-card shadow="always" style="border-radius: 16px; margin-top: 14px;width: 97%;margin-left: 10px;">
+
+                                        <div>
+                                            <p style="text-align: left;line-height: 2;margin-top: -3px;" v-html="item.text">
+
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p style="text-align: left;line-height: 2;margin-bottom: -10px;color: #959695">
+                                                {{item.date}}
+                                            </p>
+                                        </div>
+
+                                    </el-card>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div v-show="this.index===4">
+
+                            <div v-show="this.newFollow.length===0" style="">
+                                <el-empty style="height: 660px" image="https://cdn.pipilong.com.cn/svg/empty.svg"></el-empty>
+                            </div>
+                            <div style="overflow: auto;overflow-x: hidden;height: 700px;">
+                                <div v-for="(item,index) in this.newFollow">
+
+                                    <el-card shadow="always" style="border-radius: 16px; margin-top: 14px;width: 97%;margin-left: 10px;">
+
+                                        <div>
+                                            <p style="text-align: left;line-height: 2;margin-top: -3px;">
+                                                {{item.text}}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p style="text-align: left;line-height: 2;margin-bottom: -10px;color: #959695">
+                                                {{item.date}}
+                                            </p>
+                                        </div>
+
+                                    </el-card>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div v-show="this.index===5">
+
+                            <el-card shadow="always" style="width: 250px;height: 700px;float: left;overflow: auto;overflow-x: hidden">
+
+                                <h3 style="line-height: 0">全部消息</h3>
+                                <el-divider></el-divider>
+
+                                <div v-if="this.chatList.length>0">
+                                    <div v-for="(item,index) in chatList" style="margin-left: -23px;line-height: 1;">
+                                            <el-button type="primary" plain class="hot_item" @click="showChatRoom(item)">
+                                                <el-row>
+                                                    <el-col :span="5" style="margin-left: -14px;">
+                                                        <el-badge :hidden="item.noReadCount==='0'" :value="item.noReadCount" :max="99">
+                                                        <el-avatar :size="45" :src="item.userAvatarUrl"
+                                                                   style="float: left;"></el-avatar>
+                                                        </el-badge>
+                                                    </el-col>
+                                                    <el-col :span="13" style="text-align: left;margin-left: 10px;">
+                                                        <h3 style="margin-top: -2px;">
+                                                            {{item.friendName}}
+                                                        </h3>
+                                                        <p style="margin-bottom: -5px;margin-top: -2px;font-size: 12px;">
+                                                            {{item.text}}</p>
+                                                    </el-col>
+                                                    <el-col :span="2">
+                                                        <div class="close" @click="close(index)">
+                                                            <i class="ri-close-line"></i>
+                                                        </div>
+                                                    </el-col>
+                                                </el-row>
+                                                <p style="font-size: 12px;text-align: left;margin-bottom: -6px;">
+                                                    {{item.date}}</p>
+                                            </el-button>
+                                    </div>
+                                </div>
+
+
+                                <div v-if="this.chatList.length===0">
+                                    <div style="">
+                                        <el-empty style="height: 530px" image="https://cdn.pipilong.com.cn/svg/empty.svg"></el-empty>
+                                    </div>
+                                </div>
+
+                            </el-card>
+
+                            <el-card shadow="always" style="width: 600px;height: 700px;margin-left: 260px;line-height: 1">
+                                <div v-if="this.chatRoom.friendId !== ''">
+                                    <p style="font-size: 21px;margin-top: 0px;">{{this.chatRoom.friendName}}</p>
+                                    <div style="margin-top: -6px;"> <el-divider></el-divider></div>
+
+                                    <div style="height: 420px;margin-top: -20px;overflow: auto" id="showwindows">
+
+                                        <p style="font-size: 12px;color: #b7b7b7;margin-bottom: -3px;">{{this.chatRoom.date}}</p>
+                                        <div style="" v-for="(item,index) in this.chatRoom.chatRecords">
+                                            <div style="height: 10px;clear: both"></div>
+                                            <div v-if="item.position==='left'" style="">
+
+                                                <el-col :span="2" style="">
+                                                    <div style="text-align: left;">
+                                                        <el-avatar :size="40" :src="item.userAvatarUrl"></el-avatar>
+                                                    </div>
+                                                </el-col>
+
+                                                <el-col :span="20">
+                                                    <div style="float: left;">
+                                                        <el-card shadow="always" class="bubble_left">
+                                                            <p style="margin: -10px -13px -10px -8px;line-height: 1.5;letter-spacing: 2.2px;">{{item.text}}</p>
+                                                        </el-card>
+                                                    </div>
+                                                </el-col>
+
+                                            </div>
+
+                                            <div v-if="item.position==='right'" style="">
+
+                                                <el-col :span="20" :offset="2">
+                                                    <div style="float: right;">
+                                                        <el-card shadow="always" class="bubble_right">
+                                                            <p style="margin: -10px -13px -10px -8px;line-height: 1.5;letter-spacing: 2.2px;">{{item.text}}</p>
+                                                        </el-card>
+                                                    </div>
+                                                </el-col>
+
+                                                <el-col :span="2" style="margin-right: -6px;">
+                                                    <div style="text-align: right;">
+                                                        <el-avatar :size="40" :src="item.userAvatarUrl"></el-avatar>
+                                                    </div>
+                                                </el-col>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div style="margin-top: -12px;"> <el-divider></el-divider></div>
+                                    <div style="">
+                                        <label>
+                                            <textarea re v-model="message" class="chatRoomInput" placeholder="请输入聊天内容..."></textarea>
+                                        </label>
+                                    </div>
+
+                                    <div style="text-align: right;margin-top: 10px;">
+                                        <el-button type="primary" class="sendMessage_button--primary" plain @click="sendMessage">发送</el-button>
+                                    </div>
+                                </div>
+
+                                <div v-if="this.chatRoom.friendId === ''">
+                                    <div style="">
+                                        <el-empty style="height: 660px" image="https://cdn.pipilong.com.cn/svg/empty.svg"></el-empty>
+                                    </div>
+                                </div>
+
+                            </el-card>
+
+                        </div>
+
+
+
+                </el-main>
+            </el-container>
+            <!--            右侧-->
+            <el-aside width="260px" style="background-color: #f8f8f8">
+
+
+                <div v-show="this.index === 1">
+                    <div style="">
+                        <img src="https://cdn.pipilong.com.cn/svg/message3.svg" style="width: 220px;margin-top: 100px;margin-right: 20px;"/>
+                    </div>
+                </div>
+                <div v-show="this.index === 2">
+                    <div style="">
+                        <img src="https://cdn.pipilong.com.cn/svg/message4.svg" style="width: 220px;margin-top: 100px;margin-right: 20px;"/>
+                    </div>
+                </div>
+                <div v-show="this.index === 3">
+                    <div style="">
+                        <img src="https://cdn.pipilong.com.cn/svg/comment.svg" style="width: 220px;margin-top: 100px;margin-right: 20px;"/>
+                    </div>
+                </div>
+                <div v-show="this.index === 4">
+                    <div style="">
+                        <img src="https://cdn.pipilong.com.cn/svg/follow.svg" style="width: 220px;margin-top: 100px;margin-right: 20px;"/>
+                    </div>
+                </div>
+                <div v-show="this.index === 5">
+                    <div style="">
+                        <img src="https://cdn.pipilong.com.cn/svg/discuss6.svg" style="width: 220px;margin-top: 100px;margin-right: 20px;"/>
+                    </div>
+                </div>
+
+
+                <!--                回到顶部-->
+                <el-backtop :bottom="150" visibility-height="140" :right="180" style="width: 50px;">
+                    <div style="{
+                                height: 100%;
+                                width: 100%;
+                                background-color: #f2f5f6;
+                                box-shadow: 0 0 6px rgb(16,178,160);
+                                text-align: center;
+                                line-height: 50px;
+                                color: #10b2a0;
+                                border-radius: 16px;
+                                }">
+                        <div style="font-size: 30px;">
+                            <i class="ri-rocket-2-fill"></i>
+                        </div>
+                    </div>
+                </el-backtop>
+
+            </el-aside>
+        </el-container>
+        <!--        脚部-->
+        <el-footer height="40px" style="background-color: #f8f8f8;margin-top: -27px;">
+            <div style="margin-top: -30px">
+                <h5>Copyright © 2023 Pipilong. 皮皮龙技术分享 版权所有 <a href="https://beian.miit.gov.cn/"
+                                                                          target="_blank" class="footer-style">皖ICP备2023001037号-1</a>
+                </h5>
+            </div>
+        </el-footer>
+
+    </el-container>
+
+</div>
+
+<script>
+
+    const service = axios.create({
+        withCredentials: true, // 跨域请求时发送Cookie
+        timeout: 60000, // 请求超时
+    });
+
+</script>
+
+<script>
+
+    var webSocket = null;
+
+    service.get("http://localhost:8080/verification/isLogin").then(res => {
+        webSocket = new WebSocket("ws://pipilong.com.cn/chatRoomSocket/"+res.data);
+
+        webSocket.onopen = function (){
+
+        }
+
+        webSocket.onmessage = function (msg){
+
+            messageReceived(msg.data);
+
+        }
+
+        webSocket.onerror = function (msg){
+            this.$message.error(msg);
+        }
+
+        webSocket.onclose = function (){
+
+        }
+    });
+
+
+
+</script>
+
+
+<script>
+
+    const v = new Vue({
+        el: "#app",
+
+        mounted() {
+
+            service.get("http://localhost:8080/verification/isLogin").then(res => {
+                this.user_id = res.data;
+                this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
+                this.isLogin = true;
+
+                service.get("http://localhost:8080/user/getprofile").then(res=>{
+                    this.username=res.data.username;
+                }).catch(error=>{
+                    this.$message.error('登录异常，请重新登录！');
+                });
+
+                service.get("http://localhost:8080/message/systemMessage/"+this.user_id).then(res=>{
+                    this.systemMessage = JSON.parse(res.data[0]);
+                    this.count1 =res.data[1];
+
+                });
+
+                service.get("http://localhost:8080/message/likeMessage/"+this.user_id).then(res=>{
+                    this.likeAndCollection= JSON.parse(res.data[0]);
+                    this.count2=res.data[1];
+                });
+                service.get("http://localhost:8080/message/commentMessage/"+this.user_id).then(res=>{
+                    this.commentAndAt= JSON.parse(res.data[0]);
+                    this.count3=res.data[1];
+                });
+                service.get("http://localhost:8080/message/followMessage/"+this.user_id).then(res=>{
+                    this.newFollow= JSON.parse(res.data[0]);
+                    this.count4=res.data[1];
+                });
+
+                service.get("http://localhost:8080/message/chatRoom/" + this.user_id).then(res => {
+                    this.chatList = JSON.parse(res.data[0]);
+                    if(this.chatList.length>0) this.chatRoom = this.chatList[0];
+                    this.count5=res.data[1];
+                    if(this.chatRoom.friendId !== '') {
+                        service.get("http://localhost:8080/message/chatRecord/" + this.user_id + "/" + this.chatRoom.friendId).then(res => {
+                            this.chatRoom.chatRecords = res.data;
+                            setTimeout(function () {
+                                //设置滚动条到最底部
+                                const div = document.getElementById('showwindows');
+                                div.scrollTop = div.scrollHeight;
+                            },20);
+                        });
+                    }
+                    let url=window.location.href;
+                    let index=url.indexOf('?');
+                    if(index!==-1){
+                        let friendId = url.split('?')[1].split('=')[1];
+                        for(let i=0;i<this.chatList.length;i++){
+                            if(this.chatList[i].friendId===friendId){
+                                this.chatRoom=this.chatList[i];
+                                break;
+                            }
+                        }
+                        service.get("http://localhost:8080/message/chatRecord/" + this.user_id + "/" + friendId).then(res => {
+                            this.chatRoom.chatRecords = res.data;
+                            this.index=5;
+                            setTimeout(function () {
+                                //设置滚动条到最底部
+                                const div = document.getElementById('showwindows');
+                                div.scrollTop = div.scrollHeight;
+                            },20);
+                        });
+                    }
+                });
+
+            }).catch(error=>{
+                this.$message.error("登录异常！");
+                window.location.href='./login.html';
+            });
+
+            window.messageReceived = this.messageReceived;
+
+        },
+
+        methods: {
+            login() {
+                this.dialogVisibleLogin = true;
+            },
+            openRelease() {
+                if(!this.isLogin){
+                    window.open('./login.html');
+                    return 0;
+                }
+                this.isShowDialog = true;
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            avatarShow() {
+                this.isAvatarShow = true;
+            },
+            avatarShut() {
+                this.isAvatarShow = false;
+            },
+            openPersonalSettings(){
+              window.open('./personal-settings.html');
+            },
+            logout(){
+
+                service.get('http://localhost:8080/logout').then(res=>{
+                   window.location.href='../index.html';
+                }).catch(error=>{
+                    this.$message.error('退出登录失败！');
+                });
+
+            },
+            searchMethod(){
+                let url = encodeURI('./search-page.html?query='+this.search);
+                window.open(url);
+            },
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            change(index){
+                this.index=index;
+                if(index !== 5){
+                    if(index===2){
+                        if(this.index2===0) return;
+                    }else{
+                        if(index===3){
+                            if(this.index3===0) return;
+                        }else{
+                            if(index===4){
+                                if(this.index4===0) return;
+                            }
+                        }
+                    }
+                    let data=new FormData();
+                    data.append('userId',this.user_id);
+                    data.append('type',this.type[index]);
+                    service.post("http://localhost:8080/message/updateNoRead",data).then(res=>{
+
+                    });
+                }
+                if(index===5) {
+                    setTimeout(function () {
+                        //设置滚动条到最底部
+                        const div = document.getElementById('showwindows');
+                        div.scrollTop = div.scrollHeight;
+                    },20);
+                }
+            },
+            enterSourceEvent(item){
+                window.open(item.eventSourceUrl);
+            },
+            close(index){
+
+                service.delete("http://localhost:8080/message/deleteChatRoom/"+this.user_id+"/"+this.chatList[index].friendId).then(res=>{
+                    this.chatList.splice(index,1);
+                    if(this.chatList.length === 0){
+                        this.chatRoom='';
+                    }
+                    this.$message({
+                        message: '删除成功！',
+                        type: 'success'
+                    });
+                });
+
+            },
+            showChatRoom(item){
+                this.chatRoom=item;
+                service.get("http://localhost:8080/message/chatRecord/"+this.user_id+"/"+this.chatRoom.friendId).then(res=>{
+                    this.chatRoom.chatRecords = res.data;
+                    setTimeout(function(){
+                        //设置滚动条到最底部
+                        const div = document.getElementById('showwindows');
+                        div.scrollTop = div.scrollHeight;
+                    },20);
+                });
+
+            },
+            sendMessage(){
+                let data={
+                    'userAvatarUrl': this.avatarUrl,
+                    'text': this.message,
+                    'position': 'right',
+                    'userId': this.user_id,
+                    'friendId': this.chatRoom.friendId,
+                    'date': '',
+                };
+                console.info(this.chatRoom);
+                this.chatRoom.chatRecords.push(data);
+                setTimeout(function(){
+                    const div = document.getElementById('showwindows');
+                    div.scrollTop = div.scrollHeight;
+                },20);
+                this.chatRoom.text=this.message;
+                webSocket.send(JSON.stringify(data));
+            },
+            messageReceived(msg){
+
+                let data={
+                    'userAvatarUrl': this.chatRoom.userAvatarUrl,
+                    'text': msg,
+                    'position': 'left',
+                };
+                this.chatRoom.text=msg;
+                this.chatRoom.chatRecords.push(data);
+                setTimeout(function(){
+                    const div = document.getElementById('showwindows');
+                    div.scrollTop = div.scrollHeight;
+                },20);
+
+            }
+        },
+
+        data: {
+
+                search: '',
+                isLogin: false,
+                avatarUrl: '',
+                fit: 'fill',
+                dialogVisibleLogin: false,
+                isAvatarShow: false,
+                username: '',
+                systemMessage: [
+
+                ],
+                likeAndCollection: [
+
+                ],
+                commentAndAt: [],
+                newFollow: [],
+                chatList: [],
+                index: 1,
+                count: 10,
+                loading: false,
+                chatRoom: {
+                    'chatRecords': [],
+                    'noReadCount': '',
+                    'userAvatarUrl': '',
+                    'friendName': '',
+                    'friendId': '',
+                    'text': '',
+                    'date': ''
+                },
+                message: '',
+                chatListIsLoad: false,
+                count1: '',
+                count2: '',
+                count3: '',
+                count4: '',
+                count5: '',
+                type: ['','系统','点赞','评论','关注'],
+        }
+    });
+</script>
+
+</body>
+</html>
