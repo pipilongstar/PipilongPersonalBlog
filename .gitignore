@@ -17,7 +17,7 @@ target/
 .idea
 .mvn
 /src/test
-/src/main/resources/static
+/src/main/resources/static/editormd
 *.iws
 *.iml
 *.ipr
@@ -39,5 +39,3 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/resources/static/css/
-/src/main/resources/static/editormd/

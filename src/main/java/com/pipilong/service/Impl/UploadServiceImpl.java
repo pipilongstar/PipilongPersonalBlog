@@ -36,6 +36,9 @@ import java.util.UUID;
 @Service
 public class UploadServiceImpl implements UploadService {
 
+    private static final String HOTLISTKEY="hotList";
+    private static final String SCOREKEY="scoreKey";
+    private static final String TIMEKEY="timeKey";
     @Autowired
     private CodeGenerator codeGenerator;
     @Autowired
@@ -58,13 +61,17 @@ public class UploadServiceImpl implements UploadService {
         String key="user:"+sessionId;
         String userId = stringRedisTemplate.opsForValue().get(key);
 
+        this.upload(is,userId);
+    }
+
+    @Override
+    public void upload(InputStream is,String userId) throws IOException {
         String bucketName = "pipilong-blog-1313596756";
         String cosKey = "UserAvatar/"+ userId+".jpg";
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(is.available());
+//        metadata.setContentLength(is.available());
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, cosKey, is,metadata);
         cosClient.putObject(putObjectRequest);
-
     }
 
     @Override
@@ -87,6 +94,9 @@ public class UploadServiceImpl implements UploadService {
         discuss.setDiscussId(Long.parseLong(codeGenerator.getCode(8)));
         discussMapper.submitDiscuss(discuss);
         submitElasticSearchService.submitDiscuss(discuss);
+        stringRedisTemplate.opsForHash().putIfAbsent(SCOREKEY,String.valueOf(discuss.getDiscussId()),String.valueOf(1.5));
+        stringRedisTemplate.opsForHash().putIfAbsent(TIMEKEY,String.valueOf(discuss.getDiscussId()),String.valueOf(System.currentTimeMillis()));
+        stringRedisTemplate.opsForZSet().addIfAbsent(HOTLISTKEY,String.valueOf(discuss.getDiscussId()),1.5);
 
     }
 }

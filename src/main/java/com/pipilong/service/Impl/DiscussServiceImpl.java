@@ -8,6 +8,7 @@ import com.pipilong.pojo.Discuss;
 import com.pipilong.pojo.PersonMessage;
 import com.pipilong.service.DiscussService;
 import com.pipilong.utils.CodeGenerator;
+import com.sun.corba.se.impl.orbutil.concurrent.Sync;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author pipilong
@@ -108,6 +110,8 @@ public class DiscussServiceImpl implements DiscussService {
         personMessage.setEventSourceUrl(comment.getDiscussUrl());
         personMessage.setDate(date);
         eventMapper.insertPersonMessage(personMessage);
+
+        rabbitTemplate.convertAndSend("scoreCalculationExchange","scoreCalculation", Arrays.asList(MessageType.COMMENT,comment.getDiscussId()));
 
     }
 

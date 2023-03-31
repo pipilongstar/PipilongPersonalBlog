@@ -24,7 +24,7 @@ public interface UserMapper {
      * @param email 电子邮箱
      * @param telephone 手机号
      */
-    void registerUserToSecurity(@Param("userId") String userId, @Param("email") String email,@Param("telephone") String telephone);
+    void registerUserToSecurity(@Param("userId") String userId, @Param("email") String email,@Param("telephone") String telephone,@Param("githubId") String githubId,@Param("qqId") String qqId,@Param("giteeId") String giteeId);
 
     /**
      * 把用户相关信息注册到user_data表中

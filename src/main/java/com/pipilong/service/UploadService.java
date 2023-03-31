@@ -35,6 +35,13 @@ public interface UploadService {
      */
     void uploadDiscuss(Discuss discuss) throws IOException;
 
+    /**
+     * 上传
+     * @param is 输入流
+     * @param userId 用户id
+     * @throws IOException io异常
+     */
+    public void upload(InputStream is,String userId) throws IOException;
 }
 
 

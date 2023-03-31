@@ -111,4 +111,77 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(chatRecordQueue()).to(chatRecordExchange()).with("chatRecord");
     }
 
+
+    /**
+     * 用来计算用户行为的队列
+     */
+    @Bean
+    public Queue scoreCalculationQueue(){
+        return new Queue("scoreCalculationQueue",true);
+    }
+
+    @Bean
+    public DirectExchange scoreCalculationExchange(){
+        return new DirectExchange("scoreCalculationExchange",true,false);
+    }
+
+    @Bean
+    public Binding scoreCalculationQueueToExchange(){
+        return BindingBuilder.bind(scoreCalculationQueue()).to(scoreCalculationExchange()).with("scoreCalculation");
+    }
+
+    /**
+     * 用来存储github登录的用户的信息
+     * @return null
+     */
+    @Bean
+    public Queue githubQueue(){
+        return new Queue("githubQueue",true);
+    }
+
+    @Bean
+    public Queue giteeQueue(){
+        return new Queue("giteeQueue",true);
+    }
+
+    @Bean
+    public DirectExchange oauth2LoginExchange(){
+        return new DirectExchange("oauth2LoginExchange",true,false);
+    }
+
+    @Bean
+    public Binding githubQueueToExchange(){
+        return BindingBuilder.bind(githubQueue()).to(oauth2LoginExchange()).with("github");
+    }
+
+    @Bean
+    public Binding giteeQueueToExchange(){
+        return BindingBuilder.bind(giteeQueue()).to(oauth2LoginExchange()).with("gitee");
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

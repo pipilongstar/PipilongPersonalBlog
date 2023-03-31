@@ -1,23 +1,49 @@
 spring:
   profiles:
-    active: pro
+    active: dev
   servlet:
     multipart:
       enabled: true
+
 
   security:
     oauth2:
       client:
         registration:
           github:
-            client-id: d9d6946364681fc45ef8
-            client-secret: 62f08091ae6ddcd487072508e0eb152e9c0ff2dc
-            client-name: github
+            client-id: a4df803c114f830a3e5f
+            client-secret: 164df022321bbd34b01fd452f015dfe4c431034d
+            redirect-uri: "http://localhost:8080/login/oauth2/code/github"
+            scope: read:user,user:email
+            client-name: GitHub
+          gitee:
+            client-id: 3a07d780a419d4223121e34f816e2e4304c27d39a1720275b447428962036087
+            client-secret: c9db5343982faf792b326b6549cfcf94ecc115c0bcc25ab35d4b22c4d34d77f9
+            redirect-uri: "http://localhost:8080/login/oauth2/code/gitee"
+            authorization-grant-type: code
+            scope: user_info,email
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+            user-name-attribute: login
+          gitee:
+            authorization-uri: https://gitee.com/oauth/authorize
+            token-uri: https://gitee.com/oauth/token
+            user-info-uri: https://gitee.com/api/v5/user
+
+  jwt:
+    secret: FDSfsdfFdslafjldsajfljlagdFDLfsdfsDFS23fda
+    expiration: 3600
+
   rabbitmq:
     listener:
       simple:
         concurrency: 5
         max-concurrency: 10
+  session:
+    timeout: 7d
 
 
 #  task:
@@ -32,9 +58,9 @@ spring:
 logging:
   level:
     com.pipilong.*: info
-server:
-  port: 443
-  ssl:
-    key-store: pipilong.com.cn.jks
-    key-store-password: 4h95u766l621vh4
-    key-store-type: JKS
+#server:
+#  port: 443
+#  ssl:
+#    key-store: pipilong.com.cn.jks
+#    key-store-password: 4h95u766l621vh4
+#    key-store-type: JKS

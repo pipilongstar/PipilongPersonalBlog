@@ -1,14 +1,17 @@
 package com.pipilong.consumer;
 
+import com.pipilong.enums.MessageType;
 import com.pipilong.mapper.DiscussMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +30,9 @@ public class DiscussConsumer {
     @Autowired
     private DiscussMapper discussMapper;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @RabbitListener(queues = "readQueue")
     public void read(List<String> data){
         String authorId = data.get(0);
@@ -35,6 +41,7 @@ public class DiscussConsumer {
         String key2 = "discussReadCount:";
         this.authorsContributionChange(key1,true,authorId);
         this.authorsContributionChange(key2,true,discussId);
+        rabbitTemplate.convertAndSend("scoreCalculationExchange","scoreCalculation", Arrays.asList(MessageType.READ,discussId));
     }
 
     @RabbitListener(queues = "likeQueue")
@@ -74,6 +81,8 @@ public class DiscussConsumer {
             ops.putIfAbsent(key1,"count","0");
             ops.increment(key1,"count",1);
         }
+
+        rabbitTemplate.convertAndSend("scoreCalculationExchange","scoreCalculation", Arrays.asList(MessageType.LIKE,discussID));
     }
 
     @RabbitListener(queues = "collectionQueue")
@@ -94,6 +103,8 @@ public class DiscussConsumer {
         this.authorsContributionChange(key,collection,authorId);
         String key2 = "discussCollectionCount:";
         this.authorsContributionChange(key2,true,discussId);
+
+        rabbitTemplate.convertAndSend("scoreCalculationExchange","scoreCalculation", Arrays.asList(MessageType.COLLECTION,discussId));
     }
 
     private void authorsContributionChange(String key, @NotNull Boolean change, String id){

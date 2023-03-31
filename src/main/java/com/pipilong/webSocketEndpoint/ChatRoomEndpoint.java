@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,8 +56,10 @@ public class ChatRoomEndpoint {
             friendSession.getAsyncRemote().sendText(msg.getText());
             isRead=true;
         }
-        Pair<ChatRecord, Boolean> pair = new Pair<>(msg,isRead);
-        rabbitTemplate.convertAndSend("chatRecordExchange","chatRecord",pair);
+        List<Object> list=new ArrayList<>();
+        list.add(msg);
+        list.add(isRead);
+        rabbitTemplate.convertAndSend("chatRecordExchange","chatRecord",list);
     }
 
     @OnError

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登录</title>
-    <link rel="stylesheet" href="https://cdn.pipilong.com.cn/css/login.css">
+    <link rel="stylesheet" href="../css/login.css">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
@@ -85,8 +85,9 @@
                         <p>使用其他方式登录</p>
                     </div>
                     <ul>
-                        <li><a href="#"><i class="ri-github-fill ri-2x"></i></a></li>
+                        <li><a href="#"><i class="ri-github-fill ri-2x" @click="githubLogin"></i></a></li>
                         <li><a href="#"><i class="ri-qq-fill ri-2x"></i></a></li>
+                        <li><a href="#"><img src="https://cdn.pipilong.com.cn/svg/gitee.svg" width="26px;" @click="giteeLogin"/></a></li>
                     </ul>
                 </div>
             </div>
@@ -140,7 +141,7 @@
                         <p>使用其他方式登录</p>
                     </div>
                     <ul>
-                        <li><i class="ri-github-fill ri-2x" @click="githubLogin"></i></li>
+                        <li><i class="ri-github-fill ri-2x"></i></li>
                         <li><i class="ri-qq-fill ri-2x"></i></li>
                     </ul>
                 </div>
@@ -178,7 +179,7 @@
                 if (this.isSendSms) return;
                 this.isSendSms = true;
 
-                service.post("https://www.pipilong.com.cn/sendcode/" + this.telephone).then((res) => {
+                service.post("http://localhost:8080/sendcode/" + this.telephone).then((res) => {
                     console.info("kaishi");
                     var timeout = setInterval(() => {
                         if (this.count < 1) {
@@ -207,7 +208,7 @@
                 formData.append("username",this.username1);
                 formData.append("password","");
                 formData.append("code",this.code);
-                service.post("https://www.pipilong.com.cn/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
+                service.post("http://localhost:8080/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
                     window.location.href='../index.html';
                 }).catch(error => {
                    this.error_code = error.response.data;
@@ -224,7 +225,7 @@
                 formData.append("username",this.username1);
                 formData.append("password",this.password);
                 formData.append("code","");
-                service.post("https://www.pipilong.com.cn/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
+                service.post("http://localhost:8080/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
                     window.location.href='../index.html';
                 }).catch(error => {
                     this.IsLoginRequestSend=false;
@@ -234,8 +235,6 @@
             },
             //注册
             register() {
-                if(this.isRegister) return;
-                this.isRegister=true;
                 if (this.email_exist === '' && this.phone_exist === '' && this.error_username === '') {
 
                     console.info('daole 1');
@@ -245,7 +244,7 @@
                         "email":this.email,
                         "telephone":this.telephone
                     };
-                    service.put("https://www.pipilong.com.cn/user/register/"+this.code,user_data).then((res) => {
+                    service.put("http://localhost:8080/user/register/"+this.code,user_data).then((res) => {
                         this.user_id=res.data;
                         this.$message({
                             message: '恭喜注册成功！',
@@ -256,7 +255,6 @@
                         this.error_code=error.response.data;
                     });
                 }
-                this.isRegister=false;
             },
             exchangeLogin() {
                 this.codeLogin = !this.codeLogin;
@@ -277,7 +275,7 @@
             //验证手机号是否存在
             exist_phone() {
 
-                service.get("https://www.pipilong.com.cn/verification/telephone/"+this.telephone).then(res => {
+                service.get("http://localhost:8080/verification/telephone/"+this.telephone).then(res => {
                     this.phone_exist='';
                 }).catch(error => {
                     this.phone_exist=error.response.data;
@@ -287,7 +285,7 @@
             //验证邮箱是否存在
             exist_email() {
 
-                service.get("https://www.pipilong.com.cn/verification/email/"+this.email).then(res => {
+                service.get("http://localhost:8080/verification/email/"+this.email).then(res => {
                     this.email_exist='';
                 }).catch(error => {
                    this.email_exist=error.response.data;
@@ -304,10 +302,18 @@
             },
             githubLogin(){
 
-                service.post('https://www.pipilong.com.cn/oauth2/github').then(res=>{
-                    window.location.href='../index.html';
+                service.get('http://localhost:8080/login/oauth2/code/github/login').then(res=>{
+                    window.location.href=res.data;
                 }).catch(error=>{
-                    this.$message.error('认证失败！');
+                    this.$message.error('服务器异常！');
+                });
+            },
+            giteeLogin(){
+
+                service.get('http://localhost:8080/login/oauth2/code/gitee/login').then(res=>{
+                    window.location.href=res.data;
+                }).catch(error=>{
+                    this.$message.error('服务器异常！');
                 });
             }
         },
@@ -337,7 +343,6 @@
             user_id: '',
             isSendSms: false,
             IsLoginRequestSend: false,
-            isRegister: false,
         }
     });
 </script>

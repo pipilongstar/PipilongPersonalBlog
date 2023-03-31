@@ -2,6 +2,7 @@ package com.pipilong.mapper;
 
 import com.pipilong.pojo.Discuss;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,12 +14,9 @@ import java.util.List;
 @Mapper
 public interface QueryMapper {
 
+    List<Discuss> selectRankingList(@Param("limit")Integer limit);
 
-    List<Discuss> selectRankingList();
-
-
-
-
+    Discuss selectByDiscussId(@Param("discussId")String discussId);
 
 
 }

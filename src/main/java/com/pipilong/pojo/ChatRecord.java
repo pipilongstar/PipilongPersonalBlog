@@ -22,3 +22,24 @@ public class ChatRecord implements Serializable {
     private String date;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

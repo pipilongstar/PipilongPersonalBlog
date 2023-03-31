@@ -13,7 +13,10 @@
         <result property="submitDate" column="date"/>
     </resultMap>
     <select id="selectRankingList" resultMap="map">
-        select * from discuss order by number_of_read desc limit 6;
+        select * from discuss order by number_of_read desc limit ${limit};
+    </select>
+    <select id="selectByDiscussId" resultMap="map">
+        select * from discuss where discuss_id = ${discussId};
     </select>
 
 </mapper>
