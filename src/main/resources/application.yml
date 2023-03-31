@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: pro
   servlet:
     multipart:
       enabled: true
@@ -11,15 +11,15 @@ spring:
       client:
         registration:
           github:
-            client-id: a4df803c114f830a3e5f
-            client-secret: 164df022321bbd34b01fd452f015dfe4c431034d
-            redirect-uri: "http://localhost:8080/login/oauth2/code/github"
+            client-id: 044c6d2cdd08e9d0e89a
+            client-secret: b64fdff62ebd5e2e30a6e7f8d4ddc7a7ce48e129
+            redirect-uri: "http://localhost:443/login/oauth2/code/github"
             scope: read:user,user:email
             client-name: GitHub
           gitee:
             client-id: 3a07d780a419d4223121e34f816e2e4304c27d39a1720275b447428962036087
             client-secret: c9db5343982faf792b326b6549cfcf94ecc115c0bcc25ab35d4b22c4d34d77f9
-            redirect-uri: "http://localhost:8080/login/oauth2/code/gitee"
+            redirect-uri: "http://localhost:443/login/oauth2/code/gitee"
             authorization-grant-type: code
             scope: user_info,email
         provider:
