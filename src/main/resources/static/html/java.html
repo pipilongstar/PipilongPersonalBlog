@@ -201,6 +201,12 @@
                                 </i>
                                 <span slot="title" style="font-size: 20px;margin-left: 10px;">Java</span>
                             </template>
+                            <el-submenu index="1-4">
+                                <template slot="title">JVM</template>
+                                <el-menu-item index="JVM运行时数据区" @click="openHtml">JVM运行时数据区</el-menu-item>
+                                <el-menu-item index="GC-内存分配与回收策略" @click="openHtml">GC-内存分配与回收策略</el-menu-item>
+                                <el-menu-item index="GC-如何判断对象是否已经“死”了" @click="openHtml">GC-如何判断对象是否已经“死”了</el-menu-item>
+                            </el-submenu>
                         </el-submenu>
                         <el-submenu index="2">
                             <template slot="title">
@@ -422,8 +428,12 @@
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
             },
-            make(){
+            make() {
                 new showdown.Converter();
+            },
+            openHtml(key){
+                document.getElementById("main").innerHTML = '<object type="text/html" data="https://cos.pipilong.com.cn/md/'+key.indexPath[2]+'.html"' +
+                    ' width="820px;" height="788px;"></object>';
             }
         },
 

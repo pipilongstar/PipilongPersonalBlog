@@ -547,7 +547,7 @@
     var webSocket = null;
 
     service.get("http://localhost:8080/verification/isLogin").then(res => {
-        webSocket = new WebSocket("ws://pipilong.com.cn/chatRoomSocket/"+res.data);
+        webSocket = new WebSocket("ws://localhost:8080/chatRoomSocket/"+res.data);
 
         webSocket.onopen = function (){
 
