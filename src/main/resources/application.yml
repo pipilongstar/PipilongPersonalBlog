@@ -58,9 +58,9 @@ spring:
 logging:
   level:
     com.pipilong.*: info
-#server:
-#  port: 443
-#  ssl:
-#    key-store: pipilong.com.cn.jks
-#    key-store-password: 4h95u766l621vh4
-#    key-store-type: JKS
+server:
+  port: 443
+  ssl:
+    key-store: pipilong.com.cn.jks
+    key-store-password: 4h95u766l621vh4
+    key-store-type: JKS
