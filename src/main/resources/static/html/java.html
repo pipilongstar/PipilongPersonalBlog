@@ -360,12 +360,12 @@
         mounted() {
             this.isShowDialog=false;
 
-            service.get("http://localhost:8080/verification/isLogin").then(res => {
+            service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
                 this.isLogin = true;
 
-                service.get("http://localhost:8080/user/getprofile").then(res=>{
+                service.get("https://www.pipilong.com.cn/user/getprofile").then(res=>{
                     this.username=res.data.username;
                 }).catch(error=>{
                     this.$message.error('登录异常，请重新登录！');
@@ -407,7 +407,7 @@
             },
             logout(){
 
-                service.get('http://localhost:8080/logout').then(res=>{
+                service.get('https://www.pipilong.com.cn/logout').then(res=>{
                    window.location.href='./index.html';
                 }).catch(error=>{
                     this.$message.error('退出登录失败！');

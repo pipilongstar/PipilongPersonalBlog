@@ -546,8 +546,8 @@
 
     var webSocket = null;
 
-    service.get("http://localhost:8080/verification/isLogin").then(res => {
-        webSocket = new WebSocket("ws://localhost:8080/chatRoomSocket/"+res.data);
+    service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
+        webSocket = new WebSocket("ws://www.pipilong.com.cn/chatRoomSocket/"+res.data);
 
         webSocket.onopen = function (){
 
@@ -580,42 +580,42 @@
 
         mounted() {
 
-            service.get("http://localhost:8080/verification/isLogin").then(res => {
+            service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
                 this.isLogin = true;
 
-                service.get("http://localhost:8080/user/getprofile").then(res=>{
+                service.get("https://www.pipilong.com.cn/user/getprofile").then(res=>{
                     this.username=res.data.username;
                 }).catch(error=>{
                     this.$message.error('登录异常，请重新登录！');
                 });
 
-                service.get("http://localhost:8080/message/systemMessage/"+this.user_id).then(res=>{
+                service.get("https://www.pipilong.com.cn/message/systemMessage/"+this.user_id).then(res=>{
                     this.systemMessage = JSON.parse(res.data[0]);
                     this.count1 =res.data[1];
 
                 });
 
-                service.get("http://localhost:8080/message/likeMessage/"+this.user_id).then(res=>{
+                service.get("https://www.pipilong.com.cn/message/likeMessage/"+this.user_id).then(res=>{
                     this.likeAndCollection= JSON.parse(res.data[0]);
                     this.count2=res.data[1];
                 });
-                service.get("http://localhost:8080/message/commentMessage/"+this.user_id).then(res=>{
+                service.get("https://www.pipilong.com.cn/message/commentMessage/"+this.user_id).then(res=>{
                     this.commentAndAt= JSON.parse(res.data[0]);
                     this.count3=res.data[1];
                 });
-                service.get("http://localhost:8080/message/followMessage/"+this.user_id).then(res=>{
+                service.get("https://www.pipilong.com.cn/message/followMessage/"+this.user_id).then(res=>{
                     this.newFollow= JSON.parse(res.data[0]);
                     this.count4=res.data[1];
                 });
 
-                service.get("http://localhost:8080/message/chatRoom/" + this.user_id).then(res => {
+                service.get("https://www.pipilong.com.cn/message/chatRoom/" + this.user_id).then(res => {
                     this.chatList = JSON.parse(res.data[0]);
                     if(this.chatList.length>0) this.chatRoom = this.chatList[0];
                     this.count5=res.data[1];
                     if(this.chatRoom.friendId !== '') {
-                        service.get("http://localhost:8080/message/chatRecord/" + this.user_id + "/" + this.chatRoom.friendId).then(res => {
+                        service.get("https://www.pipilong.com.cn/message/chatRecord/" + this.user_id + "/" + this.chatRoom.friendId).then(res => {
                             this.chatRoom.chatRecords = res.data;
                             setTimeout(function () {
                                 //设置滚动条到最底部
@@ -634,7 +634,7 @@
                                 break;
                             }
                         }
-                        service.get("http://localhost:8080/message/chatRecord/" + this.user_id + "/" + friendId).then(res => {
+                        service.get("https://www.pipilong.com.cn/message/chatRecord/" + this.user_id + "/" + friendId).then(res => {
                             this.chatRoom.chatRecords = res.data;
                             this.index=5;
                             setTimeout(function () {
@@ -685,7 +685,7 @@
             },
             logout(){
 
-                service.get('http://localhost:8080/logout').then(res=>{
+                service.get('https://www.pipilong.com.cn/logout').then(res=>{
                    window.location.href='../index.html';
                 }).catch(error=>{
                     this.$message.error('退出登录失败！');
@@ -719,7 +719,7 @@
                     let data=new FormData();
                     data.append('userId',this.user_id);
                     data.append('type',this.type[index]);
-                    service.post("http://localhost:8080/message/updateNoRead",data).then(res=>{
+                    service.post("https://www.pipilong.com.cn/message/updateNoRead",data).then(res=>{
 
                     });
                 }
@@ -736,7 +736,7 @@
             },
             close(index){
 
-                service.delete("http://localhost:8080/message/deleteChatRoom/"+this.user_id+"/"+this.chatList[index].friendId).then(res=>{
+                service.delete("https://www.pipilong.com.cn/message/deleteChatRoom/"+this.user_id+"/"+this.chatList[index].friendId).then(res=>{
                     this.chatList.splice(index,1);
                     if(this.chatList.length === 0){
                         this.chatRoom='';
@@ -750,7 +750,7 @@
             },
             showChatRoom(item){
                 this.chatRoom=item;
-                service.get("http://localhost:8080/message/chatRecord/"+this.user_id+"/"+this.chatRoom.friendId).then(res=>{
+                service.get("https://www.pipilong.com.cn/message/chatRecord/"+this.user_id+"/"+this.chatRoom.friendId).then(res=>{
                     this.chatRoom.chatRecords = res.data;
                     setTimeout(function(){
                         //设置滚动条到最底部

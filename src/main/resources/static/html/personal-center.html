@@ -482,12 +482,12 @@
 
         mounted() {
 
-            service.get("http://localhost:8080/verification/isLogin").then( res=> {
+            service.get("https://www.pipilong.com.cn/verification/isLogin").then( res=> {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
                 this.isLogin = true;
 
-                service.get("http://localhost:8080/user/dynamic/"+this.user_id).then(res=>{
+                service.get("https://www.pipilong.com.cn/user/dynamic/"+this.user_id).then(res=>{
                     this.dynamicList=res.data;
                     for(let i=0;i<this.dynamicList.length;i++){
                         this.dynamicList[i].label=JSON.parse(this.dynamicList[i].label);
@@ -498,7 +498,7 @@
                 window.location.href='./login.html';
             });
 
-            service.get("http://localhost:8080/user/getprofile").then(res=>{
+            service.get("https://www.pipilong.com.cn/user/getprofile").then(res=>{
                 this.user=res.data;
             }).catch(error=>{
                 this.$message.error('登录异常，请重新登录！');
@@ -509,7 +509,7 @@
         methods: {
             handleClick(tag) {
                 if(tag.name==="second"){
-                    service.get("http://localhost:8080/user/collection/"+this.user_id).then(res=>{
+                    service.get("https://www.pipilong.com.cn/user/collection/"+this.user_id).then(res=>{
                         this.collectionList=res.data;
                         for(let i=0;i<this.collectionList.length;i++){
                             this.collectionList[i].label=JSON.parse(this.collectionList[i].label);
@@ -518,12 +518,12 @@
                     });
                 }else{
                     if(tag.name==="third"){
-                        service.get("http://localhost:8080/user/getFollowed/"+this.user_id).then(res=>{
+                        service.get("https://www.pipilong.com.cn/user/getFollowed/"+this.user_id).then(res=>{
                             this.followed=res.data;
                         });
                     }else{
                         if(tag.name==="fourth"){
-                            service.get("http://localhost:8080/user/getFollow/"+this.user_id).then(res=>{
+                            service.get("https://www.pipilong.com.cn/user/getFollow/"+this.user_id).then(res=>{
                                 this.follow=res.data;
                             });
                         }
@@ -541,7 +541,7 @@
             },
             logout(){
 
-                service.get('http://localhost:8080/logout').then(res=>{
+                service.get('https://www.pipilong.com.cn/logout').then(res=>{
                     window.location.href='../index.html';
                 }).catch(error=>{
                     this.$message.error('退出登录失败！');
@@ -561,7 +561,7 @@
                 data.append('userId',this.user_id);
                 data.append('friendId',item.userId);
                 data.append('username',item.username);
-                service.post('http://localhost:8080/user/createChatRoom',data).then(res=>{
+                service.post('https://www.pipilong.com.cn/user/createChatRoom',data).then(res=>{
 
                 });
                 window.location.href='./message.html?friendId='+item.userId;

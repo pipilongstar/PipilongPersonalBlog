@@ -193,7 +193,7 @@
                         <div style="margin-top: -53px;">
 
                             <el-upload
-                                    action="http://localhost:8080/upload/avatar"
+                                    action="https://www.pipilong.com.cn/upload/avatar"
                                     :multiple="true"
                                     :with-credentials="true"
                                     :show-file-list="false"
@@ -754,7 +754,7 @@
 
         mounted() {
 
-            service.get("http://localhost:8080/verification/isLogin").then(res => {
+            service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
                 this.imageUrl = this.avatarUrl;
@@ -763,7 +763,7 @@
                 window.open('./login.html', '_parent', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
             });
 
-            service.get("http://localhost:8080/user/getprofile").then(res=>{
+            service.get("https://www.pipilong.com.cn/user/getprofile").then(res=>{
                 this.user=res.data;
                 this.telephone = res.data.telephone;
                 this.email = res.data.email;
@@ -805,7 +805,7 @@
             },
             logout() {
 
-                service.get('http://localhost:8080/logout').then(res=>{
+                service.get('https://www.pipilong.com.cn/logout').then(res=>{
                     window.location.href='./index.html';
                 }).catch(error=>{
                     this.$message.error('退出登录失败！');
@@ -831,7 +831,7 @@
             upload() {
                 let formData = new FormData();
                 formData.append("file", this.file);
-                service.post('http://localhost:8080/upload/avatar', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
+                service.post('https://www.pipilong.com.cn/upload/avatar', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(res => {
                     this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id+".jpg";
                     this.imageUrl = this.avatarUrl;
                     this.$message({
@@ -844,7 +844,7 @@
             },
             save() {
 
-                service.put('http://localhost:8080/user/modifyprofile',this.user).then(res=>{
+                service.put('https://www.pipilong.com.cn/user/modifyprofile',this.user).then(res=>{
                     this.$message({
                         message: '保存成功',
                         type: 'success'
@@ -861,7 +861,7 @@
 
                 //绑定github
                 if(!this.isBindGitHub){
-                    service.get('http://localhost:8080/oauth2/authorization/github').then(res=>{
+                    service.get('https://www.pipilong.com.cn/oauth2/authorization/github').then(res=>{
                         this.isBindGitHub=true;
                         this.$message({
                             message: '绑定成功！',
@@ -899,7 +899,7 @@
                 this.oldPassword='';
                 this.newPassword2='';
                 this.newPassword1='';
-                service.get("http://localhost:8080//password/"+this.user_id).then(res=>{
+                service.get("https://www.pipilong.com.cn//password/"+this.user_id).then(res=>{
                     this.dialogUpdatePassword = true;
                 }).catch(error=>{
                     this.dialogSettingPassword = true;
@@ -963,9 +963,9 @@
                 let url = null;
                 let data=null;
                 if(this.dialogUpdateTelephone){
-                    url="http://localhost:8080/sendcode/"+this.telephone;
+                    url="https://www.pipilong.com.cn/sendcode/"+this.telephone;
                 }else{
-                    url="http://localhost:8080/sendemail"
+                    url="https://www.pipilong.com.cn/sendemail"
                     data = new FormData();
                     data.append('userid',this.user_id);
                 }
@@ -990,7 +990,7 @@
             },
             verificationCode(){
                 if(this.code === '') return;
-                service.get('http://localhost:8080/verification/code/'+this.code).then(res=>{
+                service.get('https://www.pipilong.com.cn/verification/code/'+this.code).then(res=>{
                     this.code_verification=true;
                 }).catch(error=>{
                     this.code_verification=false;
@@ -1003,7 +1003,7 @@
                 let form = new FormData();
                 form.append('telephone',this.telephone);
                 form.append('userid',this.user_id);
-                service.put('http://localhost:8080/user/modifyphone',form).then(res=>{
+                service.put('https://www.pipilong.com.cn/user/modifyphone',form).then(res=>{
                 }).catch(error=>{
                     this.dialogUpdateTelephone=false;
                     this.active1=0;
@@ -1016,7 +1016,7 @@
                 let form = new FormData();
                 form.append('email',this.email);
                 form.append('userid',this.user_id);
-                service.put('http://localhost:8080/user/modifyemail',form).then(res=>{
+                service.put('https://www.pipilong.com.cn/user/modifyemail',form).then(res=>{
                 }).catch(error=>{
                     this.dialogUpdateEmail=false;
                     this.active2=0;
@@ -1038,7 +1038,7 @@
                 from.append('oldpassword',this.oldPassword);
                 from.append('newpassword',this.newPassword1);
                 from.append('userid',this.user_id);
-                service.post('http://localhost:8080/user/modifypassword',from).then(res=>{
+                service.post('https://www.pipilong.com.cn/user/modifypassword',from).then(res=>{
                     this.error_password='';
                     this.active3=2;
                 }).catch(error=>{
@@ -1058,7 +1058,7 @@
                 let data = new FormData();
                 data.append('newPassword',this.newPassword1);
                 data.append('userId',this.user_id);
-                service.post("http://localhost:8080/user/settingPassword",data).then(res=>{
+                service.post("https://www.pipilong.com.cn/user/settingPassword",data).then(res=>{
                     this.active3=2;
                 }).catch(error=>{
                     this.$message.error("设置失败！");

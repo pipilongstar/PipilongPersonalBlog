@@ -425,7 +425,7 @@
             let url = window.location.href;
             this.discussId = url.substring(url.lastIndexOf('=') + 1);
 
-            service.get("http://localhost:8080/discuss/" + this.discussId).then(res => {
+            service.get("https://www.pipilong.com.cn/discuss/" + this.discussId).then(res => {
                 this.discussData = res.data;
                 this.discussData.label = JSON.parse(this.discussData.label);
                 this.discussData.submitDate=this.discussData.submitDate.substring(0,10);
@@ -444,10 +444,10 @@
                 let data=new FormData();
                 data.append('authorId',this.discussData.userId);
                 data.append('discussId',this.discussData.discussId);
-                service.post("http://localhost:8080/discuss/read",data).then(res=>{
+                service.post("https://www.pipilong.com.cn/discuss/read",data).then(res=>{
                 });
 
-                service.get("http://localhost:8080/discuss/comment/"+this.discussId).then(res=>{
+                service.get("https://www.pipilong.com.cn/discuss/comment/"+this.discussId).then(res=>{
                     this.replyList=res.data;
                     for(let i=0;i<this.replyList.length;i++){
                         this.replyList[i].date=this.replyList[i].date.substring(0,10);
@@ -458,25 +458,25 @@
                 this.$message.error(error.response.data);
             });
 
-            service.get("http://localhost:8080/query/rankingList").then(res=>{
+            service.get("https://www.pipilong.com.cn/query/rankingList").then(res=>{
                 this.hotList=res.data;
                 this.hotList.forEach((item,index)=>{
                     Object.assign(item,{'indexUrl':'https://cdn.pipilong.com.cn/svg/数字'+(index+1)+'.svg'});
                 });
             });
 
-            service.get("http://localhost:8080/verification/isLogin").then(res => {
+            service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id + ".jpg";
                 this.isLogin = true;
 
-                service.get("http://localhost:8080/user/getprofile").then(res => {
+                service.get("https://www.pipilong.com.cn/user/getprofile").then(res => {
                     this.username = res.data.username;
                 }).catch(error => {
                     this.$message.error('登录异常，请重新登录！');
                 });
 
-                service.get("http://localhost:8080/discuss/discussUser/"+this.discussId+'/'+this.user_id).then(res=>{
+                service.get("https://www.pipilong.com.cn/discuss/discussUser/"+this.discussId+'/'+this.user_id).then(res=>{
                     this.isCollection=res.data[0];
                     this.isDianZan=res.data[1];
                 });
@@ -506,7 +506,7 @@
                 window.open('./personal-settings.html');
             },
             logout() {
-                service.get('http://localhost:8080/logout').then(res => {
+                service.get('https://www.pipilong.com.cn/logout').then(res => {
                     window.location.href = '../index.html';
                 }).catch(error => {
                     this.$message.error('退出登录失败！');
@@ -549,7 +549,7 @@
                 data.append('discussUrl',window.location.href);
                 data.append('username',this.username)
                 data.append('discussTheme',this.discussData.theme)
-                service.post("http://localhost:8080/discuss/dianzan",data).then(res=>{
+                service.post("https://www.pipilong.com.cn/discuss/dianzan",data).then(res=>{
                 });
             },
             giveTheThumbsUp1(){
@@ -566,7 +566,7 @@
                 data.append('discussId',this.discussId);
                 data.append('userId',this.user_id);
                 data.append('authorId',this.discussData.userId);
-                service.post("http://localhost:8080/discuss/collection",data).then(res=>{
+                service.post("https://www.pipilong.com.cn/discuss/collection",data).then(res=>{
                 });
             },
             collection1(){
@@ -606,7 +606,7 @@
                     "discussUrl": window.location.href,
                     "discussTheme": this.discussData.theme,
                 }
-                service.post("http://localhost:8080/discuss/submitReply",data).then(res=>{
+                service.post("https://www.pipilong.com.cn/discuss/submitReply",data).then(res=>{
                     this.$message({
                         message: '评论成功！',
                         type: 'success'
@@ -635,7 +635,7 @@
                 let data=new FormData();
                 data.append('userId',this.user_id);
                 data.append('friendId',this.discussData.userId);
-                service.post("http://localhost:8080/user/follow",data).then(res=>{
+                service.post("https://www.pipilong.com.cn/user/follow",data).then(res=>{
                     this.$message({
                         message: '关注成功！',
                         type: 'success'

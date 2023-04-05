@@ -325,19 +325,19 @@
 
         mounted() {
 
-            service.get("http://localhost:8080/verification/isLogin").then(res => {
+            service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
                 this.user_id = res.data;
                 this.avatarUrl = "https://cos.pipilong.com.cn/UserAvatar/" + this.user_id +".jpg";
                 this.isLogin = true;
 
-                service.get("http://localhost:8080/user/getprofile").then(res=>{
+                service.get("https://www.pipilong.com.cn/user/getprofile").then(res=>{
                     this.username=res.data.username;
                 }).catch(error=>{
                     this.$message.error('登录异常，请重新登录！');
                 });
             });
 
-            service.get("http://localhost:8080/query/rankingList").then(res=>{
+            service.get("https://www.pipilong.com.cn/query/rankingList").then(res=>{
                 this.hotList=res.data;
                 this.hotList.forEach((item,index)=>{
                     Object.assign(item,{'indexUrl':'https://cdn.pipilong.com.cn/svg/数字'+(index+1)+'.svg'});

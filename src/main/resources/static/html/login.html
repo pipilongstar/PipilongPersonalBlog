@@ -179,7 +179,7 @@
                 if (this.isSendSms) return;
                 this.isSendSms = true;
 
-                service.post("http://localhost:8080/sendcode/" + this.telephone).then((res) => {
+                service.post("https://www.pipilong.com.cn/sendcode/" + this.telephone).then((res) => {
                     console.info("kaishi");
                     var timeout = setInterval(() => {
                         if (this.count < 1) {
@@ -208,7 +208,7 @@
                 formData.append("username",this.username1);
                 formData.append("password","");
                 formData.append("code",this.code);
-                service.post("http://localhost:8080/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
+                service.post("https://www.pipilong.com.cn/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
                     window.location.href='../index.html';
                 }).catch(error => {
                    this.error_code = error.response.data;
@@ -225,7 +225,7 @@
                 formData.append("username",this.username1);
                 formData.append("password",this.password);
                 formData.append("code","");
-                service.post("http://localhost:8080/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
+                service.post("https://www.pipilong.com.cn/login",formData, { headers: { 'Content-Type': 'multipart/form-data' }}).then(res => {
                     window.location.href='../index.html';
                 }).catch(error => {
                     this.IsLoginRequestSend=false;
@@ -244,7 +244,7 @@
                         "email":this.email,
                         "telephone":this.telephone
                     };
-                    service.put("http://localhost:8080/user/register/"+this.code,user_data).then((res) => {
+                    service.put("https://www.pipilong.com.cn/user/register/"+this.code,user_data).then((res) => {
                         this.user_id=res.data;
                         this.$message({
                             message: '恭喜注册成功！',
@@ -275,7 +275,7 @@
             //验证手机号是否存在
             exist_phone() {
 
-                service.get("http://localhost:8080/verification/telephone/"+this.telephone).then(res => {
+                service.get("https://www.pipilong.com.cn/verification/telephone/"+this.telephone).then(res => {
                     this.phone_exist='';
                 }).catch(error => {
                     this.phone_exist=error.response.data;
@@ -285,7 +285,7 @@
             //验证邮箱是否存在
             exist_email() {
 
-                service.get("http://localhost:8080/verification/email/"+this.email).then(res => {
+                service.get("https://www.pipilong.com.cn/verification/email/"+this.email).then(res => {
                     this.email_exist='';
                 }).catch(error => {
                    this.email_exist=error.response.data;
@@ -302,7 +302,7 @@
             },
             githubLogin(){
 
-                service.get('http://localhost:8080/login/oauth2/code/github/login').then(res=>{
+                service.get('https://www.pipilong.com.cn/login/oauth2/code/github/login').then(res=>{
                     window.location.href=res.data;
                 }).catch(error=>{
                     this.$message.error('服务器异常！');
@@ -310,7 +310,7 @@
             },
             giteeLogin(){
 
-                service.get('http://localhost:8080/login/oauth2/code/gitee/login').then(res=>{
+                service.get('https://www.pipilong.com.cn/login/oauth2/code/gitee/login').then(res=>{
                     window.location.href=res.data;
                 }).catch(error=>{
                     this.$message.error('服务器异常！');
