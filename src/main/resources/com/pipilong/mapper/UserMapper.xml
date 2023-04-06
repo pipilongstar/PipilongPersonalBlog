@@ -30,10 +30,15 @@
     <insert id="registerUserToSecurity">
         insert into account_security value (null,${userId},'${email}'
                                             ,${telephone}
-                                            ,null
-                                            ,${githubId}
-                                            ,${qqId}
-                                            ,${giteeId}
+                                            ,null,
+                                            <if test="githubId!=''">${githubId}</if>
+                                            <if test="githubId==''">null</if>
+                                            ,
+                                            <if test="qqId!=''">${qqId}</if>
+                                            <if test="qqId==''">null</if>
+                                            ,
+                                            <if test="giteeId!=''">${giteeId}</if>
+                                            <if test="giteeId==''">null</if>
                                            );
     </insert>
 
