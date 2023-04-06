@@ -21,10 +21,10 @@ public class WebConfig {
         return new StandardServletMultipartResolver();
     }
 
-//    @Bean
-//    public ServerEndpointExporter serverEndpointExporter(){
-//        return new ServerEndpointExporter();
-//    }
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter(){
+        return new ServerEndpointExporter();
+    }
 
     @Bean
     public RestTemplate restTemplate() {

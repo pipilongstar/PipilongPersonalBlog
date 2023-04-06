@@ -547,7 +547,7 @@
     var webSocket = null;
 
     service.get("https://www.pipilong.com.cn/verification/isLogin").then(res => {
-        webSocket = new WebSocket("ws://www.pipilong.com.cn:443/chatRoomSocket/"+res.data);
+        webSocket = new WebSocket("ws://101.43.24.234:443/chatRoomSocket/"+res.data);
 
         webSocket.onopen = function (){
 
