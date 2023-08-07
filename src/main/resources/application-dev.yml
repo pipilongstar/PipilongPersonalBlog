@@ -16,6 +16,7 @@ spring:
     host: localhost
 
 
+
 es:
   hostAndPort: "localhost:9200"
 

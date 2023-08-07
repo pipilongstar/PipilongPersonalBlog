@@ -2,7 +2,8 @@ package com.pipilong.webSocketEndpoint;
 
 import com.alibaba.fastjson.JSON;
 import com.pipilong.pojo.ChatRecord;
-import javafx.util.Pair;
+
+import com.pipilong.utils.Trie;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +33,11 @@ public class ChatRoomEndpoint {
 
     private static RabbitTemplate rabbitTemplate;
 
+    private static Trie trie;
+
     @Autowired
-    private void setRabbitTemplate(RabbitTemplate rabbitTemplate){
+    private void setRabbitTemplate(RabbitTemplate rabbitTemplate,Trie trie){
+        ChatRoomEndpoint.trie=trie;
         ChatRoomEndpoint.rabbitTemplate=rabbitTemplate;
     }
 
@@ -48,8 +53,9 @@ public class ChatRoomEndpoint {
     }
 
     @OnMessage
-    public void onMessage(String message){
+    public void onMessage(String message) throws IOException {
         ChatRecord msg = JSON.parseObject(message,ChatRecord.class);
+        msg.setText(trie.filterSensitiveWords(msg.getText()));
         Session friendSession = map.get(msg.getFriendId());
         boolean isRead = false;
         if(friendSession != null){

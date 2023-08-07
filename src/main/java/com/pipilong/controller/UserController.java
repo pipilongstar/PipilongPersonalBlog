@@ -6,8 +6,6 @@ import com.pipilong.pojo.Follow;
 import com.pipilong.pojo.User;
 import com.pipilong.service.UserService;
 import com.pipilong.service.VerificationService;
-import com.tencentcloudapi.common.profile.HttpProfile;
-import javafx.scene.input.DataFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -49,7 +49,6 @@ public class QueryController {
      */
     @PostMapping("/search")
     public ResponseEntity<String> search(@RequestBody String conditional) throws Exception {
-
         String data = submitElasticSearchService.search(conditional);
         return new ResponseEntity<>(data,HttpStatus.OK);
     }

@@ -190,7 +190,7 @@
             <!--            左侧-->
             <el-aside width="250px" style="background-color: #f8f8f8">
 
-                <el-card class="box-card" style="height: 700px;margin-top: 16px;">
+                <el-card class="box-card" style="height: auto;margin-top: 16px;width: auto;overflow: hidden">
 
                     <el-menu mode="vertical" @open="handleOpen" @close="handleClose" :collapse="false"
                     style="width: 200px;margin-left: 24px;text-align: left;">
@@ -201,6 +201,17 @@
                                 </i>
                                 <span slot="title" style="font-size: 20px;margin-left: 10px;">Java</span>
                             </template>
+                            <el-submenu index="1-1">
+                                <template slot="title">JVM</template>
+                                <el-menu-item index="JVM运行时数据区.html" @click="openHtml">JVM运行时数据区</el-menu-item>
+                                <el-menu-item index="GC-内存分配与回收策略.html" @click="openHtml">GC-内存分配与回收策略</el-menu-item>
+                                <el-menu-item index="GC-如何判断对象是否已经“死”了.html" @click="openHtml">GC-如何判断对象是否已经“死”了</el-menu-item>
+                            </el-submenu>
+                            <el-submenu index="1-2">
+                                <template slot="title">并发</template>
+                                <el-menu-item index="ConcurrentHashMap详解.html" @click="openHtml">ConcurrentHashMap详解</el-menu-item>
+                                <el-menu-item index="ConcurrentLinkedQueue详解.html" @click="openHtml">ConcurrentLinkedQueue详解</el-menu-item>
+                            </el-submenu>
                         </el-submenu>
                         <el-submenu index="2">
                             <template slot="title">
@@ -233,6 +244,11 @@
                                 </i>
                                 <span slot="title" style="font-size: 18px;margin-left: 10px;">常用框架</span>
                             </template>
+                            <el-submenu index="5-1">
+                                <template slot="title">Spring</template>
+                                <el-menu-item index="Spring事务失效的常见场景.html" @click="openHtml" >Spring事务失效的常见场景</el-menu-item>
+                                <el-menu-item index="SpringMVC执行流程.html" @click="openHtml" >SpringMVC执行流程</el-menu-item>
+                            </el-submenu>
                         </el-submenu>
                         <el-submenu index="6">
                             <template slot="title">
@@ -257,6 +273,10 @@
                                 </i>
                                 <span slot="title" style="font-size: 18px;margin-left: 9px;">高性能</span>
                             </template>
+                            <el-submenu index="8-1">
+                                <template slot="title">RabbitMQ</template>
+                                <el-menu-item index="rabbitmq会出现的一些问题.html" @click="openHtml" >rabbitmq会出现的一些问题</el-menu-item>
+                            </el-submenu>
                         </el-submenu>
                         <el-submenu index="9">
                             <template slot="title">
@@ -422,8 +442,12 @@
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
             },
-            make(){
+            make() {
                 new showdown.Converter();
+            },
+            openHtml(key){
+                document.getElementById("main").innerHTML = '<object type="text/html" data="https://cos.pipilong.com.cn/md/'+key.indexPath[2] +'"'+
+                    ' width="820px;" height="788px;"></object>';
             }
         },
 

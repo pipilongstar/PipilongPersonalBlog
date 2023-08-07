@@ -8,7 +8,6 @@ import com.pipilong.pojo.Discuss;
 import com.pipilong.pojo.PersonMessage;
 import com.pipilong.service.DiscussService;
 import com.pipilong.utils.CodeGenerator;
-import com.sun.corba.se.impl.orbutil.concurrent.Sync;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

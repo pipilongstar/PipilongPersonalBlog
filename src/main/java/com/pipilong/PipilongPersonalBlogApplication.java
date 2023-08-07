@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.google.common.hash.BloomFilter;
 import com.pipilong.annotation.ErrorLog;
 import com.pipilong.service.Impl.SubmitElasticSearchServiceImpl;
+import com.pipilong.utils.Trie;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -33,7 +35,7 @@ import java.util.List;
 @EnableAsync
 @EnableWebSocket
 @EnableConfigurationProperties
-public class PipilongPersonalBlogApplication {
+public class PipilongPersonalBlogApplication{
 
     @Autowired
     private BloomFilter<String> bloomFilter;
@@ -43,6 +45,9 @@ public class PipilongPersonalBlogApplication {
 
     @Autowired
     private SubmitElasticSearchServiceImpl service;
+
+    @Autowired
+    private Trie trie;
 
     private final Request request=new Request("GET", "/discuss/_search");
 
@@ -54,6 +59,7 @@ public class PipilongPersonalBlogApplication {
     @ErrorLog
     @PostConstruct
     public void init() throws IOException {
+        //初始化布隆过滤器
         List<String> keys = this.getAllKeysFromElasticsearch();
         for(String key : keys){
             List<String> queryItems = service.analyzeQuery(key);
@@ -61,6 +67,13 @@ public class PipilongPersonalBlogApplication {
                 this.bloomFilter.put(item);
             }
         }
+
+        //初始化前缀树中的敏感词
+        trie.insert("草泥马");
+        trie.insert("操你妈");
+        trie.insert("sb");
+        trie.insert("傻逼");
+//        DispatcherServlet
     }
 
     @NotNull
@@ -88,7 +101,6 @@ public class PipilongPersonalBlogApplication {
         }
         return res;
     }
-
 
 }
 
