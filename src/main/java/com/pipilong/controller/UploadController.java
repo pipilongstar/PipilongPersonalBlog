@@ -1,5 +1,6 @@
 package com.pipilong.controller;
 
+import com.pipilong.exception.RepeatedSubmissionException;
 import com.pipilong.pojo.Discuss;
 import com.pipilong.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +60,14 @@ public class UploadController {
      * @param discuss 用户的讨论
      * @return true or false
      */
-    @PostMapping("/discuss")
-    public ResponseEntity<String> uploadDiscuss(@RequestBody Discuss discuss) throws IOException {
+    @PostMapping("/discuss/{token}")
+    public ResponseEntity<String> uploadDiscuss(
+            @RequestBody Discuss discuss,
+            @PathVariable("token") String token,
+            HttpSession httpSession
+            ) throws IOException, RepeatedSubmissionException {
 
-        uploadService.uploadDiscuss(discuss);
+        uploadService.uploadDiscuss(discuss,token,httpSession.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

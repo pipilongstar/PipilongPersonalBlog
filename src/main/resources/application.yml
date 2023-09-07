@@ -5,7 +5,6 @@ spring:
     multipart:
       enabled: true
 
-
   security:
     oauth2:
       client:
@@ -44,7 +43,6 @@ spring:
         max-concurrency: 10
   session:
     timeout: 7d
-
 
 #  task:
 #    execution:

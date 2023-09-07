@@ -1,6 +1,5 @@
 package com.pipilong.utils;
 
-import jdk.internal.net.http.common.Pair;
 import org.springframework.stereotype.Component;
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
@@ -88,6 +87,16 @@ public class Trie {
         public TrieNode() {
             children = new HashMap<>();
             isEnd=false;
+        }
+    }
+
+
+    private static class Pair<K,V>{
+        K first;
+        V second;
+        public Pair(K k,V v){
+            this.first=k;
+            this.second=v;
         }
     }
 

@@ -2,10 +2,12 @@ package com.pipilong.service.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.pipilong.annotation.ErrorLog;
+import com.pipilong.exception.RepeatedSubmissionException;
 import com.pipilong.mapper.DiscussMapper;
 import com.pipilong.pojo.Discuss;
 import com.pipilong.service.SubmitElasticSearchService;
 import com.pipilong.service.UploadService;
+import com.pipilong.service.UtilService;
 import com.pipilong.utils.CodeGenerator;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.model.ObjectMetadata;
@@ -53,6 +55,9 @@ public class UploadServiceImpl implements UploadService {
     @Autowired
     private SubmitElasticSearchService submitElasticSearchService;
 
+    @Autowired
+    private UtilService utilService;
+
     @ErrorLog
     @Transactional
     @Override
@@ -88,7 +93,11 @@ public class UploadServiceImpl implements UploadService {
 
     @Transactional(isolation = Isolation.REPEATABLE_READ,propagation = Propagation.REQUIRED)
     @Override
-    public void uploadDiscuss(@NotNull Discuss discuss) throws IOException {
+    public void uploadDiscuss(@NotNull Discuss discuss,String token,String sessionId) throws IOException, RepeatedSubmissionException {
+
+        if(!utilService.verifyToken(sessionId,token)){
+            throw new RepeatedSubmissionException("请求重复提交");
+        }
 
         discuss.setSubmitDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         discuss.setDiscussId(Long.parseLong(codeGenerator.getCode(8)));

@@ -1,5 +1,6 @@
 package com.pipilong.service;
 
+import com.pipilong.exception.RepeatedSubmissionException;
 import com.pipilong.pojo.Discuss;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public interface UploadService {
      * 上传用户发布的讨论
      * @param discuss 用户发布的讨论
      */
-    void uploadDiscuss(Discuss discuss) throws IOException;
+    void uploadDiscuss(Discuss discuss,String token,String sessionId) throws IOException, RepeatedSubmissionException;
 
     /**
      * 上传
